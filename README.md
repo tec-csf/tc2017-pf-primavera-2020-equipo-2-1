@@ -1,13 +1,13 @@
-# *[Poner aquí el Título del Proyecto]*
+# *ALGORITMOS DE GRAFOS*
 ---
-#### Materia: *[Poner aquí nombre de la materia]*
+#### Materia: *Análisis y Diseño de Algoritmos*
 
 ##### Integrantes:
-1. *[Poner aquí Nombre y Apellidos del integrante 1]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
-2. *[Poner aquí Nombre y Apellidos del integrante 2]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
-3. *[Poner aquí Nombre y Apellidos del integrante 3]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
-4. *[Poner aquí Nombre y Apellidos del integrante 4]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
-5. *[Poner aquí Nombre y Apellidos del integrante 5]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
+1. *Andrés Barragán Salas* - *A01026567* - *CSF*
+2. *Abraham Garcia Del Corral* - *A01023256* - *CSF*
+3. *Gerardo Anglada de Landa* - *A01021917* - *CSF*
+4. *Rodrigo Quiroz Reyes* - *A01026546* - *CSF*
+5. *Héctor Arturo Quinde García* - *A01339451* - *CSF*
 
 ---
 ## 1. Aspectos generales

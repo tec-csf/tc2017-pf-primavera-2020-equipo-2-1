@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<title>Algoritmos de Grafos</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
+body {font-size:16px;}
+.w3-half img{margin-bottom:-6px;margin-top:16px;opacity:0.8;cursor:pointer}
+.w3-half img:hover{opacity:1}
+</style>
+<body>
+
+<!-- Sidebar/menu -->
+<nav class="w3-sidebar w3-blue-grey w3-collapse w3-top w3-medium w3-padding" style="z-index:3;width:300px;font-weight:bold;" id="mySidebar"><br>
+  <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-hide-large w3-display-topleft" style="width:100%;font-size:22px">Close Menu</a>
+  <div class="w3-container">
+    <h3 class="w3-padding-16"><b>Algoritmos de Grafos<br><font size="-1">Equipo 2</font></b></h3>
+  </div>
+  <div class="w3-bar-block">
+    <a href="#generar_grafo" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Generar Grafo</a> 
+    <a href="#dfs" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">DFS</a> 
+    <a href="#bfs" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">BFS</a> 
+    <a href="#a-star" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">A*</a> 
+    <a href="#prim" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Prim</a> 
+    <a href="#kruskal" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Kruskal</a>
+    <a href="#dijkstra" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Dijkstra</a>
+    <a href="#belford" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Bellman-Ford</a>
+    <a href="#floyd" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Floyd-Warshall</a>
+    <a href="#compare" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Comparar Algoritmos</a>
+    <div class="w3-padding-16"></div>
+    <a href="#credits" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Integrantes | Referencias</a>
+  </div>
+</nav>
+
+<!-- Top menu on small screens -->
+<header class="w3-container w3-top w3-hide-large w3-blue-grey w3-xlarge w3-padding">
+  <a href="javascript:void(0)" class="w3-button w3-blue-grey w3-margin-right" onclick="w3_open()">☰</a>
+  <span>Algoritmos de Grafos | <font size="-1">Equipo 2</font></span>
+</header>
+
+<!-- Overlay effect when opening sidebar on small screens -->
+<div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+<!-- !PAGE CONTENT! -->
+<div class="w3-main" style="margin-left:340px;margin-right:40px">
+
+  <!-- Header -->
+  <div class="w3-container" style="margin-top:80px" id="generar_grafo">
+    <h1 class="w3-xxxlarge"><b>Proyecto Final - Algoritmos de Grafos</b></h1>
+    <h1 class="w3-xxlarge w3-text-indigo"><b>Generar Grafo</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+  </div>
+  
+  <!-- Generar Grafos -->
+  <div class="w3-container">
+    <div style="float:left; width: 10%;"><p></p></div>
+    <form class="w3-container w3-card-4" style="float:left; width: 20%;">
+        <p style="font-size: x-large; color: #3f51b5;">Grafo</p>
+        <p><input class="w3-input" type="text" style="width:50%" id="node-set" value="0"><label>Nodos</label></p>
+        <p><input class="w3-input" type="text" style="width:50%" id="edge-set" value="0"><label>Aristas</label></p>
+
+        <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="drawSetGraph();"> Generar </button></p>
+        <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="drawRandomGraph();"> Generar Aleatorio </button></p>
+    </form>
+    <div style="float:left; width: 5%;"><p></p></div>
+    <div id="mynetwork" class="w3-card-4" style="float:left; width: 600px; height: 420px;"></div>
+   </div>
+
+  <!-- DFS -->
+  <div class="w3-container" id="dfs" style="margin-top:120px;">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Búsqueda en Profundidad (DFS)</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div style="margin-top:10px;">
+        <div style="float:left; width: 5%;"><p></p></div>
+        <div style="float:left; width: 600px; height: 600px;">
+          <div id="dfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+          <div ><p> Código </p></div>
+          <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+            <p id="dfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'dfs-code'...</p>
+          </div>
+        </div>
+        <div style="float:left; width: 2%;"><p></p></div>
+        <div style="float:left; width: 33%;">
+            <div >
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+              <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+              <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+            </div>
+            <div>
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+              <p id="tiempo-dfs" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+            </div>
+            <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+            <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                <p id="dfs-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+            </div>
+            <div><p> Camino </p></div>
+            <div class="w3-container w3-card-4" style="height: 170px;">
+                <p id="dfs-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            </div>
+            <div style="margin-top:20px;">
+                <div style="float: left; width: 50%;"><input id="origin-dfs" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="DFS();"> Ejecutar Algoritmo </button></div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- BFS -->
+  <div class="w3-container" id="bfs" style="margin-top:120px;">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Búsqueda en Amplitud (BFS)</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div style="margin-top:10px;">
+        <div style="float:left; width: 5%;"><p></p></div>
+        <div style="float:left; width: 600px; height: 600px;">
+          <div id="bfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+          <div ><p> Código </p></div>
+          <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+            <p id="bfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'bfs-code'...</p>
+          </div>
+        </div>
+        <div style="float:left; width: 2%;"><p></p></div>
+        <div style="float:left; width: 33%;">
+            <div >
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+              <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+              <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+            </div>
+            <div>
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+              <p id="tiempo-bfs" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+            </div>
+            <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+            <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                <p id="bfs-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+            </div>
+            <div><p> Camino </p></div>
+            <div class="w3-container w3-card-4" style="height: 170px;">
+                <p id="bfs-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            </div>
+            <div style="margin-top:20px;">
+                <div style="float: left; width: 50%;"><input id="origin-bfs" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
+            </div>
+        </div>
+    </div>
+  </div>
+  
+    <!-- A* -->
+    <div class="w3-container" id="a-star" style="margin-top:120px;">
+      <h1 class="w3-xxxlarge w3-text-indigo"><b>Algorimto A-Star (A*)</b></h1>
+      <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+      <div style="margin-top:10px;">
+          <div style="float:left; width: 5%;"><p></p></div>
+          <div style="float:left; width: 600px; height: 600px;">
+            <div id="a-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+            <div ><p> Código </p></div>
+            <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+              <p id="a-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'a-code'...</p>
+            </div>
+          </div>
+          <div style="float:left; width: 2%;"><p></p></div>
+          <div style="float:left; width: 33%;">
+              <div >
+                <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+                <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+                <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+              </div>
+              <div>
+                <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+                <p id="tiempo-a" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+              </div>
+              <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+              <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                  <p id="a-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+              </div>
+              <div><p> Camino </p></div>
+              <div class="w3-container w3-card-4" style="height: 170px;">
+                  <p id="a-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+              </div>
+              <div style="margin-top:20px;">
+                  <div style="float: left; width: 50%;"><input id="origin-a" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                  <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+  <!-- Prim -->
+  <div class="w3-container" id="prim" style="margin-top:120px;">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Prim</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div style="margin-top:10px;">
+        <div style="float:left; width: 5%;"><p></p></div>
+        <div style="float:left; width: 600px; height: 600px;">
+          <div id="prim-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+          <div ><p> Código </p></div>
+          <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+            <p id="prim-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'prim-code'...</p>
+          </div>
+        </div>
+        <div style="float:left; width: 2%;"><p></p></div>
+        <div style="float:left; width: 33%;">
+            <div >
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+              <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+              <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+            </div>
+            <div>
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+              <p id="tiempo-prim" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+            </div>
+            <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+            <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                <p id="prim-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+            </div>
+            <div><p> Camino </p></div>
+            <div class="w3-container w3-card-4" style="height: 170px;">
+                <p id="prim-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            </div>
+            <div style="margin-top:20px;">
+                <div style="float: left; width: 50%;"><input id="origin-prim" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Kruskal -->
+  <div class="w3-container" id="kruskal" style="margin-top:120px;">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Kruskal</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div style="margin-top:10px;">
+        <div style="float:left; width: 5%;"><p></p></div>
+        <div style="float:left; width: 600px; height: 600px;">
+          <div id="kruskal-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+          <div ><p> Código </p></div>
+          <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+            <p id="kruskal-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'kruskal-code'...</p>
+          </div>
+        </div>
+        <div style="float:left; width: 2%;"><p></p></div>
+        <div style="float:left; width: 33%;">
+            <div >
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+              <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+              <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+            </div>
+            <div>
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+              <p id="tiempo-kruskal" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+            </div>
+            <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+            <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                <p id="kruskal-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+            </div>
+            <div><p> Camino </p></div>
+            <div class="w3-container w3-card-4" style="height: 170px;">
+                <p id="kruskal-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            </div>
+            <div style="margin-top:20px;">
+                <div style="float: left; width: 50%;"><input id="origin-kruskal" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Dijkstra -->
+  <div class="w3-container" id="dijkstra" style="margin-top:120px;">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Dijkstra</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div style="margin-top:10px;">
+        <div style="float:left; width: 5%;"><p></p></div>
+        <div style="float:left; width: 600px; height: 600px;">
+          <div id="dijkstra-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+          <div ><p> Código </p></div>
+          <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+            <p id="dijkstra-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'dijkstra-code'...</p>
+          </div>
+        </div>
+        <div style="float:left; width: 2%;"><p></p></div>
+        <div style="float:left; width: 33%;">
+            <div >
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+              <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+              <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+            </div>
+            <div>
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+              <p id="tiempo-dijkstra" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+            </div>
+            <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+            <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                <p id="dijkstra-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+            </div>
+            <div><p> Camino </p></div>
+            <div class="w3-container w3-card-4" style="height: 170px;">
+                <p id="dijkstra-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            </div>
+            <div style="margin-top:20px;">
+                <div style="float: left; width: 50%;"><input id="origin-dijkstra" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Bellman-Ford -->
+  <div class="w3-container" id="belford" style="margin-top:120px;">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Bellman-Ford</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div style="margin-top:10px;">
+        <div style="float:left; width: 5%;"><p></p></div>
+        <div style="float:left; width: 600px; height: 600px;">
+          <div id="belford-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+          <div ><p> Código </p></div>
+          <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+            <p id="belford-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'belford-code'...</p>
+          </div>
+        </div>
+        <div style="float:left; width: 2%;"><p></p></div>
+        <div style="float:left; width: 33%;">
+            <div >
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+              <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+              <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+            </div>
+            <div>
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+              <p id="tiempo-belford" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+            </div>
+            <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+            <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                <p id="belford-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+            </div>
+            <div><p> Camino </p></div>
+            <div class="w3-container w3-card-4" style="height: 170px;">
+                <p id="belford-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            </div>
+            <div style="margin-top:20px;">
+                <div style="float: left; width: 50%;"><input id="origin-belford" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Floyd-Warshall -->
+  <div class="w3-container" id="floyd" style="margin-top:120px;">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Floyd-Warshall</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div style="margin-top:10px;">
+        <div style="float:left; width: 5%;"><p></p></div>
+        <div style="float:left; width: 600px; height: 600px;">
+          <div id="floyd-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+          <div ><p> Código </p></div>
+          <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
+            <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'floyd-code'...</p>
+          </div>
+        </div>
+        <div style="float:left; width: 2%;"><p></p></div>
+        <div style="float:left; width: 33%;">
+            <div >
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
+              <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: ...</p>
+              <p style="font-size: smaller; margin-left: 30px; margin-top: 0;">Espacial: ...</p>
+            </div>
+            <div>
+              <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;"> Tiempo de Ejecución: </p>
+              <p id="tiempo-floyd" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00s</p>
+            </div>
+            <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
+            <div class="w3-container w3-card-4" style="height: 47px;; overflow: auto;">
+                <p id="floyd-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
+            </div>
+            <div><p> Camino </p></div>
+            <div class="w3-container w3-card-4" style="height: 170px;">
+                <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            </div>
+            <div style="margin-top:20px;">
+                <div style="float: left; width: 50%;"><input id="origin-floyd" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Script principal: debe ir al final! -->
+  <script type="text/javascript" src="graph.js"></script>
+
+<!-- End page content -->
+</div>
+
+<!-- W3.CSS Container -->
+<div class="w3-light-grey w3-container w3-padding-32" style="margin-top:75px;padding-right:58px"><p class="w3-right">Tecnológico de Monterrey | Campus Santa Fe</p></div>
+
+<script>
+// Script to open and close sidebar
+function w3_open() {
+  document.getElementById("mySidebar").style.display = "block";
+  document.getElementById("myOverlay").style.display = "block";
+}
+ 
+function w3_close() {
+  document.getElementById("mySidebar").style.display = "none";
+  document.getElementById("myOverlay").style.display = "none";
+}
+
+// Modal Image Gallery
+function onClick(element) {
+  document.getElementById("img01").src = element.src;
+  document.getElementById("modal01").style.display = "block";
+  var captionText = document.getElementById("caption");
+  captionText.innerHTML = element.alt;
+}
+</script>
+
+</body>
+</html>

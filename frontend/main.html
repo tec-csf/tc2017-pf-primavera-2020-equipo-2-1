@@ -21,11 +21,11 @@ body {font-size:16px;}
     <h3 class="w3-padding-16"><b>Algoritmos de Grafos<br><font size="-1">Equipo 2</font></b></h3>
   </div>
   <div class="w3-bar-block">
-    <a href="#generar_grafo" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Generar Grafo</a> 
-    <a href="#dfs" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">DFS</a> 
-    <a href="#bfs" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">BFS</a> 
-    <a href="#a-star" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">A*</a> 
-    <a href="#prim" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Prim</a> 
+    <a href="#generar_grafo" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Generar Grafo</a>
+    <a href="#dfs" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">DFS</a>
+    <a href="#bfs" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">BFS</a>
+    <a href="#a-star" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">A*</a>
+    <a href="#prim" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Prim</a>
     <a href="#kruskal" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Kruskal</a>
     <a href="#dijkstra" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Dijkstra</a>
     <a href="#belford" onclick="w3_close()" class="w3-bar-item w3-button w3-hover-white">Bellman-Ford</a>
@@ -54,7 +54,7 @@ body {font-size:16px;}
     <h1 class="w3-xxlarge w3-text-indigo"><b>Generar Grafo</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
   </div>
-  
+
   <!-- Generar Grafos -->
   <div class="w3-container">
     <div style="float:left; width: 10%;"><p></p></div>
@@ -149,7 +149,7 @@ body {font-size:16px;}
         </div>
     </div>
   </div>
-  
+
     <!-- A* -->
     <div class="w3-container" id="a-star" style="margin-top:120px;">
       <h1 class="w3-xxxlarge w3-text-indigo"><b>Algorimto A-Star (A*)</b></h1>
@@ -391,7 +391,7 @@ body {font-size:16px;}
   </div>
 
   <!-- Script principal: debe ir al final! -->
-  <script type="text/javascript" src="graph.js"></script>
+  <script type="text/javascript" src="./../backend/graph.js"></script>
 
 <!-- End page content -->
 </div>
@@ -405,7 +405,7 @@ function w3_open() {
   document.getElementById("mySidebar").style.display = "block";
   document.getElementById("myOverlay").style.display = "block";
 }
- 
+
 function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
   document.getElementById("myOverlay").style.display = "none";

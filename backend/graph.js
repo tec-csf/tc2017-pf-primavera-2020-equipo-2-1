@@ -90,26 +90,144 @@ function drawSetGraph() {
     drawGraph(nodes_set, edges_set);
 }
 
+function drawTestGraph() {
+    destroy();
+
+    node_number = 8;
+    edge_number = 7;
+    var no_nodes = node_number;
+    var no_edges = edge_number;
+
+    // Poner los números generados en la página
+    document.getElementById("node-set").value = no_nodes;
+    document.getElementById("edge-set").value = no_edges;
+
+    var i;
+    for (i = 1; i <= no_nodes; ++i) {
+        addNode(i);
+    }
+
+    i = 1;
+    var origin = 1;
+    var destination = 2;
+    var weight = Math.floor(Math.random() * 15) + 1;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 2;
+    origin = 1;
+    destination = 3;
+    weight = Math.floor(Math.random() * 15) + 1;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 3;
+    origin = 2;
+    destination = 4;
+    weight = Math.floor(Math.random() * 15) + 1;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 4;
+    origin = 2;
+    destination = 5;
+    weight = Math.floor(Math.random() * 15) + 1;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 5;
+    origin = 3;
+    destination = 6;
+    weight = Math.floor(Math.random() * 15) + 1;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 6;
+    origin = 5;
+    destination = 8;
+    weight = Math.floor(Math.random() * 15) + 1;
+    i+=addEdge(i, origin, destination, weight);
+
+     i = 7;
+     origin = 3;
+     destination = 7;
+     weight = Math.floor(Math.random() * 15) + 1;
+     i+=addEdge(i, origin, destination, weight);
+
+    // create a network
+    var container = document.getElementById('mynetwork');
+
+    // provide the data in the vis format
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        //nodes: {shape: "circle"}
+    };
+
+    // initialize your network!
+    network = new vis.Network(container, data, options);
+}
+
 
 /* ---- ESTILIZACIÓN ---- */
+// function highlightNode(id, node_group) {
+//     //Se usan los grupos de nodos individuales de cada algorimto para no activar todas las animaciones
+//     node_group.update({id: id, borderWidth: 3, color: {border: "red"}});
+// }
+//
+//
+// function highlightEdge(id, edge_group) {
+//     edge_group.update({id: id, width: 3, color: {color: "red"}});
+// }
+//
+//
+// function markVisited_node(id, node_group) {
+//     node_group.update({id: id, borderWidth: 1, color: {border: "red"}, shapeProperties: {borderDashes: [5, 5]}});
+// }
+//
+//
+// function markVisited_edge(id, edge_group) {
+//     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: [5, 5]});
+// }
+//
+//
+// function resetAnimation_Node(id, node_group) {
+//     node_group.update({id: id, borderWidth: 1, color: {border: "#2B7CE9"}, shapeProperties: {borderDashes: false}})
+// }
+//
+//
+// function resetAnimation_Edge(id, edge_group) {
+//     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: false})
+// }
+
+
 function highlightNode(id, node_group) {
-    //Se usan los grupos de nodos individuales de cada algorimto para no activar todas las animaciones
-    node_group.update({id: id, borderWidth: 3, color: {border: "red"}});
+    node_group.update({id: id, borderWidth: 1, color: {background: '#5284AF'}});
 }
 
 
-function highlightEdge(id, edge_group) {
+function highlightEdge(id, edge_group, node_group, network_group, node_Id) {
     edge_group.update({id: id, width: 3, color: {color: "red"}});
+    if(node_Id !== undefined)
+    {
+      var connected_nodes = network_group.getConnectedNodes(node_Id, 'to');
+      var i;
+      for(i = 0; i < connected_nodes.length; i++) {
+        highlightNode(connected_nodes[i], node_group);
+      }
+    }
 }
 
 
-function markVisited_node(id, node_group) {
+function dashNode(id, node_group) {
     node_group.update({id: id, borderWidth: 1, color: {border: "red"}, shapeProperties: {borderDashes: [5, 5]}});
 }
 
 
-function markVisited_edge(id, edge_group) {
+function dashEdge(id, edge_group) {
     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: [5, 5]});
+}
+
+
+function markVisited_Node(id, node_group) {
+  node_group.update({id: id, borderWidth: 3, color: {border: "red", background: '#5284AF'}, font: {color: '#FEFEFE'}});
 }
 
 
@@ -122,6 +240,18 @@ function resetAnimation_Edge(id, edge_group) {
     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: false})
 }
 
+/* Para Quitarle todos los highlight, pero Andrés ya lo logró de otra manera */
+function cleanGraph(node_group, edge_group){
+  var i;
+  for(i = 0; i < node_group.length; i++){
+    node_group.update({id: i+1, borderWidth: 1, color: {border: "#2B7CE9", background: '#97C2FC'}, font: {color: "black"}, shapeProperties: {borderDashes: false}})
+  }
+  for(i = 0; i < edge_group.length; i++){
+    edge_group.update({id: i+1, width: 1, color: {color: "#2B7CE9"}, dashes: false})
+  }
+}
+
+
 
 /* ---- ACCESO ---- */
 function isNeighbour(origin, destination) {
@@ -130,6 +260,41 @@ function isNeighbour(origin, destination) {
             if (edges.get(i).to == destination)
                 return true;
     return false;
+}
+
+
+/* ---- OTROS ---- */
+function Queue(){
+  var a=[], b=0;
+  this.getLength = function() { return a.length-b };
+  this.isEmpty = function() { return 0==a.length };
+  this.enqueue = function(b) { a.push(b) };
+  this.dequeue = function() {
+    if(0!=a.length){
+      var c=a[b];
+      2*++b>=a.length&&(a=a.slice(b),b=0);
+      return c
+    }
+  };
+  this.peek=function() { return 0<a.length?a[b]:void 0 }
+};
+
+
+function sleep(ms) {
+  return new Promise(resolve => {
+    setTimeout(() => { resolve(true); }, ms);
+  });
+}
+
+
+function visit_Node(node_analized, node_group)
+{
+  return new Promise(resolve => {
+    setTimeout(() => {
+      markVisited_Node(node_analized, node_group);
+      resolve(true);
+    }, 3000);
+  });
 }
 
 
@@ -148,7 +313,8 @@ function isNeighbour(origin, destination) {
 var dfs_result; //En esta variable estoy poniendo el camino que toma para que la imprima en cada llamada
 function DFS() {
     dfs_result = ""; //Cada vez que se llama se reinicia el resultado
-    //Se obtiene el nodod de origen usansdo el id del input (todos son 'origin-algorimtmo' -> checar html para obtener ids)
+    //Se obtiene el nodo de origen usando el id del input
+    // (todos son 'origin-algorimtmo' -> checar html para obtener ids)
     var start_node = parseInt(document.getElementById("origin-dfs").value); //En algunos algorimtos no se necesitará esto
 
     //Se tiene que volver a hacer un dibujo del grafo para tener animaciones individuales
@@ -200,7 +366,74 @@ function DFSUtil(current_node, visited, dfs_nodes, dfs_edges) {
 }
 
 /* ---- BFS ---- */
+function BFS()
+{
+    //cleanGraph();
+    // Se obtiene el nodo de origen usansdo el id del input
+    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
+    var start_node = parseInt(document.getElementById("origin-bfs").value); // En algunos algorimtos no se necesitará esto
+
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var bfs_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
+    var bfs_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('bfs-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var data = {
+        nodes: bfs_nodes,
+        edges: bfs_edges
+    };
+    var options = { };
+    var bfs_network = new vis.Network(container, data, options);
+    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+
+    var visited = [];
+    for (var i = 0; i < node_number; i++)
+        visited[i] = false;
+
+    BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges);
+}
 
 
+async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
+{
+    console.log(start_node);
 
+    var queue = new Queue();
+    highlightNode(start_node, bfs_nodes);
+
+    visited[start_node - 1] = true;
+
+    queue.enqueue(start_node);
+
+    // const sleep_bool = await sleep(100);
+    // _stop = false;
+    while (!queue.isEmpty())
+    {
+        var node_analized = queue.dequeue();
+        visited[node_analized - 1] = true;
+        var neighbors = bfs_network.getConnectedEdges(node_analized);
+
+        const visit_Node_bool = await visit_Node(node_analized, bfs_nodes);
+        // if(_stop) { return; }
+        const sleep_bool = await sleep(1000);
+        // if(_stop) { return; }
+
+        var i;
+        for (i = 0; i < neighbors.length; i++)
+        {
+            if (bfs_edges.get(neighbors[i]).from == node_analized)
+            {
+                var destination = bfs_edges.get(neighbors[i]).to;
+                if(!visited[destination])
+                {
+                    highlightEdge(neighbors[i], bfs_edges, bfs_nodes, bfs_network, node_analized);
+                    queue.enqueue(destination);
+                }
+            }
+        }
+    }
+}
+
+
+/* ---- "MAIN" ---- */
 drawRandomGraph();

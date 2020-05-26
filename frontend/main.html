@@ -51,6 +51,7 @@ body {font-size:16px;}
   <!-- Header -->
   <div class="w3-container" style="margin-top:80px" id="generar_grafo">
     <h1 class="w3-xxxlarge"><b>Proyecto Final - Algoritmos de Grafos</b></h1>
+    <hr>
     <h1 class="w3-xxlarge w3-text-indigo"><b>Generar Grafo</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
   </div>
@@ -72,7 +73,8 @@ body {font-size:16px;}
    </div>
 
   <!-- DFS -->
-  <div class="w3-container" id="dfs" style="margin-top:120px;">
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="dfs">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Búsqueda en Profundidad (DFS)</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
@@ -112,7 +114,8 @@ body {font-size:16px;}
   </div>
 
   <!-- BFS -->
-  <div class="w3-container" id="bfs" style="margin-top:120px;">
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="bfs">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Búsqueda en Amplitud (BFS)</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
@@ -152,7 +155,8 @@ body {font-size:16px;}
   </div>
 
     <!-- A* -->
-    <div class="w3-container" id="a-star" style="margin-top:120px;">
+    <hr style="margin-top:120px;">
+    <div class="w3-container" id="a-star">
       <h1 class="w3-xxxlarge w3-text-indigo"><b>Algorimto A-Star (A*)</b></h1>
       <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
       <div style="margin-top:10px;">
@@ -192,7 +196,8 @@ body {font-size:16px;}
     </div>
 
   <!-- Prim -->
-  <div class="w3-container" id="prim" style="margin-top:120px;">
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="prim">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Prim</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
@@ -232,7 +237,8 @@ body {font-size:16px;}
   </div>
 
   <!-- Kruskal -->
-  <div class="w3-container" id="kruskal" style="margin-top:120px;">
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="kruskal">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Kruskal</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
@@ -272,7 +278,8 @@ body {font-size:16px;}
   </div>
 
   <!-- Dijkstra -->
-  <div class="w3-container" id="dijkstra" style="margin-top:120px;">
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="dijkstra">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Dijkstra</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
@@ -312,7 +319,8 @@ body {font-size:16px;}
   </div>
 
   <!-- Bellman-Ford -->
-  <div class="w3-container" id="belford" style="margin-top:120px;">
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="belford">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Bellman-Ford</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
@@ -352,7 +360,8 @@ body {font-size:16px;}
   </div>
 
   <!-- Floyd-Warshall -->
-  <div class="w3-container" id="floyd" style="margin-top:120px;">
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="floyd">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo de Floyd-Warshall</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
@@ -388,6 +397,138 @@ body {font-size:16px;}
                 <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar Algoritmo </button></div>
             </div>
         </div>
+    </div>
+  </div>
+
+  <!-- Comparar Algorimtos -->
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="compare">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Comparar Algoritmos</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    
+    <!-- Tabla de Algoritmos -->
+    <table class="w3-table w3-bordered">
+      <tr>
+        <th></th>
+        <th style="width: 40%;">Algoritmo</th>
+        <th>Avance</th>
+        <th>Tiempo</th>
+      </tr>
+      <tr>
+        <td><input id="compare-bfs"type="checkbox" checked="checked"></td>
+        <td>Búsqueda en Profundidad (DFS)</td>
+        <td>
+          <div id="progress-bfs" style="width: 80%; background-color: #ddd;">
+            <div id="bar-bfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+      <tr>
+        <td><input id="compare-dfs"type="checkbox" checked="checked"></td>
+        <td>Búsqueda en Amplitud (BFS)</td>
+        <td>
+          <div id="progress-dfs" style="width: 80%; background-color: #ddd;">
+            <div id="bar-dfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+      <tr>
+        <td><input id="compare-a"type="checkbox" checked="checked"></td>
+        <td>Algorimto A-Star (A*)</td>
+        <td>
+          <div id="progress-a" style="width: 80%; background-color: #ddd;">
+            <div id="bar-a" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+      <tr>
+        <td><input id="compare-prim"type="checkbox" checked="checked"></td>
+        <td>Algoritmo de Prim</td>
+        <td>
+          <div id="progress-prim" style="width: 80%; background-color: #ddd;">
+            <div id="bar-prim" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+      <tr>
+        <td><input id="compare-kruskal"type="checkbox" checked="checked"></td>
+        <td>Algoritmo de Kruskal</td>
+        <td>
+          <div id="progress-kruskal" style="width: 80%; background-color: #ddd;">
+            <div id="bar-kruskal" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+      <tr>
+        <td><input id="compare-dijkstra"type="checkbox" checked="checked"></td>
+        <td>Algoritmo de Dijkstra</td>
+        <td>
+          <div id="progress-dijkstra" style="width: 80%; background-color: #ddd;">
+            <div id="bar-disjktra" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+      <tr>
+        <td><input id="compare-belford"type="checkbox" checked="checked"></td>
+        <td>Algoritmo de Bellman-Ford</td>
+        <td>
+          <div id="progress-belford" style="width: 80%; background-color: #ddd;">
+            <div id="bar-belford" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+      <tr>
+        <td><input id="compare-floyd"type="checkbox" checked="checked"></td>
+        <td>Algoritmo de Floyd-Warshall</td>
+        <td>
+          <div id="progress-floyd" style="width: 80%; background-color: #ddd;">
+            <div id="bar-floyd" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          </div>
+        </td>
+        <td>0.00s</td>
+      </tr>
+    </table>
+    <div class="w3-container">
+      <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="float: right" onclick=""> Ejecutar Algoritmos </button></p>
+    </div>
+    <hr>
+    <!-- Gráfico -->
+    <div class="w3-container" style="width: 900px; margin: auto;">
+      <div class="w3-container" style="float: left;">
+        <div style="width: 600px; font-weight: bold;">Gráfico</div>
+        <div id="grafico-algoritmos" class="w3-card-4 w3-container" style="width: 600px; height: 340px;"></div>
+      </div>
+      <div class="w3-container" style="float: left">
+        <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Resultados Históricos </button></p>
+        <div><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a PDF </button></div>
+        <div><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a CSV </button></div>
+        <div><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a JSON </button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Integrantes | Referencias -->
+  <hr style="margin-top:120px;">
+  <div class="w3-container" id="credits">
+    <h1 class="w3-xxxlarge w3-text-indigo"><b>Integrantes | Referencias</b></h1>
+    <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
+    <div>
+      <p>Clase: Análisis y Diseño de Algoritmos</p>
+      <p style="margin-left: 20px; font-size: smaller;">Profesor: Dr. Vicente Cubells</p>
+      <p style="margin-top: 30px;">Integrantes Equipo 2: </p>
+      <p style="margin-left: 20px; font-size: smaller;">Andrés Barragán Salas - A01026567</p>
+      <p style="margin-left: 20px; font-size: smaller;">Abraham Garcia Del Corral - A01023256</p>
+      <p style="margin-left: 20px; font-size: smaller;">Gerardo Anglada de Landa - A01021917</p>
+      <p style="margin-left: 20px; font-size: smaller;">Rodrigo Quiroz Reyes - A01026546</p>
+      <p style="margin-left: 20px; font-size: smaller;">Héctor Arturo Quinde García - A01339451</p>
+      <p style="margin-top: 30px;">Referencias utilizadas: </p>
     </div>
   </div>
 

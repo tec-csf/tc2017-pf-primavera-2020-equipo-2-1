@@ -3,11 +3,12 @@ var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
 var network = null;
 
-var step_duration = 2000; // ms = 1 segundo
 var node_number, edge_number;
 var edges_array = [];
 
-/* ---- CREACIÓN DE GRAFO ---- */
+/* ---- ALGORITMOS PARA LA CREACIÓN DE GRAFO ---- */
+
+/* Limpia todos los valores del grafo */
 function destroy() {
     if (network !== null) {
         nodes.clear();
@@ -18,12 +19,14 @@ function destroy() {
 }
 
 
+/* Función auxiliar de drawGraph que agrega al DataSet el nodo */
 function addNode(id) {
     var id_shown = id.toString();
     nodes.add({id: id, label: id_shown});
 }
 
 
+/* Función auxiliar de drawGraph que agrega al DataSet la arista */
 function addEdge(id, origin, destination, weight) {
     if (!isNeighbour(origin, destination)) {
         var shown_weight = weight.toString();
@@ -35,6 +38,7 @@ function addEdge(id, origin, destination, weight) {
 }
 
 
+/* Genera grafo */
 function drawGraph(no_nodes, no_edges) {
     destroy();
 
@@ -56,33 +60,34 @@ function drawGraph(no_nodes, no_edges) {
         i += addEdge(i, origin, destination, weight);
     }
 
-    // create a network
     var container = document.getElementById('mynetwork');
 
-    // provide the data in the vis format
     var data = {
         nodes: nodes,
         edges: edges
     };
     var options = { };
 
-    // initialize your network!
+    // Inicializa Network
     network = new vis.Network(container, data, options);
 }
 
 
+/* Genera datos aleatorios para creación de grafo */
 function drawRandomGraph() {
-    var no_nodes = Math.floor(Math.random() * 11) + 5; //Número de nodos entre 5 y 15
-    var no_edges = Math.floor(Math.random() * (no_nodes+1)) + no_nodes; //Número de aristas entre la cantidad de nodos y 2 veces la cantidad de nodos
+    // Genera entre 5 y 15 nodos,
+    // y entre los n nodos generados y 2*n nodos generados de aristas
+    var no_nodes = Math.floor(Math.random() * 11) + 5;
+    var no_edges = Math.floor(Math.random() * (no_nodes+1)) + no_nodes;
 
-    // Poner los números generados en la página
+    // Despliega los números generados en HTML
     document.getElementById("node-set").value = no_nodes;
     document.getElementById("edge-set").value = no_edges;
 
     drawGraph(no_nodes, no_edges);
 }
 
-
+/* Obtiene datos declarados en HTML para creación de grafo */
 function drawSetGraph() {
     var nodes_set = document.getElementById("node-set").value;
     var edges_set = document.getElementById("edge-set").value;
@@ -90,6 +95,8 @@ function drawSetGraph() {
     drawGraph(nodes_set, edges_set);
 }
 
+
+/* Genera un grafo fijo para debug */
 function drawTestGraph() {
     destroy();
 
@@ -98,7 +105,7 @@ function drawTestGraph() {
     var no_nodes = node_number;
     var no_edges = edge_number;
 
-    // Poner los números generados en la página
+    // Despliega los números generados en HTML
     document.getElementById("node-set").value = no_nodes;
     document.getElementById("edge-set").value = no_edges;
 
@@ -111,7 +118,7 @@ function drawTestGraph() {
     var origin = 1;
     var destination = 2;
     var weight = Math.floor(Math.random() * 15) + 1;
-    i+=addEdge(i, origin, destination, weight);
+    i += addEdge(i, origin, destination, weight);
 
     i = 2;
     origin = 1;
@@ -123,36 +130,33 @@ function drawTestGraph() {
     origin = 2;
     destination = 4;
     weight = Math.floor(Math.random() * 15) + 1;
-    i+=addEdge(i, origin, destination, weight);
+    i += addEdge(i, origin, destination, weight);
 
     i = 4;
     origin = 2;
     destination = 5;
     weight = Math.floor(Math.random() * 15) + 1;
-    i+=addEdge(i, origin, destination, weight);
+    i += addEdge(i, origin, destination, weight);
 
     i = 5;
     origin = 3;
     destination = 6;
     weight = Math.floor(Math.random() * 15) + 1;
-    i+=addEdge(i, origin, destination, weight);
+    i += addEdge(i, origin, destination, weight);
 
     i = 6;
     origin = 5;
     destination = 8;
     weight = Math.floor(Math.random() * 15) + 1;
+    i += addEdge(i, origin, destination, weight);
+
+    i = 7;
+    origin = 3;
+    destination = 7;
+    weight = Math.floor(Math.random() * 15) + 1;
     i+=addEdge(i, origin, destination, weight);
 
-     i = 7;
-     origin = 3;
-     destination = 7;
-     weight = Math.floor(Math.random() * 15) + 1;
-     i+=addEdge(i, origin, destination, weight);
-
-    // create a network
     var container = document.getElementById('mynetwork');
-
-    // provide the data in the vis format
     var data = {
         nodes: nodes,
         edges: edges
@@ -161,17 +165,22 @@ function drawTestGraph() {
         //nodes: {shape: "circle"}
     };
 
-    // initialize your network!
+    // Inicializar Network
     network = new vis.Network(container, data, options);
 }
 
 
 /* ---- ESTILIZACIÓN ---- */
+
+/* Sombrea nodo; denota que ha sido visitado
+ * pero aún no ha sido analizado
+ */
 function highlightNode(id, node_group) {
     node_group.update({id: id, borderWidth: 1, color: {background: '#5284AF'}});
 }
 
 
+/* Marca las aristas que han sido recorridas */
 function highlightEdge(id, edge_group, node_group, network_group, node_Id) {
     edge_group.update({id: id, width: 3, color: {color: "red"}});
     if(node_Id !== undefined)
@@ -185,43 +194,69 @@ function highlightEdge(id, edge_group, node_group, network_group, node_Id) {
 }
 
 
+/* Rodea nodo con línea punteada;
+ * denota que ese nodo es inaccesible
+ */
 function dashNode(id, node_group) {
     node_group.update({id: id, borderWidth: 1, color: {border: "red"}, shapeProperties: {borderDashes: [5, 5]}});
 }
 
 
+/* Marca arista con línea punteada;
+ * denota que esa arista no se recorre
+ */
 function dashEdge(id, edge_group) {
     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: [5, 5]});
 }
 
 
+/* Rodea nodo con línea roja y enfatiza número;
+ * denota que ese nodo ha sido analizado
+ */
 function markVisited_Node(id, node_group) {
   node_group.update({id: id, borderWidth: 3, color: {border: "red", background: '#5284AF'}, font: {color: '#FEFEFE'}});
 }
 
 
-function resetAnimation_Node(id, node_group) {
-    node_group.update({id: id, borderWidth: 1, color: {border: "#2B7CE9"}, shapeProperties: {borderDashes: false}})
+/* Función con atraso para marcar nodo como analizado */
+function visit_Node(node_analized, node_group)
+{
+  return new Promise(resolve => {
+    setTimeout(() => {
+      markVisited_Node(node_analized, node_group);
+      resolve(true);
+    }, 3000);
+  });
 }
 
 
+/* Regresa nodo a valores preestablecidos */
+function resetAnimation_Node(id, node_group) {
+    node_group.update({id: i+1, borderWidth: 1, color: {border: "#2B7CE9", background: '#97C2FC'}, font: {color: "black"}, shapeProperties: {borderDashes: false}})
+}
+
+
+/* Regresa arista a valores preestablecidos */
 function resetAnimation_Edge(id, edge_group) {
     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: false})
 }
 
-/* Para Quitarle todos los highlight, pero Andrés ya lo logró de otra manera */
+
+/* Para quitarle todos los highlights a grafo */
 function cleanGraph(node_group, edge_group){
   var i;
   for(i = 0; i < node_group.length; i++){
-    node_group.update({id: i+1, borderWidth: 1, color: {border: "#2B7CE9", background: '#97C2FC'}, font: {color: "black"}, shapeProperties: {borderDashes: false}})
+    resetAnimation_Node(i+1, node_group);
   }
   for(i = 0; i < edge_group.length; i++){
-    edge_group.update({id: i+1, width: 1, color: {color: "#2B7CE9"}, dashes: false})
+    resetAnimation_Edge(i+1, edge_group);
   }
 }
 
 
 /* ---- ACCESO ---- */
+
+/* Verifica si dos nodos están conectados directamente */
 function isNeighbour(origin, destination) {
     for(let i=1; i <= edges.length; ++i)
         if (edges.get(i).from == origin)
@@ -232,6 +267,8 @@ function isNeighbour(origin, destination) {
 
 
 /* ---- OTROS ---- */
+
+/* Estructura para utilizar un contendor queue */
 function Queue(){
   var a=[], b=0;
   this.getLength = function() { return a.length-b };
@@ -248,20 +285,12 @@ function Queue(){
 };
 
 
+/* Crea un atraso de tiempo establecido
+ * para mejor visualización de recorrido
+ */
 function sleep(ms) {
   return new Promise(resolve => {
     setTimeout(() => { resolve(true); }, ms);
-  });
-}
-
-
-function visit_Node(node_analized, node_group)
-{
-  return new Promise(resolve => {
-    setTimeout(() => {
-      markVisited_Node(node_analized, node_group);
-      resolve(true);
-    }, 3000);
   });
 }
 
@@ -315,7 +344,7 @@ function DFS() {
     for (var i = 0; i < node_number; i++)
         visited[i] = false;
 
-    // Se 'imprime' instruccion en ejecución
+    // Se 'imprime' instrucción en ejecución
     document.getElementById("dfs-instruction").innerHTML = "DFS("+start_node+");";
 
     DFSUtil(start_node, visited, dfs_network, dfs_nodes, dfs_edges);
@@ -375,6 +404,7 @@ function BFS()
 
     document.getElementById("bfs-code").innerHTML = bfs_code;
     bfs_result = ""; // Limpia string
+
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
     var start_node = parseInt(document.getElementById("origin-bfs").value); // En algunos algoritmos no se necesitará esto

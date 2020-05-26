@@ -254,12 +254,9 @@ function cleanGraph(node_group, edge_group){
 }
 
 /* Animar barras de avance */
-var bars_loaded = 0;
 function load_progressBar(algorithm) {
   var bar_id = "bar-" + algorithm;
 
-  if (bars_loaded == 0) {
-    bars_loaded = 1;
     var progress_bar = document.getElementById(bar_id);
     progress_bar.innerHTML = "";
     var width = 1;
@@ -267,7 +264,6 @@ function load_progressBar(algorithm) {
     function frame() {
       if (width >= 100) {
         clearInterval(id);
-        bars_loaded = 0;
       } else {
         width++;
         progress_bar.style.width = width + "%";
@@ -275,7 +271,6 @@ function load_progressBar(algorithm) {
             progress_bar.innerHTML = width  + "%";
       }
     }
-  }
 }
 
 /* ---- ACCESO ---- */
@@ -503,6 +498,33 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
     }
 }
 
+/* -------------------------------------------------------------------------- */
+/* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
+
+/* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
+function runAlgorithm(algorithm) {
+    var algorithm_checkbox = "compare-" + algorithm; 
+
+    if(document.getElementById(algorithm_checkbox).checked) {
+        load_progressBar(algorithm); 
+        //Agregar el resto de los métodos que se utilicen 
+    }
+}
+
+/* Ejecuta todos los allgoritmos seleccionados en la sección de comparación */
+function compareAlgorithms() {
+    //Estas llamadas son las que deberemos paralelizar
+    runAlgorithm("dfs");
+    runAlgorithm("bfs");
+    runAlgorithm("a");
+    runAlgorithm("prim");
+    runAlgorithm("kruskal");
+    runAlgorithm("dijkstra");
+    runAlgorithm("belford");
+    runAlgorithm("floyd");
+
+    //Se genera la gráfica
+}
 
 /* ---- "MAIN" ---- */
 drawRandomGraph();

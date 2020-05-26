@@ -167,37 +167,6 @@ function drawTestGraph() {
 
 
 /* ---- ESTILIZACIÓN ---- */
-// function highlightNode(id, node_group) {
-//     //Se usan los grupos de nodos individuales de cada algorimto para no activar todas las animaciones
-//     node_group.update({id: id, borderWidth: 3, color: {border: "red"}});
-// }
-//
-//
-// function highlightEdge(id, edge_group) {
-//     edge_group.update({id: id, width: 3, color: {color: "red"}});
-// }
-//
-//
-// function markVisited_node(id, node_group) {
-//     node_group.update({id: id, borderWidth: 1, color: {border: "red"}, shapeProperties: {borderDashes: [5, 5]}});
-// }
-//
-//
-// function markVisited_edge(id, edge_group) {
-//     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: [5, 5]});
-// }
-//
-//
-// function resetAnimation_Node(id, node_group) {
-//     node_group.update({id: id, borderWidth: 1, color: {border: "#2B7CE9"}, shapeProperties: {borderDashes: false}})
-// }
-//
-//
-// function resetAnimation_Edge(id, edge_group) {
-//     edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: false})
-// }
-
-
 function highlightNode(id, node_group) {
     node_group.update({id: id, borderWidth: 1, color: {background: '#5284AF'}});
 }
@@ -252,7 +221,6 @@ function cleanGraph(node_group, edge_group){
 }
 
 
-
 /* ---- ACCESO ---- */
 function isNeighbour(origin, destination) {
     for(let i=1; i <= edges.length; ++i)
@@ -303,75 +271,113 @@ function visit_Node(node_analized, node_group)
 
 // Hace falta meter la medición de tiempo (desde el .js);
 // las complejidades (desde el .html)
-// y el código del algorimto (desde cualquiera).
+// y el código del algoritmo (desde cualquiera).
 
 // Checa los ids correspondientes a cada cosa en el main.html
-// Si le hace falta algo en el html para su algorimto decirle a Andrés.
+// Si le hace falta algo en el html para su algoritmo decirle a Andrés.
 
 
 /* ---- DFS ---- */
-var dfs_result; //En esta variable estoy poniendo el camino que toma para que la imprima en cada llamada
+var dfs_result; // String con recorrido de algoritmo.
 function DFS() {
-    dfs_result = ""; //Cada vez que se llama se reinicia el resultado
-    //Se obtiene el nodo de origen usando el id del input
-    // (todos son 'origin-algorimtmo' -> checar html para obtener ids)
-    var start_node = parseInt(document.getElementById("origin-dfs").value); //En algunos algorimtos no se necesitará esto
+    // Algoritmo para desplegar en HTML
+    var dfs_code = "";
+    dfs_code += "var stack = [];<br>";
+    dfs_code += "stack.push(nodo_inicial);<br>";
+    dfs_code += "while stack NOT EMPTY<br>";
+    dfs_code += "&emsp;current_node = stack.pop();<br>";
+    dfs_code += "&emsp;if current_node NOT VISITED;<br>";
+    dfs_code += "&emsp;&emsp;current_node = VISITED;<br>";
+    dfs_code += "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>";
+    dfs_code += "&emsp;&emsp;&emsp;stack.push(i)";
 
-    //Se tiene que volver a hacer un dibujo del grafo para tener animaciones individuales
-    var dfs_nodes = new vis.DataSet(nodes.get()); //Se hace una copia de los nodos y aristas
+    document.getElementById("dfs-code").innerHTML = dfs_code;
+    dfs_result = ""; // Limpia string
+
+    // Se obtiene el nodo de origen usando el id del input
+    // ids se encuentran en main.html. (todos son 'origin-algoritmo')
+    var start_node = parseInt(document.getElementById("origin-dfs").value);
+
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var dfs_nodes = new vis.DataSet(nodes.get());
     var dfs_edges = new vis.DataSet(edges.get());
-    var container = document.getElementById('dfs-network'); //Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var container = document.getElementById('dfs-network'); // ids se encuentran en main.html.
     var data = {
         nodes: dfs_nodes,
         edges: dfs_edges
     };
     var options = {};
     var dfs_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+    // Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
 
     var visited = [];
-    for (var i = 1; i <= node_number; i++)
+    for (var i = 0; i < node_number; i++)
         visited[i] = false;
 
-    document.getElementById("dfs-instruction").innerHTML = "DFS("+start_node+");"; //Con esto estoy 'imrpimiendo' las instrucciones que se estan ejecutando en el momento (no puse muchas de estas, son de ejemplo)
-    setTimeout(DFSUtil, step_duration, start_node, visited, dfs_nodes, dfs_edges, ""); //Este es un timpo de llamada recursiva que tiene delay, creo que Gerry ya encontró algo más óptimo
+    // Se 'imprime' instruccion en ejecución
+    document.getElementById("dfs-instruction").innerHTML = "DFS("+start_node+");";
+
+    DFSUtil(start_node, visited, dfs_network, dfs_nodes, dfs_edges);
 }
 
 
-function DFSUtil(current_node, visited, dfs_nodes, dfs_edges) {
-    document.getElementById("dfs-instruction").innerHTML = "visited["+current_node+"] = true;";
-    visited[current_node] = true;
-    dfs_result+= " -> " + current_node; //Se actualiza el resultado del algorimto
-    //console.log(current_node);
-    document.getElementById("dfs-result").innerHTML = dfs_result; //Se va imprime el resultado actualizado
+async function DFSUtil(current_node, visited, dfs_network, dfs_nodes, dfs_edges) {
+    var stack = [];
+    stack.push(current_node);
+    document.getElementById("dfs-instruction").innerHTML = "stack.push["+current_node+"];";
 
-    var neighbors = network.getConnectedEdges(current_node);
-    document.getElementById("dfs-instruction").innerHTML = "var neighbors = network.getConnectedEdges(" + current_node + ");";
-    highlightNode(current_node, dfs_nodes); //Se hace la animación, se manda como parametro los nodes o edges propios de este algoritmo (si no se hace esto se modifican el resto de los grafos)
+    highlightNode(current_node, dfs_nodes);
+    while (stack.length > 0)
+    {
+        var node_analized = stack.pop();
 
-    for (var i in neighbors) {
-        if (dfs_edges.get(neighbors[i]).from == current_node){
-            var destination = dfs_edges.get(neighbors[i]).to;
-            document.getElementById("dfs-instruction").innerHTML = "var destination = dfs_edges.get(neighbors["+i+"]).to;";
-            highlightEdge(neighbors[i], dfs_edges);
-            document.getElementById("dfs-instruction").innerHTML = "if (!visited["+destination+"])";
-            if (!visited[destination]){
-                setTimeout(DFSUtil, step_duration, destination, visited, dfs_nodes, dfs_edges);
-                document.getElementById("dfs-instruction").innerHTML = "DFS("+destination+");";
+        if(!visited[node_analized - 1])
+        {
+            const visit_Node_bool = await visit_Node(node_analized, dfs_nodes);
+            dfs_result += node_analized;
+            const sleep_bool = await sleep(1000);
+            visited[node_analized - 1] = true;
+            var neighbors = dfs_network.getConnectedEdges(node_analized);
+            document.getElementById("dfs-instruction").innerHTML = "var neighbors = network.getConnectedEdges(" + current_node + ");";
+            var i;
+            for (i = 0; i < neighbors.length; i++)
+            {
+                if (dfs_edges.get(neighbors[i]).from == node_analized)
+                {
+                    document.getElementById("dfs-result").innerHTML = dfs_result;
+                    var destination = dfs_edges.get(neighbors[i]).to;
+                    document.getElementById("dfs-instruction").innerHTML = "var destination = dfs_edges.get(neighbors["+i+"]).to;";
+                    stack.push(destination);
+                    highlightEdge(neighbors[i], dfs_edges, dfs_nodes, dfs_network, node_analized);
+                }
             }
-            else
-                markVisited_edge(neighbors[i], dfs_edges);
         }
+        dfs_result += " -> ";
     }
 }
 
 /* ---- BFS ---- */
+var bfs_result;
 function BFS()
 {
-    //cleanGraph();
+    // Algoritmo para desplegar en HTML
+    var bfs_code = "";
+    bfs_code += "var queue = new Queue();<br>";
+    bfs_code += "nodo_inicial = VISITED;<br>";
+    bfs_code += "queue.enqueue(nodo_inicial);<br>";
+    bfs_code += "while queue NOT EMPTY<br>";
+    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
+    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
+    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
+    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
+    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+
+    document.getElementById("bfs-code").innerHTML = bfs_code;
+    bfs_result = ""; // Limpia string
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
-    var start_node = parseInt(document.getElementById("origin-bfs").value); // En algunos algorimtos no se necesitará esto
+    var start_node = parseInt(document.getElementById("origin-bfs").value); // En algunos algoritmos no se necesitará esto
 
     // Se tiene que volver a hacer un dibujo del grafo
     // para tener animaciones individuales
@@ -390,19 +396,21 @@ function BFS()
     for (var i = 0; i < node_number; i++)
         visited[i] = false;
 
+    // Se 'imprime' instruccion en ejecución
+    document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
+
     BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges);
 }
 
 
 async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
 {
-    console.log(start_node);
-
     var queue = new Queue();
     highlightNode(start_node, bfs_nodes);
 
     visited[start_node - 1] = true;
 
+    document.getElementById("bfs-instruction").innerHTML = "queue.enqueue["+start_node+"];";
     queue.enqueue(start_node);
 
     // const sleep_bool = await sleep(100);
@@ -410,10 +418,15 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
     while (!queue.isEmpty())
     {
         var node_analized = queue.dequeue();
+        bfs_result += node_analized;
+
         visited[node_analized - 1] = true;
         var neighbors = bfs_network.getConnectedEdges(node_analized);
+        document.getElementById("bfs-instruction").innerHTML = "var neighbors = network.getConnectedEdges(" + node_analized + ");";
+
 
         const visit_Node_bool = await visit_Node(node_analized, bfs_nodes);
+        document.getElementById("bfs-result").innerHTML = bfs_result;
         // if(_stop) { return; }
         const sleep_bool = await sleep(1000);
         // if(_stop) { return; }
@@ -424,6 +437,7 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
             if (bfs_edges.get(neighbors[i]).from == node_analized)
             {
                 var destination = bfs_edges.get(neighbors[i]).to;
+                document.getElementById("bfs-instruction").innerHTML = "var destination = bfs_edges.get(neighbors["+i+"]).to;";
                 if(!visited[destination])
                 {
                     highlightEdge(neighbors[i], bfs_edges, bfs_nodes, bfs_network, node_analized);
@@ -431,6 +445,7 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
                 }
             }
         }
+        bfs_result += " -> ";
     }
 }
 

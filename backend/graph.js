@@ -253,6 +253,30 @@ function cleanGraph(node_group, edge_group){
   }
 }
 
+/* Animar barras de avance */
+var bars_loaded = 0;
+function load_progressBar(algorithm) {
+  var bar_id = "bar-" + algorithm;
+
+  if (bars_loaded == 0) {
+    bars_loaded = 1;
+    var progress_bar = document.getElementById(bar_id);
+    progress_bar.innerHTML = "";
+    var width = 1;
+    var id = setInterval(frame, 10);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+        bars_loaded = 0;
+      } else {
+        width++;
+        progress_bar.style.width = width + "%";
+        if (width >= 20)
+            progress_bar.innerHTML = width  + "%";
+      }
+    }
+  }
+}
 
 /* ---- ACCESO ---- */
 

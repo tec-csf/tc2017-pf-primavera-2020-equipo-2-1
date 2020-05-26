@@ -477,21 +477,21 @@ body {font-size:16px;}
         <th>Tiempo</th>
       </tr>
       <tr>
-        <td><input id="compare-bfs"type="checkbox" checked="checked"></td>
+        <td><input id="compare-dfs"type="checkbox" checked="checked"></td>
         <td>Búsqueda en Profundidad (DFS)</td>
         <td>
-          <div id="progress-bfs" style="width: 80%; background-color: #ddd;">
-            <div id="bar-bfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          <div id="progress-dfs" style="width: 80%; background-color: #ddd;">
+            <div id="bar-dfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
       </tr>
       <tr>
-        <td><input id="compare-dfs"type="checkbox" checked="checked"></td>
-        <td>Búsqueda en Amplitud (BFS)</td>
+        <td><input id="compare-bfs"type="checkbox" checked="checked"></td>
+        <td>Búsqueda en Amplitud (BFS)</d>
         <td>
-          <div id="progress-dfs" style="width: 80%; background-color: #ddd;">
-            <div id="bar-dfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+          <div id="progress-bfs" style="width: 80%; background-color: #ddd;">
+            <div id="bar-bfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
@@ -501,7 +501,7 @@ body {font-size:16px;}
         <td>Algorimto A-Star (A*)</td>
         <td>
           <div id="progress-a" style="width: 80%; background-color: #ddd;">
-            <div id="bar-a" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+            <div id="bar-a" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
@@ -511,7 +511,7 @@ body {font-size:16px;}
         <td>Algoritmo de Prim</td>
         <td>
           <div id="progress-prim" style="width: 80%; background-color: #ddd;">
-            <div id="bar-prim" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+            <div id="bar-prim" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
@@ -521,7 +521,7 @@ body {font-size:16px;}
         <td>Algoritmo de Kruskal</td>
         <td>
           <div id="progress-kruskal" style="width: 80%; background-color: #ddd;">
-            <div id="bar-kruskal" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+            <div id="bar-kruskal" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
@@ -531,7 +531,7 @@ body {font-size:16px;}
         <td>Algoritmo de Dijkstra</td>
         <td>
           <div id="progress-dijkstra" style="width: 80%; background-color: #ddd;">
-            <div id="bar-disjktra" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+            <div id="bar-disjktra" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
@@ -541,7 +541,7 @@ body {font-size:16px;}
         <td>Algoritmo de Bellman-Ford</td>
         <td>
           <div id="progress-belford" style="width: 80%; background-color: #ddd;">
-            <div id="bar-belford" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+            <div id="bar-belford" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
@@ -551,14 +551,14 @@ body {font-size:16px;}
         <td>Algoritmo de Floyd-Warshall</td>
         <td>
           <div id="progress-floyd" style="width: 80%; background-color: #ddd;">
-            <div id="bar-floyd" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 30px; color: white;"></div>
+            <div id="bar-floyd" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
         <td>0.00s</td>
       </tr>
     </table>
     <div class="w3-container">
-      <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="float: right" onclick=""> Ejecutar Algoritmos </button></p>
+      <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="float: right" onclick="load_progressBar('dfs');"> Ejecutar Algoritmos </button></p>
     </div>
     <hr>
     <!-- Gráfico -->

@@ -5,6 +5,7 @@ var network = null;
 
 var node_number, edge_number;
 var edges_array = [];
+var Aristas=[];
 
 /* ---- ALGORITMOS PARA LA CREACIÓN DE GRAFO ---- */
 
@@ -32,6 +33,13 @@ function addEdge(id, origin, destination, weight) {
         var shown_weight = weight.toString();
         edges.add({id: id, from: origin, to: destination, label: shown_weight, arrows: 'to', color: {color: "#2B7CE9", inherit: false}});
         edges_array.push({id: id, from: origin, to: destination, weight: weight});
+        var Arista= {
+            origen:origin,
+            destino:destination,
+            peso:weight
+        
+        };
+        Aristas.push(Arista);
         return 0;
     }
     return -1;
@@ -497,6 +505,54 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
         bfs_result += " -> ";
     }
 }
+function Dijkstra(){
+    // Algoritmo para desplegar en HTML
+    var Dijkstra_code = " Codigo-Diksstra";
+    /*bfs_code += "var queue = new Queue();<br>";
+    bfs_code += "nodo_inicial = VISITED;<br>";
+    bfs_code += "queue.enqueue(nodo_inicial);<br>";
+    bfs_code += "while queue NOT EMPTY<br>";
+    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
+    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
+    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
+    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
+    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+    Codigo a
+    */
+
+
+    document.getElementById("dijkstra-code").innerHTML = bfs_code;
+    bfs_result = ""; // Limpia string
+
+    // Se obtiene el nodo de origen usansdo el id del input
+    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
+    var start_node = parseInt(document.getElementById("origin-dijkstra").value); // En algunos algoritmos no se necesitará esto
+    var target_node=parseInt(document.getElementById("target-dijkstra").value);
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var bfs_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
+    var bfs_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('bfs-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var data = {
+        nodes: bfs_nodes,
+        edges: bfs_edges
+    };
+    var options = { };
+    var bfs_network = new vis.Network(container, data, options);
+    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+
+    var visited = [];
+    for (var i = 0; i < node_number; i++)
+        visited[i] = false;
+
+    // Se 'imprime' instruccion en ejecución
+    document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
+
+
+
+
+}
+
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
@@ -528,3 +584,4 @@ function compareAlgorithms() {
 
 /* ---- "MAIN" ---- */
 drawRandomGraph();
+

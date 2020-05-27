@@ -559,6 +559,7 @@ function Dijkstra(){
 }
 async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij_edges,Tabla){
     var visited=[];
+    var toAnalize=[];
     var queue = new Queue();
 
     highlightNode(start_node, dij_nodes);
@@ -566,18 +567,51 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
     queue.enqueue(start_node)
     Tabla[start_node]=0;
 
-    while(!queue.isEmpty()){
+    while(visited.length!=node_number){
         var node_analized= queue.dequeue();
+        console.log(node_analized+ "<- Le nodo");
         for(var i=0;i<Aristas.length;i++){
             if(Aristas[i].origen==node_analized){
-                Tabla[i]=Aristas[i].peso;
-                console.log(node_analized+" -> "+Aristas[i].destino+" -> "+Tabla[i]);
+                console.log("SI");
+                //Revisar esto y hacer tabla de padres!!!
+
+                if(Tabla[Aristas[i].destino-1]>Aristas[i].peso+Tabla[node_analized-1]){
+                    Tabla[Aristas[i].destino-1]=Aristas[i].peso+Tabla[node_analized-1];
+                    toAnalize.push(Aristas[i].destino);
+                   // console.log("FALF");
+                    console.log("Tabla: "+ node_analized +" i  "+i+"  "+Tabla[i])
+                    
+                }
             }
         }
-        break;
+        console.log("To analize: "+toAnalize[0]);
+        console.log("To analize: "+toAnalize[1]);
+        if(toAnalize.length==0){
+            console.log("????");
+            break;
+
+        }
+        var min=Infinity;
+        var aux;
+        for(var i=0;i<toAnalize.length;i++){
+            if((Tabla[toAnalize[i]-1])<min){
+                console.log("FALF3");
+                min=toAnalize[i];
+                aux=i;
+            }
+        }
+        console.log("min "+min)
+        toAnalize.splice(aux,1);
+        visited.push(min);
+        queue.enqueue(min);
+        // Tabla.forEach(element => {
+        //     console.log("---"+element);
+        // });
+
 
 
     }
+    console.log("FIN");
 
 }
 
@@ -628,3 +662,16 @@ console.log(Aristas[1].origen);
 //     Tabla[i]=Infinity;
 // }
 // console.log(Tabla[0]);
+var prueba=[];
+prueba.push("hola");
+prueba.push("como");
+prueba.push("estas");
+prueba.push("atm");
+prueba.forEach(element => {
+    console.log(element);
+});
+console.log("----");
+prueba.splice(1,1);
+prueba.forEach(element => {
+    console.log(element);
+});

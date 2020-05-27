@@ -508,6 +508,7 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
 function Dijkstra(){
     // Algoritmo para desplegar en HTML
     var Dijkstra_code = " Codigo-Diksstra";
+    console.log("flag Dikjkstra");
     /*bfs_code += "var queue = new Queue();<br>";
     bfs_code += "nodo_inicial = VISITED;<br>";
     bfs_code += "queue.enqueue(nodo_inicial);<br>";
@@ -521,7 +522,7 @@ function Dijkstra(){
     */
 
 
-    document.getElementById("dijkstra-code").innerHTML = bfs_code;
+    document.getElementById("dijkstra-code").innerHTML = Dijkstra_code;
     bfs_result = ""; // Limpia string
 
     // Se obtiene el nodo de origen usansdo el id del input
@@ -530,26 +531,53 @@ function Dijkstra(){
     var target_node=parseInt(document.getElementById("target-dijkstra").value);
     // Se tiene que volver a hacer un dibujo del grafo
     // para tener animaciones individuales
-    var bfs_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
-    var bfs_edges = new vis.DataSet(edges.get());
-    var container = document.getElementById('bfs-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var dij_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
+    var dij_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('dijkstra-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
     var data = {
-        nodes: bfs_nodes,
-        edges: bfs_edges
+        nodes: dij_nodes,
+        edges: dij_edges
     };
     var options = { };
-    var bfs_network = new vis.Network(container, data, options);
+    var dijkstra_network = new vis.Network(container, data, options);
     //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
 
     var visited = [];
+
+    var Tabla=[node_number-1]
+    for(var i=0;i<node_number;i++){
+        Tabla[i]=Infinity;
+    }
+
     for (var i = 0; i < node_number; i++)
         visited[i] = false;
 
     // Se 'imprime' instruccion en ejecución
     document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
+    DijkstraUtil(start_node,target_node,dijkstra_network,dij_nodes,dij_edges,Tabla)
+
+}
+async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij_edges,Tabla){
+    var visited=[];
+    var queue = new Queue();
+
+    highlightNode(start_node, dij_nodes);
+    visited.push(start_node);
+    queue.enqueue(start_node)
+    Tabla[start_node]=0;
+
+    while(!queue.isEmpty()){
+        var node_analized= queue.dequeue();
+        for(var i=0;i<Aristas.length;i++){
+            if(Aristas[i].origen==node_analized){
+                Tabla[i]=Aristas[i].peso;
+                console.log(node_analized+" -> "+Aristas[i].destino+" -> "+Tabla[i]);
+            }
+        }
+        break;
 
 
-
+    }
 
 }
 
@@ -584,4 +612,19 @@ function compareAlgorithms() {
 
 /* ---- "MAIN" ---- */
 drawRandomGraph();
-
+console.log(Aristas[0].origen);
+Aristas.sort(function (a,b){
+    if(a.origen<b.origen){
+        return -1;
+    }
+    else if(a.origen<b.origen){
+        return 1;
+    }
+    return 0;
+});
+console.log(Aristas[1].origen);
+// var Tabla=[node_number-1]
+// for(var i=0;i<node_number;i++){
+//     Tabla[i]=Infinity;
+// }
+// console.log(Tabla[0]);

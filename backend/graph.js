@@ -37,7 +37,7 @@ function addEdge(id, origin, destination, weight) {
             origen:origin,
             destino:destination,
             peso:weight
-        
+
         };
         Aristas.push(Arista);
         return 0;
@@ -125,43 +125,43 @@ function drawTestGraph() {
     i = 1;
     var origin = 1;
     var destination = 2;
-    var weight = Math.floor(Math.random() * 15) + 1;
+    var weight = 1;
     i += addEdge(i, origin, destination, weight);
 
     i = 2;
     origin = 1;
     destination = 3;
-    weight = Math.floor(Math.random() * 15) + 1;
+    weight = 8;
     i+=addEdge(i, origin, destination, weight);
 
     i = 3;
     origin = 2;
     destination = 4;
-    weight = Math.floor(Math.random() * 15) + 1;
+    weight = 3;
     i += addEdge(i, origin, destination, weight);
 
     i = 4;
     origin = 2;
     destination = 5;
-    weight = Math.floor(Math.random() * 15) + 1;
+    weight = 2;
     i += addEdge(i, origin, destination, weight);
 
     i = 5;
     origin = 3;
     destination = 6;
-    weight = Math.floor(Math.random() * 15) + 1;
+    weight = 5;
     i += addEdge(i, origin, destination, weight);
 
     i = 6;
     origin = 5;
     destination = 8;
-    weight = Math.floor(Math.random() * 15) + 1;
+    weight = 10;
     i += addEdge(i, origin, destination, weight);
 
     i = 7;
     origin = 3;
     destination = 7;
-    weight = Math.floor(Math.random() * 15) + 1;
+    weight = 6;
     i+=addEdge(i, origin, destination, weight);
 
     var container = document.getElementById('mynetwork');
@@ -333,7 +333,7 @@ function sleep(ms) {
 // Si le hace falta algo en el html para su algoritmo decirle a Andrés.
 
 
-/* ---- DFS ---- */
+/* ---- DFS ---- */ // Gerry
 var dfs_result; // String con recorrido de algoritmo.
 function DFS() {
     // Algoritmo para desplegar en HTML
@@ -413,7 +413,7 @@ async function DFSUtil(current_node, visited, dfs_network, dfs_nodes, dfs_edges)
     }
 }
 
-/* ---- BFS ---- */
+/* ---- BFS ---- */ // Gerry
 var bfs_result;
 function BFS()
 {
@@ -505,6 +505,157 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
         bfs_result += " -> ";
     }
 }
+
+
+/* ---- A* ---- */ // Quiroz
+
+
+/* ---- Prim ---- */ // Gerry
+var prim_result;
+function Prim()
+{
+    // Algoritmo para desplegar en HTML
+    var prim_code = "";
+    prim_code += "<br>";
+    prim_code += "&emsp;<br>";
+
+    document.getElementById("prim-code").innerHTML = prim_code;
+    prim_code = ""; // Limpia string
+
+    // Se obtiene el nodo de origen usansdo el id del input
+    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
+    var start_node = parseInt(document.getElementById("origin-prim").value); // En algunos algoritmos no se necesitará esto
+
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var prim_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
+    var prim_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('prim-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var data = {
+        nodes: prim_nodes,
+        edges: prim_edges
+    };
+    var options = { };
+    var prim_network = new vis.Network(container, data, options);
+    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+
+    // Se 'imprime' instruccion en ejecución
+    document.getElementById("prim-instruction").innerHTML = "Prim("+start_node+");";
+
+    PrimUtil(start_node, prim_network, prim_nodes, prim_edges);
+}
+
+
+async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges)
+{
+    var visited = [];
+    visited.push(start_node);
+
+    var not_visited = [];
+    for (var i = 0; i < node_number; i++)
+        not_visited[i] = i+1;
+
+    node_analized = start_node;
+    while(not_visited.length > 0)
+    {
+        highlightNode(node_analized, prim_nodes);
+        var neighbors = prim_network.getConnectedEdges(node_analized);
+        document.getElementById("prim-instruction").innerHTML = "var neighbors = prim_network.getConnectedEdges("+node_analized+");";
+
+        const visit_Node_bool = await visit_Node(node_analized, prim_nodes);
+
+        for (var i = 0; i < neighbors.length; i++)
+        {
+            if (prim_edges.get(neighbors[i]).from == node_analized)
+            {
+
+                var min = 16;
+                var posicion_min;
+                for (var j = 0; j < neighbors.length; j++)
+                {
+                  if (prim_edges.get(neighbors[j]).label < min)
+                  {
+                      min = prim_edges.get(neighbors[j]).label;
+                      posicion_min = j;
+                  }
+                }
+                highlightEdge(neighbors[j], prim_edges, prim_nodes, prim_network, node_analized);
+                var destination = prim_edges.get(neighbors[posicion_min]).to;
+                document.getElementById("prim-instruction").innerHTML = "var destination = prim_edges.get(neighbors[posicion_min]).to;";
+                if(!visited[destination - 1])
+                {
+                    visited[destination - 1] = true;
+                    node_analized = destination;
+                }
+            }
+            prim_result += node_analized;
+            document.getElementById("prim-result").innerHTML = prim_result;
+
+            prim_result += " -> ";
+        }
+    }
+}
+
+
+/* ---- Kruskal ---- */ // Gerry
+var kruskal_result;
+function Kruskal()
+{
+    // Algoritmo para desplegar en HTML
+    var kruskal_code = "";
+    kruskal_code += "<br>";
+    kruskal_code += "&emsp;<br>";
+
+    // document.getElementById("kruskal-code").innerHTML = kruskal_code;
+    // kruskal_code = ""; // Limpia string
+
+    // Se obtiene el nodo de origen usansdo el id del input
+    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
+    var start_node = parseInt(document.getElementById("origin-kruskal").value); // En algunos algoritmos no se necesitará esto
+
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var kruskal_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
+    var kruskal_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('kruskal-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var data = {
+        nodes: kruskal_nodes,
+        edges: kruskal_edges
+    };
+    var options = { };
+    var kruskal_network = new vis.Network(container, data, options);
+    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+
+    var visited = [];
+    for (var i = 0; i < node_number; i++)
+        visited[i] = false;
+
+    // Se 'imprime' instruccion en ejecución
+    document.getElementById("kruskal-instruction").innerHTML = "Kruskal("+start_node+");";
+
+    //TESTING
+    var arr = [1, 2];
+    var neighbors = kruskal_network.getConnectedEdges(5);
+
+    // kruskal_code += edgess;
+    kruskal_code += "<br>";
+    arr.pop();
+    arr.pop();
+    // kruskal_code += neighbors;
+    kruskal_code += kruskal_edges.get(neighbors[0]).from;
+    kruskal_code += kruskal_edges.get(neighbors[1]).from;
+    // kruskal_code += kruskal_nodes;
+
+
+
+    document.getElementById("kruskal-code").innerHTML = kruskal_code;
+    //FIN TESTING
+
+    // KruskalUtil(start_node, visited, kruskal_network, kruskal_nodes, kruskal_edges);
+}
+
+
+/* ---- Dijkstra ---- */ // Rojo
 function Dijkstra(){
     // Algoritmo para desplegar en HTML
     var Dijkstra_code = " Codigo-Diksstra";
@@ -580,7 +731,7 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
                     toAnalize.push(Aristas[i].destino);
                    // console.log("FALF");
                     console.log("Tabla: "+ node_analized +" i  "+i+"  "+Tabla[i])
-                    
+
                 }
             }
         }
@@ -616,16 +767,23 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
 }
 
 
+/* ---- Bellman-Ford ---- */
+
+
+/* ---- Floyd-Warshall ---- */
+
+
+
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 
 /* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
 function runAlgorithm(algorithm) {
-    var algorithm_checkbox = "compare-" + algorithm; 
+    var algorithm_checkbox = "compare-" + algorithm;
 
     if(document.getElementById(algorithm_checkbox).checked) {
-        load_progressBar(algorithm); 
-        //Agregar el resto de los métodos que se utilicen 
+        load_progressBar(algorithm);
+        //Agregar el resto de los métodos que se utilicen
     }
 }
 

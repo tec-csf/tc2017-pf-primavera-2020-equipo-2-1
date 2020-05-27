@@ -113,7 +113,7 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-dfs" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="DFS(1);"> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="DFS();"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
@@ -161,7 +161,7 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-bfs" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="BFS(1);"> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="BFS();"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
@@ -257,7 +257,7 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-prim" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Prim();"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
@@ -305,7 +305,7 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-kruskal" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Kruskal();"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
@@ -468,7 +468,7 @@ body {font-size:16px;}
   <div class="w3-container" id="compare">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Comparar Algoritmos</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
-    
+
     <!-- Tabla de Algoritmos -->
     <table class="w3-table w3-bordered">
       <tr>

@@ -2,6 +2,7 @@
 var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
 var network = null;
+var dataGraph=[]
 
 var node_number, edge_number;
 var edges_array = [];
@@ -1135,6 +1136,40 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 /* ---- Floyd-Warshall ---- */
 
 
+
+/* -------------------------------------------------------------------------- */
+/* --------------------- TEST DE GRÁFICAS ------------------------ */
+
+function get_data_graph(){
+    var time = document.getElementById("medicion-dfs").value;
+    console.log(time);
+
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    get_data_graph();
+    var myChart = Highcharts.chart('grafico-algoritmos', {
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Tiempos de Comparación'
+        },
+        xAxis: {
+            categories: ['DFS', 'BFS', 'A*','Prim', 'Kruskal', 'Dijkstra','Bellman','Floyd']
+        },
+        yAxis: {
+            title: {
+                text: 'Segundos'
+            }
+        },
+        series: [{
+            name: 'Grafo 1',
+            data: [1,1,1,1,1,1,1,1]
+        }
+    ]
+    });
+});
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */

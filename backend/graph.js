@@ -1146,35 +1146,35 @@ function get_data_graph(){
 
 }
 
-document.addEventListener('DOMContentLoaded', function () {
-   //get_data_graph();
-    var myChart = Highcharts.chart('grafico-algoritmos', {
-        chart: {
-            type: 'bar'
-        },
-        title: {
-            text: 'Tiempos de Comparación'
-        },
-        xAxis: {
-            categories: ['DFS', 'BFS', 'A*','Prim', 'Kruskal', 'Dijkstra','Bellman','Floyd']
-        },
-        yAxis: {
-            title: {
-                text: 'Segundos'
-            }
-        },
-        series: [{
-            name: 'Grafo 1',
-            data: [1,5,1,7,8,1,1,2]
-        },{
-            name: 'Grafo 2',
-            data: [2,3,4,5,6,1,8,1]
-        }
-        
-    ]
-    });
-});
 
+    $('#comparar_Algoritmos').on('click', function() {
+
+        var options = Highcharts.chart('grafico-algoritmos', {
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Tiempos de Comparación'
+            },
+            xAxis: {
+                categories: ['DFS', 'BFS', 'A*','Prim', 'Kruskal', 'Dijkstra','Bellman','Floyd']
+            },
+            yAxis: {
+                title: {
+                    text: 'Segundos'
+                }
+            },
+            series: [{
+                name: 'Grafo 1',
+                data: [1,5,1,7,8,1,1,2]
+            },{
+                name: 'Grafo 2',
+                data: [2,3,4,5,6,1,8,1]
+            }
+            
+        ]
+        });
+    });
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 

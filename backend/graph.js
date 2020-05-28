@@ -1142,12 +1142,10 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
 function get_data_graph(){
     var time = document.getElementById("medicion-dfs").value;
-    console.log(time);
-
+    console.log(time);  
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-   //get_data_graph();
     var myChart = Highcharts.chart('grafico-algoritmos', {
         chart: {
             type: 'bar'

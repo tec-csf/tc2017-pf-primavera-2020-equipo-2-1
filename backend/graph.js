@@ -329,12 +329,6 @@ function sleep(ms) {
 /* ------------------------------- ALGORITMOS ------------------------------- */
 
 // Hace falta meter la medición de tiempo (desde el .js);
-// las complejidades (desde el .html)
-// y el código del algoritmo (desde cualquiera).
-
-// Checa los ids correspondientes a cada cosa en el main.html
-// Si le hace falta algo en el html para su algoritmo decirle a Andrés.
-
 
 /* ---- DFS ---- */ // Gerry
 var dfs_result; // String con recorrido de algoritmo.
@@ -513,12 +507,7 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
 
 
 /* ---- A* ---- */ // Quiroz
-<<<<<<< HEAD
-=======
-/* ---- A* ---- */
-
 var a_result;
->>>>>>> a59b0d4ee55105db3378b537ab248cb4757a54c3
 function A_star(){
 
     // Algoritmo para desplegar en HTML
@@ -589,82 +578,6 @@ function A_star(){
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node) {
-<<<<<<< HEAD
-   var open_set = [];
-   var close_set= [];
-   var came_from =[];
-   open_set.push(start_node);
-   gScore[start_node]=0;
-   fScore[start_node]=h(start_node,end_node,a_network);
-
-
-   while(open_set.length>0){
-    var winner =0;
-    for (var i=0;i<open_set.length;++i){
-        if(fScore[i]<fScore[winner]){
-            winner =i;
-        }
-    }
-    var current = open_set[winner];
-    var neighbors = a_network.getConnectedNodes(current);
-
-
-    console.log("Current="+current);
-    console.log("Neighbors="+neighbors);
-
-    if(current==end_node){
-        came_from.push(current);
-        const visit_Node_bool = await visit_Node(current, a_nodes);
-        //visit_Node_bool = await visit_Node(current, a_nodes);
-        highlightNode(current, a_nodes);
-        console.log(came_from);
-        console.log("DONE");
-        return 0;
-    }
-
-    remove_from_array(open_set,current)
-    close_set.push(current);
-
-    sleep(100);
-    for(i = 0; i < neighbors.length; i++){
-
-        var neighbor = neighbors[i];
-
-        check_dir(current,neighbor);
-        console.log(direction);
-
-        if(direction){
-            highlightNode(current, a_nodes);
-            if (!close_set.includes(neighbor)) {
-                var tempG = gScore[current]+ h(neighbor, current,a_network);
-
-                // Is this a better path than before?
-                var newPath = false;
-                if (open_set.includes(neighbor)) {
-                  if (tempG < gScore[neighbor]) {
-                    gScore[neighbor] = tempG;
-                    newPath = true;
-                  }
-                } else {
-                  gScore[neighbor] = tempG;
-                  newPath = true;
-                  open_set.push(neighbor);
-
-                }
-                if (newPath) {
-                    //console.log("Debug");
-                    const visit_Node_bool = await visit_Node(current, a_nodes);
-                    highlightEdge(current, a_edges, a_nodes, a_network,current);
-                    fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
-                    came_from.push(current);
-                    //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
-                }
-
-            }
-        }else{ }
-    }
-   //else return no solution*/
-=======
  var open_set = [];
  var close_set= [];
  var came_from =[];
@@ -706,7 +619,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
 
   remove_from_array(open_set,current)
   close_set.push(current);
-  
+
   sleep(100);
   for(i = 0; i < neighbors.length; i++){
 
@@ -720,7 +633,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
       if (!close_set.includes(neighbor)) {
         get_weight(current,neighbor)
           var tempG = gScore[current]+ current_weight;
-          
+
           // Is this a better path than before?
           var newPath = false;
           if (open_set.includes(neighbor)) {
@@ -732,7 +645,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
             gScore[neighbor] = tempG;
             newPath = true;
             open_set.push(neighbor);
-           
+
           }
           if (newPath) {
               //console.log("Debug");
@@ -746,28 +659,27 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
                 highlightEdge(edge_neighbors[i], a_edges, a_nodes, a_network,current);
              }
              getpath.push({now:neighbor,from:current});
-              
+
               fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
               if (!came_from.includes(current)){
                 came_from.push(current);
                 a_result+=current;
                 document.getElementById("a-result").innerHTML = a_result;
               }
-              
+
               //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
-              
+
           }
-      
+
       }
       }else{}
 
-} 
+}
 
 if(came_from.includes(current)){
     a_result+=" -> ";
->>>>>>> a59b0d4ee55105db3378b537ab248cb4757a54c3
 }
-    
+
 
  //else return no solution*/
 
@@ -805,20 +717,16 @@ async function draw_path(start_node,end_node,array){
                     temp.push(end);
                     end= array[j].from;
                 }
-                   
+
             }
         }
     }
 
-<<<<<<< HEAD
-async function h (start_node, end_node, network){
-=======
 
 
 }
 
 async function h (start_node,end_node,network){
->>>>>>> a59b0d4ee55105db3378b537ab248cb4757a54c3
 
   var s = network.getPosition(start_node);
   var e = network.getPosition(end_node);
@@ -840,7 +748,7 @@ async function remove_from_array(arr, elt) {
 async function get_weight(nodo,nodo_end){
 
     for(i=0;i<edges_array.length;++i){
-     
+
         if((edges_array[i].from==nodo) && (edges_array[i].to==nodo_end)){
             current_weight = edges_array[i].weight;
             return
@@ -852,7 +760,7 @@ async function check_dir(nodo,nodo_end){
   for(i=0;i<edges_array.length;++i){
 
       if((edges_array[i].from==nodo) && (edges_array[i].to==nodo_end)){
-         
+
           direction = true;
           return
       }
@@ -1136,28 +1044,6 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
     visited.push(start_node);
     queue.enqueue(start_node)
-<<<<<<< HEAD
-    Tabla[start_node-1]=0;
-
-    while(visited.length!=node_number){
-        var node_analized= queue.dequeue();
-        console.log(node_analized+ "<- Le nodo");
-        for(var i=0;i<Aristas.length;i++){
-            if(Aristas[i].origen==node_analized){
-
-
-                //Revisar por que analiza un nodo dos veces
-
-
-                //var dest=Aristas[i].destino;
-                var flag=true;
-                if(Tabla[Aristas[i].destino-1]>Aristas[i].peso+Tabla[node_analized-1]){
-                    Tabla[Aristas[i].destino-1]=Aristas[i].peso+Tabla[node_analized-1];
-                    Padres[[Aristas[i].destino-1]]=node_analized;
-                    for(var j=0;j<visited.length;j++){
-                        if(Aristas[i].destino==visited[j]){
-                            flag=false;
-=======
     Tabla[start_node - 1] = 0;
 
     while (visited.length != node_number) {
@@ -1182,7 +1068,6 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
                         if (Aristas[i].destino == visited[j]) {
                             flag = false;
->>>>>>> a59b0d4ee55105db3378b537ab248cb4757a54c3
                             break;
                         }
                     }
@@ -1191,11 +1076,6 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
                         highlightNode(Aristas[i].destino, dij_nodes);
                         highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstranetwork, -1)
                     }
-<<<<<<< HEAD
-                   // console.log("FALF");
-                   // console.log("Tabla: "+ node_analized +" i  "+Aristas[i].destino+"  "+Tabla[Aristas[i].destino-1])
-=======
->>>>>>> a59b0d4ee55105db3378b537ab248cb4757a54c3
 
                 }
             }

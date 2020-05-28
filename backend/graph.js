@@ -265,15 +265,15 @@ function cleanGraph(node_group, edge_group){
 }
 
 /* Animar barras de avance */
-function load_progressBar(algorithm) {
+function load_progressBar(algorithm, progress) {
   var bar_id = "bar-" + algorithm;
 
     var progress_bar = document.getElementById(bar_id);
     progress_bar.innerHTML = "";
-    var width = 1;
+    var width = parseInt(progress_bar.style.width.substring(0, progress_bar.style.width.length - 1));
     var id = setInterval(frame, 10);
     function frame() {
-      if (width >= 100) {
+      if (width >= progress) {
         clearInterval(id);
       } else {
         width++;
@@ -1089,15 +1089,25 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 /* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
 function runAlgorithm(algorithm) {
     var algorithm_checkbox = "compare-" + algorithm;
+    var bar_id = "bar-" + algorithm;
+
+    var progress_bar = document.getElementById(bar_id);
+    progress_bar.style.width = "1%";
+    progress_bar.innerHTML  = "";
 
     if(document.getElementById(algorithm_checkbox).checked) {
-        load_progressBar(algorithm);
+        load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
         //Agregar el resto de los métodos que se utilicen
     }
 }
 
 /* Ejecuta todos los allgoritmos seleccionados en la sección de comparación */
 function compareAlgorithms() {
+    /* Paralelisación: sirve, pero no para esto (no puede hacer métodos para accesar al HTML) */
+    //var p = new Parallel(["dfs", "bfs", "a", "prim", "kruskal", "dijktra", "belford", "floyd"], {evalPath: './eval.js'});
+    //console.log(p.data);
+    //p.map(runAlgorithm);
+
     //Estas llamadas son las que deberemos paralelizar
     runAlgorithm("dfs");
     runAlgorithm("bfs");

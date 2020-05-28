@@ -36,7 +36,8 @@ function addEdge(id, origin, destination, weight) {
         var Arista= {
             origen:origin,
             destino:destination,
-            peso:weight
+            peso:weight,
+            ID:id
 
         };
         Aristas.push(Arista);
@@ -239,7 +240,6 @@ function visit_Node(node_analized, node_group)
     }, 3000);
   });
 }
-
 
 /* Regresa nodo a valores preestablecidos */
 function resetAnimation_Node(id, node_group) {
@@ -931,10 +931,10 @@ function Kruskal()
 
 /* ---- Dijkstra ---- */ // Rojo
 var Dijkstra_sol;
-function Dijkstra(){
+function Dijkstra() {
     // Algoritmo para desplegar en HTML
     var Dijkstra_code = "";
-    Dijkstra_sol=" ";
+    Dijkstra_sol = " ";
     console.log("flag Dikjkstra");
     /*bfs_code += "var queue = new Queue();<br>";
     bfs_code += "nodo_inicial = VISITED;<br>";
@@ -955,7 +955,7 @@ function Dijkstra(){
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
     var start_node = parseInt(document.getElementById("origin-dijkstra").value); // En algunos algoritmos no se necesitará esto
-    var target_node=parseInt(document.getElementById("target-dijkstra").value);
+    var target_node = parseInt(document.getElementById("target-dijkstra").value);
     // Se tiene que volver a hacer un dibujo del grafo
     // para tener animaciones individuales
     var dij_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
@@ -965,130 +965,115 @@ function Dijkstra(){
         nodes: dij_nodes,
         edges: dij_edges
     };
-    var options = { };
+    var options = {};
     var dijkstra_network = new vis.Network(container, data, options);
     //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
 
-    var visited = [];
+    var Tabla = [node_number - 1]
+    var Padres = [node_number - 1]
+    //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
 
-    var Tabla=[node_number-1]
-    var Padres=[node_number-1]
-    for(var i=0;i<node_number;i++){
-        Tabla[i]=Infinity;
-        Padres[i]=Infinity;
+    for (var i = 0; i < node_number; i++) {
+        Tabla[i] = Infinity;
+        Padres[i] = Infinity;
     }
 
     // Se 'imprime' instruccion en ejecución
-    
-    DijkstraUtil(start_node,target_node,dijkstra_network,dij_nodes,dij_edges,Tabla,Padres);
-    document.getElementById("dijkstra-result").innerHTML =Dijkstra_sol;
+
+    DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes, dij_edges, Tabla, Padres);
+
 
 }
-async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij_edges,Tabla,Padres){
-    var visited=[];
-    var toAnalize=[];
+async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes, dij_edges, Tabla, Padres) {
+    var visited = [];
+    var toAnalize = [];
     var queue = new Queue();
 
-    highlightNode(start_node, dij_nodes);
     visited.push(start_node);
     queue.enqueue(start_node)
-    Tabla[start_node-1]=0;
+    Tabla[start_node - 1] = 0;
 
-    while(visited.length!=node_number){
-        var node_analized= queue.dequeue();
-        //console.log(node_analized+ "<- Le nodo");
-        for(var i=0;i<Aristas.length;i++){
-            if(Aristas[i].origen==node_analized){
+    while (visited.length != node_number) {
+        var node_analized = queue.dequeue();
 
+        await visit_Node(node_analized, dij_nodes);
+        await sleep(1000);
+        for (var i = 0; i < Aristas.length; i++) {
 
-                //Revisar por que analiza un nodo dos veces
-                
-                
-                //var dest=Aristas[i].destino;
-                var flag=true;
-                if(Tabla[Aristas[i].destino-1]>Aristas[i].peso+Tabla[node_analized-1]){
-                    Tabla[Aristas[i].destino-1]=Aristas[i].peso+Tabla[node_analized-1];
-                    Padres[[Aristas[i].destino-1]]=node_analized;
-                    for(var j=0;j<visited.length;j++){
-                        if(Aristas[i].destino==visited[j]){
-                            flag=false;
+            if (Aristas[i].origen == node_analized) {
+                var flag = true;
+
+                /*Se Comprueba si el peso en los nodos destino requieren de una actualizacion */
+
+                if (Tabla[Aristas[i].destino - 1] > Aristas[i].peso + Tabla[node_analized - 1]) {
+                    Tabla[Aristas[i].destino - 1] = Aristas[i].peso + Tabla[node_analized - 1];
+                    Padres[[Aristas[i].destino - 1]] = node_analized;
+
+                    /*Comprueba si el nodo ya fue analizado o no*/
+
+                    for (var j = 0; j < visited.length; j++) {
+
+                        if (Aristas[i].destino == visited[j]) {
+                            flag = false;
                             break;
                         }
                     }
-                    if (flag){
+                    if (flag) {
                         toAnalize.push(Aristas[i].destino);
+                        highlightNode(Aristas[i].destino, dij_nodes);
+                        highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstranetwork, -1)
                     }
-                   // console.log("FALF");
-                   // console.log("Tabla: "+ node_analized +" i  "+Aristas[i].destino+"  "+Tabla[Aristas[i].destino-1])
-                    
+
                 }
             }
         }
-        /*console.log("To analize: "+toAnalize[0]);
-        console.log("To analize: "+toAnalize[1]);*/
-        if(toAnalize.length==0){
-            //console.log("????");
+        if (toAnalize.length == 0) {
             break;
 
         }
-        var pesominimo=Infinity;
-        var min=Infinity;
+        var pesominimo = Infinity;
+        var min = Infinity;
         var aux;
-        for(var i=0;i<toAnalize.length;i++){
-            if((Tabla[toAnalize[i]-1])<pesominimo){
-                //console.log("Es el minimo ");
-                pesominimo=Tabla[toAnalize[i]-1];
-                min=toAnalize[i];
-                aux=i;
+        //Variables auxiliares para detectar el menor peso dentro de los nodos que no se han analizado
+
+        /*De los nodos que se han descubierto, selecciona el de menor peso  */
+        for (var i = 0; i < toAnalize.length; i++) {
+            if ((Tabla[toAnalize[i] - 1]) < pesominimo) {
+                pesominimo = Tabla[toAnalize[i] - 1];
+                min = toAnalize[i];
+                aux = i;
             }
         }
-        //console.log("min "+min+" "+Tabla[min-1])
+        /*Se agrega el nodo a los analizados, se elimina de los posibles a analizar y se agrega a la cola para ser analizado en la
+        siguiente iteracion */
+
         visited.push(min);
-        toAnalize.splice(aux,1);
+        toAnalize.splice(aux, 1);
         queue.enqueue(min);
-        // Tabla.forEach(element => {
-        //     console.log("---"+element);
-        // });
-
-
-
     }
-    console.log("FIN");
-    if(Tabla[target_node-1]==Infinity){
-        console.log("No hay un camino hacia ese nodo");
-        Dijkstra_sol="No hay un camino hacia ese nodo"
+    /*Detecta si existe o no el camino mediante la tabla de pesos*/
+    if (Tabla[target_node - 1] == Infinity) {
+        Dijkstra_sol = "No hay un camino hacia ese nodo"
     }
-    else{
-        console.log("El camino minimo es: "+Tabla[target_node-1]);
-        
-        var padre=Padres[target_node-1];
-        var path=target_node;
-        var cont=0;
-        while(padre!=start_node){
-            console.log(padre==start_node);
-            path=padre+" -> "+path;
-            padre=Padres[padre-1];
+    else {
+        var padre = Padres[target_node - 1];
+        var path = target_node;
+        var cont = 0;
+
+        /*Ciclo que construye el path a través de las posiciones de los padres */
+
+        while (padre != start_node && start_node != target_node) {
+
+            path = padre + " -> " + path;
+            padre = Padres[padre - 1];
             cont++;
         }
-        path=start_node+" -> "+path;
-        console.log(path);
-        Dijkstra_sol=path+"<br>"+"Distancia: "+Tabla[target_node-1];
+        path = start_node + " -> " + path;
+        Dijkstra_sol = path + "<br>" + "Distancia: " + Tabla[target_node - 1];
     }
-    //console.log(Tabla[0]+" "+Tabla[1]+" "+Tabla[2]+" "+Tabla[3]+" "+Tabla[4]+" "+Tabla[5]+" "+Tabla[6]+" ")
+    document.getElementById("dijkstra-result").innerHTML = Dijkstra_sol;
 
 }
-/*async function printPath(path,padre,start_node,padres){
-    if(padre==start_node){
-        console.log("Path: "+path);
-    }
-    else{
-        padre=padres[padre];
-        path+=padre+"->";
-        printPath(path,padre,start_node,padres);
-    }
-
-
-}*/
 
 
 /* ---- Bellman-Ford ---- */

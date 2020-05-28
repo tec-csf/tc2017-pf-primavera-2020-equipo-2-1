@@ -91,7 +91,7 @@ body {font-size:16px;}
           <div id="dfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="dfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'dfs-code'...</p>
+            <p id="dfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -115,12 +115,12 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-dfs" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="DFS(1);"> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="DFS(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick="DFS(2);"> Lento </a>
-                    <a onclick="DFS(3);"> Normal </a>
+                    <a onclick="DFS(2000);"> Lento </a>
+                    <a onclick="DFS(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -139,7 +139,7 @@ body {font-size:16px;}
           <div id="bfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="bfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'bfs-code'...</p>
+            <p id="bfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -163,12 +163,12 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-bfs" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="BFS(1);"> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="BFS(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick="BFS(2);"> Lento </a>
-                    <a onclick="BFS(3);"> Normal </a>
+                    <a onclick="BFS(2000);"> Lento </a>
+                    <a onclick="BFS(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -179,7 +179,7 @@ body {font-size:16px;}
     <!-- A* -->
     <hr style="margin-top:120px;">
     <div class="w3-container" id="a-star">
-      <h1 class="w3-xxxlarge w3-text-indigo"><b>Algorimto A-Star (A*)</b></h1>
+      <h1 class="w3-xxxlarge w3-text-indigo"><b>Algoritmo A-Star (A*)</b></h1>
       <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
       <div style="margin-top:10px;">
           <div style="float:left; width: 5%;"><p></p></div>
@@ -187,7 +187,7 @@ body {font-size:16px;}
             <div id="a-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
             <div ><p> Código </p></div>
             <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-              <p id="a-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'a-code'...</p>
+              <p id="a-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
             </div>
           </div>
           <div style="float:left; width: 2%;"><p></p></div>
@@ -237,7 +237,7 @@ body {font-size:16px;}
           <div id="prim-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="prim-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'prim-code'...</p>
+            <p id="prim-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -261,12 +261,12 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-prim" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Prim(1);"> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Prim(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick="Prim(2);"> Lento </a>
-                    <a onclick="Prim(3);"> Normal </a>
+                    <a onclick="Prim(2000);"> Lento </a>
+                    <a onclick="Prim(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -285,7 +285,7 @@ body {font-size:16px;}
           <div id="kruskal-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="kruskal-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'kruskal-code'...</p>
+            <p id="kruskal-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -309,12 +309,12 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-kruskal" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Kruskal(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick=""> Lento </a>
-                    <a onclick=""> Normal </a>
+                    <a onclick="Kruskal(2000);"> Lento </a>
+                    <a onclick="Kruskal(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -333,7 +333,7 @@ body {font-size:16px;}
           <div id="dijkstra-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="dijkstra-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'dijkstra-code'...</p>
+            <p id="dijkstra-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -382,7 +382,7 @@ body {font-size:16px;}
           <div id="belford-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="belford-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'belford-code'...</p>
+            <p id="belford-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -430,7 +430,7 @@ body {font-size:16px;}
           <div id="floyd-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Meter código como texto en 'floyd-code'...</p>
+            <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -467,7 +467,7 @@ body {font-size:16px;}
     </div>
   </div>
 
-  <!-- Comparar Algorimtos -->
+  <!-- Comparar Algoritmos -->
   <hr style="margin-top:120px;">
   <div class="w3-container" id="compare">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Comparar Algoritmos</b></h1>
@@ -503,7 +503,7 @@ body {font-size:16px;}
       </tr>
       <tr>
         <td><input id="compare-a"type="checkbox" checked="checked"></td>
-        <td>Algorimto A-Star (A*)</td>
+        <td>Algoritmo A-Star (A*)</td>
         <td>
           <div id="progress-a" style="width: 80%; background-color: #ddd;">
             <div id="bar-a" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>

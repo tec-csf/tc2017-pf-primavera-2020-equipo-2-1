@@ -72,12 +72,12 @@ body {font-size:16px;}
         <p><input class="w3-input" type="text" style="width:50%" id="node-set" value="0"><label>Nodos</label></p>
         <p><input class="w3-input" type="text" style="width:50%" id="edge-set" value="0"><label>Aristas</label></p>
 
-        <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="drawTestGraph();"> Generar Test </button></p>
-        <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="drawSetGraph();"> Generar </button></p>
-        <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="drawRandomGraph();"> Generar Aleatorio </button></p>
+        <button type="button" class="w3-button w3-blue-grey w3-ripple" style="margin-bottom: 0px;" onclick="drawSetGraph();"> Generar </button>
+        <button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="margin-bottom: 5px;" onclick="drawRandomGraph();"> Generar Aleatorio </button>
+        <p><button type="button" class="w3-button w3-blue-grey w3-ripple" onclick="drawTestGraph();"> Generar Test </button></p>
     </form>
     <div style="float:left; width: 5%;"><p></p></div>
-    <div id="mynetwork" class="w3-card-4" style="float:left; width: 600px; height: 420px;"></div>
+    <div id="mynetwork" class="w3-card-4" style="float:left; width: 600px; height: 430px;"></div>
    </div>
 
   <!-- DFS -->
@@ -210,8 +210,8 @@ body {font-size:16px;}
                   <p id="a-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
               </div>
               <div style="margin-top:20px;">
-                  <div style="float: left; width: 50%;"><input id="origin-a" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                  <div style="float: left; width: 50%;"><input id="end-a" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo Destino</label></div>
+                  <div style="float: left; width: 30%;"><input id="origin-a" type="text" class="w3-input" style="width:70%" value="1"><label> Origen </label></div>
+                  <div style="float: left; width: 30%;"><input id="end-a" type="text" class="w3-input" style="width:70%" value="1"><label> Destino </label></div>
                   <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="A_star(1)"> Ejecutar </button></div>
                   
                   <div class="w3-dropdown">
@@ -356,8 +356,8 @@ body {font-size:16px;}
                 <p id="dijkstra-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
-                <div style="float: left; width: 50%;"><input id="origin-dijkstra" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left; width: 50%;"><input id="target-dijkstra" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo Destino</label></div>
+                <div style="float: left; width: 30%;"><input id="origin-dijkstra" type="text" class="w3-input" style="width:70%" value="1"><label> Origen </label></div>
+                <div style="float: left; width: 30%;"><input id="target-dijkstra" type="text" class="w3-input" style="width:70%" value="1"><label> Destino </label></div>
                 <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Dijkstra();"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
@@ -489,7 +489,7 @@ body {font-size:16px;}
             <div id="bar-dfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-dfs" >0.00s</td>
       </tr>
       <tr>
         <td><input id="compare-bfs"type="checkbox" checked="checked"></td>
@@ -499,7 +499,7 @@ body {font-size:16px;}
             <div id="bar-bfs" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-bfs" >0.00s</td>
       </tr>
       <tr>
         <td><input id="compare-a"type="checkbox" checked="checked"></td>
@@ -509,7 +509,7 @@ body {font-size:16px;}
             <div id="bar-a" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-a" >0.00s</td>
       </tr>
       <tr>
         <td><input id="compare-prim"type="checkbox" checked="checked"></td>
@@ -519,7 +519,7 @@ body {font-size:16px;}
             <div id="bar-prim" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-prim" >0.00s</td>
       </tr>
       <tr>
         <td><input id="compare-kruskal"type="checkbox" checked="checked"></td>
@@ -529,7 +529,7 @@ body {font-size:16px;}
             <div id="bar-kruskal" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-kruskal" >0.00s</td>
       </tr>
       <tr>
         <td><input id="compare-dijkstra"type="checkbox" checked="checked"></td>
@@ -539,7 +539,7 @@ body {font-size:16px;}
             <div id="bar-dijkstra" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-dijkstra" >0.00s</td>
       </tr>
       <tr>
         <td><input id="compare-belford"type="checkbox" checked="checked"></td>
@@ -549,7 +549,7 @@ body {font-size:16px;}
             <div id="bar-belford" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-belford" >0.00s</td>
       </tr>
       <tr>
         <td><input id="compare-floyd"type="checkbox" checked="checked"></td>
@@ -559,7 +559,7 @@ body {font-size:16px;}
             <div id="bar-floyd" style="width: 1%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white;"></div>
           </div>
         </td>
-        <td>0.00s</td>
+        <td id="medicion-floyd" >0.00s</td>
       </tr>
     </table>
     <div class="w3-container">
@@ -575,8 +575,8 @@ body {font-size:16px;}
       <div class="w3-container" style="float: left">
         <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Resultados Históricos </button></p>
         <div><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a PDF </button></div>
-        <div><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a CSV </button></div>
-        <div><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a JSON </button></div>
+        <div><button type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 60px;" onclick=""> Exportar a CSV </button></div>
+        <div><button type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick=""> Exportar a JSON </button></div>
       </div>
     </div>
   </div>

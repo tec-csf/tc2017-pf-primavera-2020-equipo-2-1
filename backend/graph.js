@@ -1183,6 +1183,7 @@ function runAlgorithm(algorithm) {
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;
     var time_id = "medicion-" + algorithm;
+    var execution_time; 
 
     var progress_bar = document.getElementById(bar_id);
     progress_bar.style.width = "1%";
@@ -1222,7 +1223,8 @@ function runAlgorithm(algorithm) {
         }
 
         var tf = performance.now()
-        document.getElementById(time_id).innerHTML = Number((tf - ti).toFixed(2)) + " milisegundos";
+        execution_time = tf - ti; 
+        document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
     }
 }
 

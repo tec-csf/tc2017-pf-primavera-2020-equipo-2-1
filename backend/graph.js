@@ -858,7 +858,7 @@ function Kruskal()
 /* ---- Dijkstra ---- */ // Rojo
 function Dijkstra(){
     // Algoritmo para desplegar en HTML
-    var Dijkstra_code = " Codigo-Diksstra";
+    var Dijkstra_code = "";
     console.log("flag Dikjkstra");
     /*bfs_code += "var queue = new Queue();<br>";
     bfs_code += "nodo_inicial = VISITED;<br>";
@@ -896,19 +896,18 @@ function Dijkstra(){
     var visited = [];
 
     var Tabla=[node_number-1]
+    var Padres=[node_number-1]
     for(var i=0;i<node_number;i++){
         Tabla[i]=Infinity;
+        Padres[i]=Infinity;
     }
-
-    for (var i = 0; i < node_number; i++)
-        visited[i] = false;
 
     // Se 'imprime' instruccion en ejecución
     document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
-    DijkstraUtil(start_node,target_node,dijkstra_network,dij_nodes,dij_edges,Tabla)
+    DijkstraUtil(start_node,target_node,dijkstra_network,dij_nodes,dij_edges,Tabla,Padres)
 
 }
-async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij_edges,Tabla){
+async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij_edges,Tabla,Padres){
     var visited=[];
     var toAnalize=[];
     var queue = new Queue();
@@ -923,19 +922,27 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
         console.log(node_analized+ "<- Le nodo");
         for(var i=0;i<Aristas.length;i++){
             if(Aristas[i].origen==node_analized){
-                //Revisar esto y hacer tabla de padres!!!
-                //console.log("Lo que hay en "+Tabla[node_analized-1])
+
+
+                //Revisar por que analiza un nodo dos veces
+                
+                
                 //var dest=Aristas[i].destino;
+                var flag=true;
                 if(Tabla[Aristas[i].destino-1]>Aristas[i].peso+Tabla[node_analized-1]){
                     Tabla[Aristas[i].destino-1]=Aristas[i].peso+Tabla[node_analized-1];
+                    Padres[[Aristas[i].destino-1]]=node_analized;
                     for(var j=0;j<visited.length;j++){
                         if(Aristas[i].destino==visited[j]){
+                            flag=false;
                             break;
                         }
+                    }
+                    if (flag){
                         toAnalize.push(Aristas[i].destino);
                     }
                    // console.log("FALF");
-                    console.log("Tabla: "+ node_analized +" i  "+Aristas[i].destino+"  "+Tabla[Aristas[i].destino-1])
+                   // console.log("Tabla: "+ node_analized +" i  "+Aristas[i].destino+"  "+Tabla[Aristas[i].destino-1])
                     
                 }
             }
@@ -947,16 +954,18 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
             break;
 
         }
+        var pesominimo=Infinity;
         var min=Infinity;
         var aux;
         for(var i=0;i<toAnalize.length;i++){
-            if((Tabla[toAnalize[i]-1])<min){
-                console.log("Es el minimo ");
+            if((Tabla[toAnalize[i]-1])<pesominimo){
+                //console.log("Es el minimo ");
+                pesominimo=Tabla[toAnalize[i]-1];
                 min=toAnalize[i];
                 aux=i;
             }
         }
-        console.log("min "+min+" "+Tabla[min-1])
+        //console.log("min "+min+" "+Tabla[min-1])
         visited.push(min);
         toAnalize.splice(aux,1);
         queue.enqueue(min);
@@ -973,8 +982,22 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
     }
     else{
         console.log("El camino minimo es: "+Tabla[target_node-1]);
+        var path;
+        printPath(path,Padres[target_node-1],start_node,Padres);
     }
     //console.log(Tabla[0]+" "+Tabla[1]+" "+Tabla[2]+" "+Tabla[3]+" "+Tabla[4]+" "+Tabla[5]+" "+Tabla[6]+" ")
+
+}
+async function printPath(path,padre,start_node,padres){
+    if(padre==start_node){
+        console.log("Path: "+path);
+    }
+    else{
+        padre=padres[padre];
+        path+=padre+"->";
+        printPath(path,padre,start_node,padres);
+    }
+
 
 }
 

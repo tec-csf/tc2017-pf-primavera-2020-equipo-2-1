@@ -48,6 +48,7 @@ function addEdge(id, origin, destination, weight) {
 
 /* Genera grafo */
 function drawGraph(no_nodes, no_edges) {
+    edges_array.length=0;
     destroy();
 
     node_number = no_nodes;
@@ -83,6 +84,7 @@ function drawGraph(no_nodes, no_edges) {
 
 /* Genera datos aleatorios para creación de grafo */
 function drawRandomGraph() {
+    edges_array.length=0;
     // Genera entre 5 y 15 nodos,
     // y entre los n nodos generados y 2*n nodos generados de aristas
     var no_nodes = Math.floor(Math.random() * 11) + 5;
@@ -106,6 +108,7 @@ function drawSetGraph() {
 
 /* Genera un grafo fijo para debug */
 function drawTestGraph() {
+    edges_array.length=0;
     destroy();
 
     node_number = 8;
@@ -513,7 +516,7 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
 /* ---- A* ---- */ // Quiroz
 /* ---- A* ---- */
 
-
+var a_result;
 function A_star(){
 
     // Algoritmo para desplegar en HTML
@@ -585,15 +588,21 @@ function A_star(){
 
 }
 
+var current_weight;
+
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node) {
  var open_set = [];
  var close_set= [];
  var came_from =[];
+ var getpath =[];
+ var heuristics=h(start_node,end_node,a_network);
  open_set.push(start_node);
  gScore[start_node]=0;
- fScore[start_node]=h(start_node,end_node,a_network);
- 
+ fScore[start_node]=heuristics;
 
+ var zero=0;
+
+ getpath.push({now:start_node,from:zero});
 
  while(open_set.length>0){
   var winner =0;
@@ -604,18 +613,20 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
   }
   var current = open_set[winner];
   var neighbors = a_network.getConnectedNodes(current);
-  
+  var edge_neighbors = a_network.getConnectedEdges(current);
 
-  console.log("Current="+current);
-  console.log("Neighbors="+neighbors);
 
   if(current==end_node){
       came_from.push(current);
       const visit_Node_bool = await visit_Node(current, a_nodes);
-      //visit_Node_bool = await visit_Node(current, a_nodes);
+
       highlightNode(current, a_nodes);
-      console.log(came_from);
-      console.log("DONE");
+
+      a_result+=current;
+      a_result+="<br>"
+      document.getElementById("a-result").innerHTML = a_result;
+
+      draw_path(start_node,end_node,getpath)
       return 0;
   }
 
@@ -628,12 +639,13 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
       var neighbor = neighbors[i];
 
       check_dir(current,neighbor);
-      console.log(direction);
+
 
       if(direction){
           highlightNode(current, a_nodes);
       if (!close_set.includes(neighbor)) {
-          var tempG = gScore[current]+ h(neighbor, current,a_network);
+        get_weight(current,neighbor)
+          var tempG = gScore[current]+ current_weight;
           
           // Is this a better path than before?
           var newPath = false;
@@ -650,10 +662,24 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
           }
           if (newPath) {
               //console.log("Debug");
-              const visit_Node_bool = await visit_Node(current, a_nodes);
-              highlightEdge(current, a_edges, a_nodes, a_network,current);
+            fScore[neighbor]=tempG;
+
+
+            const visit_Node_bool = await visit_Node(current, a_nodes);
+
+            check_dir(neighbor,current);
+             if(!direction){
+                highlightEdge(edge_neighbors[i], a_edges, a_nodes, a_network,current);
+             }
+             getpath.push({now:neighbor,from:current});
+              
               fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
-              came_from.push(current);
+              if (!came_from.includes(current)){
+                came_from.push(current);
+                a_result+=current;
+                document.getElementById("a-result").innerHTML = a_result;
+              }
+              
               //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
               
           }
@@ -662,17 +688,56 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
       }else{}
 
 } 
+
+if(came_from.includes(current)){
+    a_result+=" -> ";
+}
+    
+
  //else return no solution*/
 
 }
-
-console.log('no solution');
-console.log(came_from);
+a_result="No se puede acceder al grafo"
+document.getElementById("a-result").innerHTML = a_result;
 
 return;
 }
 
+async function draw_path(start_node,end_node,array){
+    var end=end_node;
+    var start=start_node;
+    var temp=[];
+    var print="";
+    a_result+="<br>Camino Óptimo:<br>"
+    for(var i = 0; i<array.length;++i){
+        for(var j = 0; j<array.length;++j){
+            if(array[j].now==end){
+                if(end==start_node){
+                    temp.push(start_node);
+                    temp=temp.reverse();
 
+                    print+=start;
+                    for(var h=1; h<temp.length;h++){
+                        print+="->";
+                        print+=temp[h];
+                    }
+                    a_result+=print;
+                    document.getElementById("a-result").innerHTML = a_result;
+                    return;
+                }
+                if(!temp.includes(end)){
+
+                    temp.push(end);
+                    end= array[j].from;
+                }
+                   
+            }
+        }
+    }
+
+
+
+}
 
 async function h (start_node,end_node,network){
 
@@ -680,15 +745,12 @@ async function h (start_node,end_node,network){
   var e = network.getPosition(end_node);
   
 
-  var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/11);
-  console.log("Start node->>"+start_node);
-  console.log(h);
+  var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/20);
   return h;
 }
 
 
 async function remove_from_array(arr, elt) {
-  // Could use indexOf here instead to be more efficient
   for (var i = arr.length - 1; i >= 0; i--) {
     if (arr[i] == elt) {
       arr.splice(i, 1);
@@ -696,12 +758,23 @@ async function remove_from_array(arr, elt) {
   }
 }
 
+async function get_weight(nodo,nodo_end){
+
+    for(i=0;i<edges_array.length;++i){
+     
+        if((edges_array[i].from==nodo) && (edges_array[i].to==nodo_end)){
+            current_weight = edges_array[i].weight;
+            return
+        }
+    }
+}
+
 async function check_dir(nodo,nodo_end){
 
   for(i=0;i<edges_array.length;++i){
-     // console.log(edges_array[i].from+"-"+edges_array[i].weight+"-"+edges_array[i].to);
+
       if((edges_array[i].from==nodo) && (edges_array[i].to==nodo_end)){
-          console.log(edges_array[i].from+"-"+edges_array[i].weight+"-"+edges_array[i].to);
+         
           direction = true;
           return
       }

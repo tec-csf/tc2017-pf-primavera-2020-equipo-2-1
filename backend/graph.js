@@ -1147,7 +1147,7 @@ function get_data_graph(){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    get_data_graph();
+   //get_data_graph();
     var myChart = Highcharts.chart('grafico-algoritmos', {
         chart: {
             type: 'bar'
@@ -1165,8 +1165,12 @@ document.addEventListener('DOMContentLoaded', function () {
         },
         series: [{
             name: 'Grafo 1',
-            data: [1,1,1,1,1,1,1,1]
+            data: [1,5,1,7,8,1,1,2]
+        },{
+            name: 'Grafo 2',
+            data: [2,3,4,5,6,1,8,1]
         }
+        
     ]
     });
 });

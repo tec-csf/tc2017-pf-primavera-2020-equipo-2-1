@@ -2,6 +2,7 @@
 var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
 var network = null;
+var dataGraph=[]
 
 var node_number, edge_number;
 var edges_array = [];
@@ -1150,20 +1151,93 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
 
 /* -------------------------------------------------------------------------- */
+/* --------------------- TEST DE GRÁFICAS ------------------------ */
+
+function get_data_graph(){
+    var time = document.getElementById("medicion-dfs").value;
+    console.log(time);
+
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+   //get_data_graph();
+    var myChart = Highcharts.chart('grafico-algoritmos', {
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: 'Tiempos de Comparación'
+        },
+        xAxis: {
+            categories: ['DFS', 'BFS', 'A*','Prim', 'Kruskal', 'Dijkstra','Bellman','Floyd']
+        },
+        yAxis: {
+            title: {
+                text: 'Segundos'
+            }
+        },
+        series: [{
+            name: 'Grafo 1',
+            data: [1,5,1,7,8,1,1,2]
+        },{
+            name: 'Grafo 2',
+            data: [2,3,4,5,6,1,8,1]
+        }
+        
+    ]
+    });
+});
+
+/* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 
 /* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
 function runAlgorithm(algorithm) {
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;
+    var time_id = "medicion-" + algorithm;
+    var execution_time; 
 
     var progress_bar = document.getElementById(bar_id);
     progress_bar.style.width = "1%";
     progress_bar.innerHTML  = "";
 
+    document.getElementById(time_id).innerHTML = "0.00 milisegundos"
+
     if(document.getElementById(algorithm_checkbox).checked) {
+        var ti = performance.now();
         load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
-        //Agregar el resto de los métodos que se utilicen
+        
+        switch(algorithm) {
+            case "dfs":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "bfs":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "a":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "prim":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "kruskal":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "dijkstra":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "belford":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "floyd":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+        }
+
+        var tf = performance.now()
+        execution_time = tf - ti; 
+        document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
     }
 }
 

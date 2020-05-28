@@ -117,8 +117,8 @@ body {font-size:16px;}
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick="DFS(2)"> Lento </a>
-                    <a onclick="DFS(3)"> Normal </a>
+                    <a onclick="DFS(2);"> Lento </a>
+                    <a onclick="DFS(3);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -165,8 +165,8 @@ body {font-size:16px;}
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick="BFS(2)"> Lento </a>
-                    <a onclick="BFS(3)"> Normal </a>
+                    <a onclick="BFS(2);"> Lento </a>
+                    <a onclick="BFS(3);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -211,7 +211,7 @@ body {font-size:16px;}
                   <div style="float: left; width: 50%;"><input id="origin-a" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
                   <div style="float: left; width: 50%;"><input id="end-a" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo Destino</label></div>
                   <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="A_star(1)"> Ejecutar </button></div>
-                  
+
                   <div class="w3-dropdown">
                     <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                     <div class="w3-dropdown-content" style="float: left;">
@@ -259,12 +259,12 @@ body {font-size:16px;}
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-prim" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Prim(1);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick=""> Lento </a>
-                    <a onclick=""> Normal </a>
+                    <a onclick="Prim(2);"> Lento </a>
+                    <a onclick="Prim(3);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -470,7 +470,7 @@ body {font-size:16px;}
   <div class="w3-container" id="compare">
     <h1 class="w3-xxxlarge w3-text-indigo"><b>Comparar Algoritmos</b></h1>
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
-    
+
     <!-- Tabla de Algoritmos -->
     <table class="w3-table w3-bordered">
       <tr>

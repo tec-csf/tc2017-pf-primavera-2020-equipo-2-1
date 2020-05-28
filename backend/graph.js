@@ -414,7 +414,6 @@ async function DFSUtil(current_node, visited, dfs_network, dfs_nodes, dfs_edges)
 }
 
 
-
 /* ---- BFS ---- */ // Gerry
 var bfs_result;
 function BFS()
@@ -510,9 +509,6 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
 
 
 /* ---- A* ---- */ // Quiroz
-/* ---- A* ---- */
-
-
 function A_star(){
 
     // Algoritmo para desplegar en HTML
@@ -525,8 +521,6 @@ function A_star(){
     a_code += "fScore[nodo_inicial]=h(nodo_inicial);<br>";
     a_code += "var closeSet = [];<br>";
     a_code += "var camefrom = [];<br>";
-
-    
 
     a_code += "while openSet IS NOT EMPTY<br>";
     a_code += "&emsp;current = lowest_f(openSet);<br>";
@@ -544,7 +538,6 @@ function A_star(){
     a_code += "&emsp;&emsp;&emsp;if neighbor IS NOT in openSet<br>";
     a_code += "&emsp;&emsp;&emsp;&emsp;openSet.add(neighbor)<br>";
     a_code += "return UNREACHABLE<br>";
-
 
     document.getElementById("a-code").innerHTML = a_code;
     a_result = ""; // Limpia string
@@ -577,7 +570,6 @@ function A_star(){
     }
 
 
-
     // Se 'imprime' instrucción en ejecución
     document.getElementById("a-instruction").innerHTML = "A("+start_node+");";
     AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node);
@@ -585,84 +577,80 @@ function A_star(){
 }
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node) {
- var open_set = [];
- var close_set= [];
- var came_from =[];
- open_set.push(start_node);
- gScore[start_node]=0;
- fScore[start_node]=h(start_node,end_node,a_network);
- 
+   var open_set = [];
+   var close_set= [];
+   var came_from =[];
+   open_set.push(start_node);
+   gScore[start_node]=0;
+   fScore[start_node]=h(start_node,end_node,a_network);
 
 
- while(open_set.length>0){
-  var winner =0;
-  for (var i=0;i<open_set.length;++i){
-      if(fScore[i]<fScore[winner]){
-          winner =i;
-      }
-  }
-  var current = open_set[winner];
-  var neighbors = a_network.getConnectedNodes(current);
-  
+   while(open_set.length>0){
+    var winner =0;
+    for (var i=0;i<open_set.length;++i){
+        if(fScore[i]<fScore[winner]){
+            winner =i;
+        }
+    }
+    var current = open_set[winner];
+    var neighbors = a_network.getConnectedNodes(current);
 
-  console.log("Current="+current);
-  console.log("Neighbors="+neighbors);
 
-  if(current==end_node){
-      came_from.push(current);
-      const visit_Node_bool = await visit_Node(current, a_nodes);
-      //visit_Node_bool = await visit_Node(current, a_nodes);
-      highlightNode(current, a_nodes);
-      console.log(came_from);
-      console.log("DONE");
-      return 0;
-  }
+    console.log("Current="+current);
+    console.log("Neighbors="+neighbors);
 
-  remove_from_array(open_set,current)
-  close_set.push(current);
-  
-  sleep(100);
-  for(i = 0; i < neighbors.length; i++){
+    if(current==end_node){
+        came_from.push(current);
+        const visit_Node_bool = await visit_Node(current, a_nodes);
+        //visit_Node_bool = await visit_Node(current, a_nodes);
+        highlightNode(current, a_nodes);
+        console.log(came_from);
+        console.log("DONE");
+        return 0;
+    }
 
-      var neighbor = neighbors[i];
+    remove_from_array(open_set,current)
+    close_set.push(current);
 
-      check_dir(current,neighbor);
-      console.log(direction);
+    sleep(100);
+    for(i = 0; i < neighbors.length; i++){
 
-      if(direction){
-          highlightNode(current, a_nodes);
-      if (!close_set.includes(neighbor)) {
-          var tempG = gScore[current]+ h(neighbor, current,a_network);
-          
-          // Is this a better path than before?
-          var newPath = false;
-          if (open_set.includes(neighbor)) {
-            if (tempG < gScore[neighbor]) {
-              gScore[neighbor] = tempG;
-              newPath = true;
+        var neighbor = neighbors[i];
+
+        check_dir(current,neighbor);
+        console.log(direction);
+
+        if(direction){
+            highlightNode(current, a_nodes);
+            if (!close_set.includes(neighbor)) {
+                var tempG = gScore[current]+ h(neighbor, current,a_network);
+
+                // Is this a better path than before?
+                var newPath = false;
+                if (open_set.includes(neighbor)) {
+                  if (tempG < gScore[neighbor]) {
+                    gScore[neighbor] = tempG;
+                    newPath = true;
+                  }
+                } else {
+                  gScore[neighbor] = tempG;
+                  newPath = true;
+                  open_set.push(neighbor);
+
+                }
+                if (newPath) {
+                    //console.log("Debug");
+                    const visit_Node_bool = await visit_Node(current, a_nodes);
+                    highlightEdge(current, a_edges, a_nodes, a_network,current);
+                    fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
+                    came_from.push(current);
+                    //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
+                }
+
             }
-          } else {
-            gScore[neighbor] = tempG;
-            newPath = true;
-            open_set.push(neighbor);
-           
-          }
-          if (newPath) {
-              //console.log("Debug");
-              const visit_Node_bool = await visit_Node(current, a_nodes);
-              highlightEdge(current, a_edges, a_nodes, a_network,current);
-              fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
-              came_from.push(current);
-              //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
-              
-          }
-      
-      }
-      }else{}
-
-} 
- //else return no solution*/
-
+        }else{ }
+    }
+   //else return no solution*/
 }
 
 console.log('no solution');
@@ -672,12 +660,11 @@ return;
 }
 
 
-
-async function h (start_node,end_node,network){
+async function h (start_node, end_node, network){
 
   var s = network.getPosition(start_node);
   var e = network.getPosition(end_node);
-  
+
 
   var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/11);
   console.log("Start node->>"+start_node);
@@ -696,7 +683,6 @@ async function remove_from_array(arr, elt) {
 }
 
 async function check_dir(nodo,nodo_end){
-
   for(i=0;i<edges_array.length;++i){
      // console.log(edges_array[i].from+"-"+edges_array[i].weight+"-"+edges_array[i].to);
       if((edges_array[i].from==nodo) && (edges_array[i].to==nodo_end)){
@@ -705,22 +691,31 @@ async function check_dir(nodo,nodo_end){
           return
       }
   }
-  
   direction = false;
-      
 }
 
+
 /* ---- Prim ---- */ // Gerry
-var prim_result;
 function Prim()
 {
     // Algoritmo para desplegar en HTML
     var prim_code = "";
-    prim_code += "<br>";
-    prim_code += "&emsp;<br>";
-
+    prim_code += "MST ← ∅<br>";
+    prim_code += "FOR i ← 1, ..., num_nodos DO<br>";
+    prim_code += "&emsp;&emsp;distance(nodo[i]) ← ∞, parent(nodo[i]) ← NULL<br>";
+    prim_code += "distance(nodo[1]) ← 0, parent(nodo[1]) ← nodo[1]<br>";
+    prim_code += "WHILE queue ≠ ∅ DO<br>";
+    prim_code += "&emsp;&emsp;u ← queue.obtenerMin()<br>";
+    prim_code += "&emsp;&emsp;IF parent(u) ≠ u<br>";
+    prim_code += "&emsp;&emsp;&emsp;&emsp;T.add({parent(u), u})<br>";
+    prim_code += "&emsp;&emsp;FOR ALL {u, w} ∈ E do<br>";
+    prim_code += "&emsp;&emsp;&emsp;&emsp;IF w ∈ queue AND l(u, w) < distance(w) THEN<br>";
+    prim_code += "&emsp;&emsp;&emsp;&emsp;&emsp;distance(w) ← l(u, w), parent(w) ← u<br>";
+    prim_code += "&emsp;&emsp;&emsp;&emsp;ELSE IF parent(w) = NULL THEN<br>";
+    prim_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;distance(w) ← l(u, w), parent(w) ← u<br>";
+    prim_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;queue.insert(w)<br>";
+    prim_code += "END<br>";
     document.getElementById("prim-code").innerHTML = prim_code;
-    prim_code = ""; // Limpia string
 
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
@@ -739,8 +734,8 @@ function Prim()
     var prim_network = new vis.Network(container, data, options);
     //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
 
-    // Se 'imprime' instruccion en ejecución
-    document.getElementById("prim-instruction").innerHTML = "Prim("+start_node+");";
+// Se 'imprime' instruccion en ejecución
+document.getElementById("prim-instruction").innerHTML = "Prim("+start_node+");";
 
     PrimUtil(start_node, prim_network, prim_nodes, prim_edges);
 }
@@ -748,52 +743,110 @@ function Prim()
 
 async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges)
 {
+    var mst = [];
+    var prim_result = ""; // Tendrá el contenido del MST para mostrar en HTML
+    var distance = [];
+    var parent = [];
+
+    for (var i = 0; i < node_number; i++)
+    {
+        distance[i] = Infinity;
+        parent[i] = null;
+    }
+
+    distance[start_node - 1] = 0;
+    parent[start_node - 1] = start_node;
+
+    mst.push[start_node];
+    prim_result += start_node;
+    document.getElementById("prim-result").innerHTML = prim_result;
+    prim_result += " -> ";
+
     var visited = [];
     visited.push(start_node);
+    highlightNode(start_node, prim_nodes);
 
-    var not_visited = [];
-    for (var i = 0; i < node_number; i++)
-        not_visited[i] = i+1;
-
-    node_analized = start_node;
-    while(not_visited.length > 0)
+    while (visited.length > 0)
     {
-        highlightNode(node_analized, prim_nodes);
-        var neighbors = prim_network.getConnectedEdges(node_analized);
-        document.getElementById("prim-instruction").innerHTML = "var neighbors = prim_network.getConnectedEdges("+node_analized+");";
 
-        const visit_Node_bool = await visit_Node(node_analized, prim_nodes);
+document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<br>";
+
+        // Obtener el nodo que tenga la arista más corta
+        var min = Infinity;
+        var pos_min, pos_edge;
+        for (var i = 0; i < visited.length; i++)
+        {
+
+          prim_result += "<br>queue:";
+          prim_result += visited;
+          prim_result += "<br>";
+          document.getElementById("prim-result").innerHTML = prim_result;
+
+            var temp = prim_network.getConnectedEdges(visited[i]);
+            for (var j = 0; j < temp.length; j++)
+            {
+                if (prim_edges.get(temp[j]).from == visited[i])
+                {
+                    if(prim_edges.get(temp[j]).label < min)
+                    {
+                        min = prim_edges.get(temp[j]).label;
+                        pos_min = i;
+                        pos_edge = j;
+                    }
+                }
+            }
+        }
+
+        var node_analized = visited[pos_min];
+        await visit_Node(node_analized, prim_nodes);
+        // Evita error de iluminar arista en 1era iteracion:
+        if(node_analized != start_node)
+        {
+            var edge = prim_network.getConnectedEdges(node_analized);
+            highlightEdge(edge[pos_edge], prim_edges, prim_nodes, prim_network);
+        }
+        visited.splice(pos_min, 1);
+        // Fin Obtener el nodo que tenga la arista más corta
+
+        if(parent[node_analized - 1] != node_analized)
+        {
+            mst.push[node_analized];
+            prim_result += node_analized;
+            document.getElementById("prim-result").innerHTML = prim_result;
+            prim_result += " -> ";
+        }
+
+        var neighbors = prim_network.getConnectedEdges(node_analized);
 
         for (var i = 0; i < neighbors.length; i++)
         {
-            if (prim_edges.get(neighbors[i]).from == node_analized)
+
+document.getElementById("prim-instruction").innerHTML = "FOR ALL {u, w} ∈ E do<br>";
+
+            if (visited.indexOf(prim_edges.get(neighbors[i]).to) != -1)
+            {
+                if (prim_edges.get(neighbors[i]).label < distance[prim_edges.get(neighbors[i]).to - 1])
+                {
+
+document.getElementById("prim-instruction").innerHTML = "IF w ∈ queue AND l(u, w) < distance(w) THEN<br>&emsp;distance(w) ← l(u, w), parent(w) ← u<br>";
+
+                    distance[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).label;
+                    parent[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).from;
+                }
+            } else if (parent[prim_edges.get(neighbors[i]).to - 1] == null)
             {
 
-                var min = 16;
-                var posicion_min;
-                for (var j = 0; j < neighbors.length; j++)
-                {
-                  if (prim_edges.get(neighbors[j]).label < min)
-                  {
-                      min = prim_edges.get(neighbors[j]).label;
-                      posicion_min = j;
-                  }
-                }
-                highlightEdge(neighbors[j], prim_edges, prim_nodes, prim_network, node_analized);
-                var destination = prim_edges.get(neighbors[posicion_min]).to;
-                document.getElementById("prim-instruction").innerHTML = "var destination = prim_edges.get(neighbors[posicion_min]).to;";
-                if(!visited[destination - 1])
-                {
-                    visited[destination - 1] = true;
-                    node_analized = destination;
-                }
-            }
-            prim_result += node_analized;
-            document.getElementById("prim-result").innerHTML = prim_result;
+document.getElementById("prim-instruction").innerHTML = "ELSE IF parent(w) = NULL THEN<br>&emsp;distance(w) ← l(u, w), parent(w) ← u<br>&emsp;queue.insert(w)<br>";
 
-            prim_result += " -> ";
+                distance[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).label;
+                parent[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).from;
+                visited.push(prim_edges.get(neighbors[i]).to);
+
+                highlightNode(prim_edges.get(neighbors[i]).to, prim_nodes);
+            }
         }
     }
+document.getElementById("prim-instruction").innerHTML = "END";
 }
 
 
@@ -925,8 +978,8 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
 
 
                 //Revisar por que analiza un nodo dos veces
-                
-                
+
+
                 //var dest=Aristas[i].destino;
                 var flag=true;
                 if(Tabla[Aristas[i].destino-1]>Aristas[i].peso+Tabla[node_analized-1]){
@@ -943,7 +996,7 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
                     }
                    // console.log("FALF");
                    // console.log("Tabla: "+ node_analized +" i  "+Aristas[i].destino+"  "+Tabla[Aristas[i].destino-1])
-                    
+
                 }
             }
         }

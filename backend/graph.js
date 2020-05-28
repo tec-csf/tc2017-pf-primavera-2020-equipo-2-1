@@ -1178,14 +1178,47 @@ document.addEventListener('DOMContentLoaded', function () {
 function runAlgorithm(algorithm) {
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;
+    var time_id = "medicion-" + algorithm;
 
     var progress_bar = document.getElementById(bar_id);
     progress_bar.style.width = "1%";
     progress_bar.innerHTML  = "";
 
+    document.getElementById(time_id).innerHTML = "0.00 milisegundos"
+
     if(document.getElementById(algorithm_checkbox).checked) {
+        var ti = performance.now();
         load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
-        //Agregar el resto de los métodos que se utilicen
+        
+        switch(algorithm) {
+            case "dfs":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "bfs":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "a":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "prim":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "kruskal":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "dijkstra":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "belford":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+            case "floyd":
+                //Ingresar codigo del algoritmo con velocidad normal
+                break;
+        }
+
+        var tf = performance.now()
+        document.getElementById(time_id).innerHTML = Number((tf - ti).toFixed(2)) + " milisegundos";
     }
 }
 

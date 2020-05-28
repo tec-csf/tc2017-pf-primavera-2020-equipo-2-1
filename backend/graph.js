@@ -413,6 +413,8 @@ async function DFSUtil(current_node, visited, dfs_network, dfs_nodes, dfs_edges)
     }
 }
 
+
+
 /* ---- BFS ---- */ // Gerry
 var bfs_result;
 function BFS()
@@ -508,7 +510,205 @@ async function BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges)
 
 
 /* ---- A* ---- */ // Quiroz
+/* ---- A* ---- */
 
+
+function A_star(){
+
+    // Algoritmo para desplegar en HTML
+    var a_code = "";
+    a_code += "var openSet = [];<br>";
+    a_code += "openSet.push(nodo_inicial);<br>";
+    a_code += "var gScore [] = INFINITY;<br>";
+    a_code += "gScore[nodo_inicial]=0;<br>";
+    a_code += "var fScore [] INFINITY= ;<br>";
+    a_code += "fScore[nodo_inicial]=h(nodo_inicial);<br>";
+    a_code += "var closeSet = [];<br>";
+    a_code += "var camefrom = [];<br>";
+
+    
+
+    a_code += "while openSet IS NOT EMPTY<br>";
+    a_code += "&emsp;current = lowest_f(openSet);<br>";
+
+    a_code += "&emsp;if current IS nodo_final;<br>";
+    a_code += "&emsp;&emsp;return camefrom;<br>";
+    a_code += "&emsp;openSet.remove(current);<br>";
+    a_code += "&emsp;for i in all neighbor(current)<br>";
+    a_code += "&emsp;&emsp;new_gScore = gScore[current] + d(current, neighbor)<br>";
+    a_code += "&emsp;&emsp;if new_gScore < gScore[neighbor]<br>";
+    a_code += "&emsp;&emsp;&emsp;cameFrom[neighbor] = current<br>";
+    a_code += "&emsp;&emsp;&emsp;gScore[neighbor] = new_gScore<br>";
+    a_code += "&emsp;&emsp;&emsp;fScore[neighbor] = gScore[neighbor] + h(neighbor)<br>";
+    a_code += "&emsp;&emsp;&emsp;cameFrom[neighbor] = current<br>";
+    a_code += "&emsp;&emsp;&emsp;if neighbor IS NOT in openSet<br>";
+    a_code += "&emsp;&emsp;&emsp;&emsp;openSet.add(neighbor)<br>";
+    a_code += "return UNREACHABLE<br>";
+
+
+    document.getElementById("a-code").innerHTML = a_code;
+    a_result = ""; // Limpia string
+
+    // Se obtiene el nodo de origen usando el id del input
+    // ids se encuentran en main.html. (todos son 'origin-algoritmo')
+    var start_node = parseInt(document.getElementById("origin-a").value);
+    var end_node = parseInt(document.getElementById("end-a").value);
+
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var a_nodes = new vis.DataSet(nodes.get());
+    var a_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('a-network'); // ids se encuentran en main.html.
+    var data = {
+        nodes: a_nodes,
+        edges: a_edges
+    };
+    var options = {};
+    var a_network = new vis.Network(container, data, options);
+    // Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+
+    var gScore=[node_number-1]
+    for(var i=0;i<node_number;i++){
+      gScore[i]=Infinity;
+    }
+    var fScore=[node_number-1]
+    for(var i=0;i<node_number;i++){
+      fScore[i]=Infinity;
+    }
+
+
+
+    // Se 'imprime' instrucción en ejecución
+    document.getElementById("a-instruction").innerHTML = "A("+start_node+");";
+    AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node);
+
+}
+
+async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node) {
+ var open_set = [];
+ var close_set= [];
+ var came_from =[];
+ open_set.push(start_node);
+ gScore[start_node]=0;
+ fScore[start_node]=h(start_node,end_node,a_network);
+ 
+
+
+ while(open_set.length>0){
+  var winner =0;
+  for (var i=0;i<open_set.length;++i){
+      if(fScore[i]<fScore[winner]){
+          winner =i;
+      }
+  }
+  var current = open_set[winner];
+  var neighbors = a_network.getConnectedNodes(current);
+  
+
+  console.log("Current="+current);
+  console.log("Neighbors="+neighbors);
+
+  if(current==end_node){
+      came_from.push(current);
+      const visit_Node_bool = await visit_Node(current, a_nodes);
+      //visit_Node_bool = await visit_Node(current, a_nodes);
+      highlightNode(current, a_nodes);
+      console.log(came_from);
+      console.log("DONE");
+      return 0;
+  }
+
+  remove_from_array(open_set,current)
+  close_set.push(current);
+  
+  sleep(100);
+  for(i = 0; i < neighbors.length; i++){
+
+      var neighbor = neighbors[i];
+
+      check_dir(current,neighbor);
+      console.log(direction);
+
+      if(direction){
+          highlightNode(current, a_nodes);
+      if (!close_set.includes(neighbor)) {
+          var tempG = gScore[current]+ h(neighbor, current,a_network);
+          
+          // Is this a better path than before?
+          var newPath = false;
+          if (open_set.includes(neighbor)) {
+            if (tempG < gScore[neighbor]) {
+              gScore[neighbor] = tempG;
+              newPath = true;
+            }
+          } else {
+            gScore[neighbor] = tempG;
+            newPath = true;
+            open_set.push(neighbor);
+           
+          }
+          if (newPath) {
+              //console.log("Debug");
+              const visit_Node_bool = await visit_Node(current, a_nodes);
+              highlightEdge(current, a_edges, a_nodes, a_network,current);
+              fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
+              came_from.push(current);
+              //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
+              
+          }
+      
+      }
+      }else{}
+
+} 
+ //else return no solution*/
+
+}
+
+console.log('no solution');
+console.log(came_from);
+
+return;
+}
+
+
+
+async function h (start_node,end_node,network){
+
+  var s = network.getPosition(start_node);
+  var e = network.getPosition(end_node);
+  
+
+  var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/11);
+  console.log("Start node->>"+start_node);
+  console.log(h);
+  return h;
+}
+
+
+async function remove_from_array(arr, elt) {
+  // Could use indexOf here instead to be more efficient
+  for (var i = arr.length - 1; i >= 0; i--) {
+    if (arr[i] == elt) {
+      arr.splice(i, 1);
+    }
+  }
+}
+
+async function check_dir(nodo,nodo_end){
+
+  for(i=0;i<edges_array.length;++i){
+     // console.log(edges_array[i].from+"-"+edges_array[i].weight+"-"+edges_array[i].to);
+      if((edges_array[i].from==nodo) && (edges_array[i].to==nodo_end)){
+          console.log(edges_array[i].from+"-"+edges_array[i].weight+"-"+edges_array[i].to);
+          direction = true;
+          return
+      }
+  }
+  
+  direction = false;
+      
+}
 
 /* ---- Prim ---- */ // Gerry
 var prim_result;

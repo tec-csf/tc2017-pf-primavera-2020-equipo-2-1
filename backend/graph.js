@@ -565,21 +565,26 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
     highlightNode(start_node, dij_nodes);
     visited.push(start_node);
     queue.enqueue(start_node)
-    Tabla[start_node]=0;
+    Tabla[start_node-1]=0;
 
     while(visited.length!=node_number){
         var node_analized= queue.dequeue();
         console.log(node_analized+ "<- Le nodo");
         for(var i=0;i<Aristas.length;i++){
             if(Aristas[i].origen==node_analized){
-                console.log("SI");
                 //Revisar esto y hacer tabla de padres!!!
-
+                //console.log("Lo que hay en "+Tabla[node_analized-1])
+                //var dest=Aristas[i].destino;
                 if(Tabla[Aristas[i].destino-1]>Aristas[i].peso+Tabla[node_analized-1]){
                     Tabla[Aristas[i].destino-1]=Aristas[i].peso+Tabla[node_analized-1];
-                    toAnalize.push(Aristas[i].destino);
+                    for(var j=0;j<visited.length;j++){
+                        if(Aristas[i].destino==visited[j]){
+                            break;
+                        }
+                        toAnalize.push(Aristas[i].destino);
+                    }
                    // console.log("FALF");
-                    console.log("Tabla: "+ node_analized +" i  "+i+"  "+Tabla[i])
+                    console.log("Tabla: "+ node_analized +" i  "+Aristas[i].destino+"  "+Tabla[Aristas[i].destino-1])
                     
                 }
             }
@@ -595,14 +600,14 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
         var aux;
         for(var i=0;i<toAnalize.length;i++){
             if((Tabla[toAnalize[i]-1])<min){
-                console.log("FALF3");
+                console.log("Es el minimo ");
                 min=toAnalize[i];
                 aux=i;
             }
         }
-        console.log("min "+min)
-        toAnalize.splice(aux,1);
+        console.log("min "+min+" "+Tabla[min-1])
         visited.push(min);
+        toAnalize.splice(aux,1);
         queue.enqueue(min);
         // Tabla.forEach(element => {
         //     console.log("---"+element);
@@ -612,6 +617,13 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
 
     }
     console.log("FIN");
+    if(Tabla[target_node-1]==Infinity){
+        console.log("No hay un camino hacia ese nodo");
+    }
+    else{
+        console.log("El camino minimo es: "+Tabla[target_node-1]);
+    }
+    //console.log(Tabla[0]+" "+Tabla[1]+" "+Tabla[2]+" "+Tabla[3]+" "+Tabla[4]+" "+Tabla[5]+" "+Tabla[6]+" ")
 
 }
 
@@ -646,32 +658,34 @@ function compareAlgorithms() {
 
 /* ---- "MAIN" ---- */
 drawRandomGraph();
-console.log(Aristas[0].origen);
-Aristas.sort(function (a,b){
-    if(a.origen<b.origen){
-        return -1;
-    }
-    else if(a.origen<b.origen){
-        return 1;
-    }
-    return 0;
-});
-console.log(Aristas[1].origen);
+// console.log(Aristas[0].origen);
+
+// Aristas.sort(function (a,b){
+//     if(a.origen<b.origen){
+//         return -1;
+//     }
+//     else if(a.origen<b.origen){
+//         return 1;
+//     }
+//     return 0;
+// });
+
+// console.log(Aristas[1].origen);
 // var Tabla=[node_number-1]
 // for(var i=0;i<node_number;i++){
 //     Tabla[i]=Infinity;
 // }
 // console.log(Tabla[0]);
-var prueba=[];
-prueba.push("hola");
-prueba.push("como");
-prueba.push("estas");
-prueba.push("atm");
-prueba.forEach(element => {
-    console.log(element);
-});
-console.log("----");
-prueba.splice(1,1);
-prueba.forEach(element => {
-    console.log(element);
-});
+// var prueba=[];
+// prueba.push("hola");
+// prueba.push("como");
+// prueba.push("estas");
+// prueba.push("atm");
+// prueba.forEach(element => {
+//     console.log(element);
+// });
+// console.log("----");
+// prueba.splice(1,1);
+// prueba.forEach(element => {
+//     console.log(element);
+// });

@@ -459,6 +459,7 @@ function BFS()
     document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
 
     BFSUtil(start_node, visited, bfs_network, bfs_nodes, bfs_edges);
+    document.getElementById("dfs-result").innerHTML = dfs_result;
 }
 
 
@@ -856,9 +857,11 @@ function Kruskal()
 
 
 /* ---- Dijkstra ---- */ // Rojo
+var Dijkstra_sol;
 function Dijkstra(){
     // Algoritmo para desplegar en HTML
     var Dijkstra_code = "";
+    Dijkstra_sol=" ";
     console.log("flag Dikjkstra");
     /*bfs_code += "var queue = new Queue();<br>";
     bfs_code += "nodo_inicial = VISITED;<br>";
@@ -903,8 +906,9 @@ function Dijkstra(){
     }
 
     // Se 'imprime' instruccion en ejecución
-    document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
-    DijkstraUtil(start_node,target_node,dijkstra_network,dij_nodes,dij_edges,Tabla,Padres)
+    
+    DijkstraUtil(start_node,target_node,dijkstra_network,dij_nodes,dij_edges,Tabla,Padres);
+    document.getElementById("dijkstra-result").innerHTML =Dijkstra_sol;
 
 }
 async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij_edges,Tabla,Padres){
@@ -919,7 +923,7 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
 
     while(visited.length!=node_number){
         var node_analized= queue.dequeue();
-        console.log(node_analized+ "<- Le nodo");
+        //console.log(node_analized+ "<- Le nodo");
         for(var i=0;i<Aristas.length;i++){
             if(Aristas[i].origen==node_analized){
 
@@ -947,10 +951,10 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
                 }
             }
         }
-        console.log("To analize: "+toAnalize[0]);
-        console.log("To analize: "+toAnalize[1]);
+        /*console.log("To analize: "+toAnalize[0]);
+        console.log("To analize: "+toAnalize[1]);*/
         if(toAnalize.length==0){
-            console.log("????");
+            //console.log("????");
             break;
 
         }
@@ -979,16 +983,28 @@ async function DijkstraUtil(start_node,target_node,dijkstranetwork,dij_nodes,dij
     console.log("FIN");
     if(Tabla[target_node-1]==Infinity){
         console.log("No hay un camino hacia ese nodo");
+        Dijkstra_sol="No hay un camino hacia ese nodo"
     }
     else{
         console.log("El camino minimo es: "+Tabla[target_node-1]);
-        var path;
-        printPath(path,Padres[target_node-1],start_node,Padres);
+        
+        var padre=Padres[target_node-1];
+        var path=target_node;
+        var cont=0;
+        while(padre!=start_node){
+            console.log(padre==start_node);
+            path=padre+" -> "+path;
+            padre=Padres[padre-1];
+            cont++;
+        }
+        path=start_node+" -> "+path;
+        console.log(path);
+        Dijkstra_sol=path+"<br>"+"Distancia: "+Tabla[target_node-1];
     }
     //console.log(Tabla[0]+" "+Tabla[1]+" "+Tabla[2]+" "+Tabla[3]+" "+Tabla[4]+" "+Tabla[5]+" "+Tabla[6]+" ")
 
 }
-async function printPath(path,padre,start_node,padres){
+/*async function printPath(path,padre,start_node,padres){
     if(padre==start_node){
         console.log("Path: "+path);
     }
@@ -999,7 +1015,7 @@ async function printPath(path,padre,start_node,padres){
     }
 
 
-}
+}*/
 
 
 /* ---- Bellman-Ford ---- */

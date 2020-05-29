@@ -1236,16 +1236,8 @@ async function FloydUtil(delay)
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
 var chart;
 
-$('#exportar_pdf').click(function () {
-    chart.exportChart({
-        type: 'application/pdf',
-        filename: 'my-pdf'
-    });
-});
 
-function downlaodCsv() {
-    chart.downloadCSV()
-  }
+
   
 
 async function test_graph(){
@@ -1275,13 +1267,22 @@ async function test_graph(){
         ],  exporting: {
             
             csv: {
-                itemDelimiter: ';'
+                columnHeaderFormatter: function(item, key) {
+                    if (item.name) {
+                      return item.name
+                    }
+                    return item.bar
+                  },
+                lineDelimiter: '\n'
+
             }
           }
         });
 
 }
-
+function downlaodCsv() {
+    chart.downloadCSV()
+  }
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */

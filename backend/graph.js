@@ -292,7 +292,7 @@ function load_progressBar(algorithm, progress) {
     var progress_bar = document.getElementById(bar_id);
     progress_bar.innerHTML = "";
     var width = parseInt(progress_bar.style.width.substring(0, progress_bar.style.width.length - 1));
-    var id = setInterval(frame, 10);
+    var id = setInterval(frame, 2);
     function frame() {
       if (width >= progress) {
         clearInterval(id);
@@ -738,12 +738,6 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
     var tf = performance.now();
     execution_time = tf - ti;
     document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
-
-var tf = performance.now();
-execution_time = tf - ti;
-document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
-return execution_time; 
-
 }
 
 async function draw_path(start_node,end_node,array){
@@ -1305,27 +1299,32 @@ async function runAlgorithm(algorithm) {
 
     document.getElementById(time_id).innerHTML = "0.00 milisegundos"
 
+    document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
+
     if(document.getElementById(algorithm_checkbox).checked) {
         var ti = performance.now();
-        load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
+        //load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
 
         switch(algorithm) {
             case "dfs":
+                load_progressBar(algorithm, 60);
                 await DFS(50);
-
+                load_progressBar(algorithm, 100);
                 categories_graph.push("DFS");
                 check_check_box=true;
 
                 break;
             case "bfs":
-                //Ingresar codigo del algoritmo con velocidad normal
+                
 
                 categories_graph.push("BFS");
                 check_check_box=true;
                 break;
             case "a":
-                //Ingresar codigo del algoritmo con velocidad normal
+                document.getElementById("end-a").value = parseInt(document.getElementById("target-all").value);
+                load_progressBar(algorithm, 60);
                 await A_star(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("A*");
                 check_check_box=true;
                 break;
@@ -1342,7 +1341,7 @@ async function runAlgorithm(algorithm) {
                 check_check_box=true;
                 break;
             case "dijkstra":
-                //Ingresar codigo del algoritmo con velocidad normal
+                document.getElementById("target-dijkstra").value = parseInt(document.getElementById("target-all").value);
 
                 categories_graph.push("Dijkstra");
                 check_check_box=true;

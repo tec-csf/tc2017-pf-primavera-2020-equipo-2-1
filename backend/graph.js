@@ -619,116 +619,122 @@ function A_star(delay){
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
- var open_set = [];
- var close_set= [];
- var came_from =[];
- var getpath =[];
- var heuristics=h(start_node,end_node,a_network);
- open_set.push(start_node);
- gScore[start_node]=0;
- fScore[start_node]=heuristics;
 
- var zero=0;
+     var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
 
- getpath.push({now:start_node,from:zero});
+     var open_set = [];
+     var close_set= [];
+     var came_from =[];
+     var getpath =[];
+     var heuristics=h(start_node,end_node,a_network);
+     open_set.push(start_node);
+     gScore[start_node]=0;
+     fScore[start_node]=heuristics;
 
- while(open_set.length>0){
-  var winner =0;
-  for (var i=0;i<open_set.length;++i){
-      if(fScore[i]<fScore[winner]){
-          winner =i;
-      }
-  }
-  var current = open_set[winner];
-  var neighbors = a_network.getConnectedNodes(current);
-  var edge_neighbors = a_network.getConnectedEdges(current);
+     var zero=0;
 
+     getpath.push({now:start_node,from:zero});
 
-  if(current==end_node){
-      came_from.push(current);
-      const visit_Node_bool = await visit_Node(current, a_nodes, delay);
-
-      highlightNode(current, a_nodes);
-
-      a_result+=current;
-      a_result+="<br>"
-      document.getElementById("a-result").innerHTML = a_result;
-
-      draw_path(start_node,end_node,getpath)
-      return 0;
-  }
-
-  remove_from_array(open_set,current)
-  close_set.push(current);
-
-  sleep(100);
-  for(i = 0; i < neighbors.length; i++){
-
-      var neighbor = neighbors[i];
-
-      check_dir(current,neighbor);
-
-
-      if(direction){
-          highlightNode(current, a_nodes);
-      if (!close_set.includes(neighbor)) {
-        get_weight(current,neighbor)
-          var tempG = gScore[current]+ current_weight;
-
-          // Is this a better path than before?
-          var newPath = false;
-          if (open_set.includes(neighbor)) {
-            if (tempG < gScore[neighbor]) {
-              gScore[neighbor] = tempG;
-              newPath = true;
-            }
-          } else {
-            gScore[neighbor] = tempG;
-            newPath = true;
-            open_set.push(neighbor);
-
+     while(open_set.length>0){
+      var winner =0;
+      for (var i=0;i<open_set.length;++i){
+          if(fScore[i]<fScore[winner]){
+              winner =i;
           }
-          if (newPath) {
-              //console.log("Debug");
-            fScore[neighbor]=tempG;
+      }
+      var current = open_set[winner];
+      var neighbors = a_network.getConnectedNodes(current);
+      var edge_neighbors = a_network.getConnectedEdges(current);
 
 
-            const visit_Node_bool = await visit_Node(current, a_nodes, delay);
+      if(current==end_node){
+          came_from.push(current);
+          const visit_Node_bool = await visit_Node(current, a_nodes, delay);
 
-            check_dir(neighbor,current);
-             if(!direction){
-                highlightEdge(edge_neighbors[i], a_edges, a_nodes, a_network,current);
-             }
-             getpath.push({now:neighbor,from:current});
+          highlightNode(current, a_nodes);
 
-              fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
-              if (!came_from.includes(current)){
-                came_from.push(current);
-                a_result+=current;
-                document.getElementById("a-result").innerHTML = a_result;
+          a_result+=current;
+          a_result+="<br>"
+          document.getElementById("a-result").innerHTML = a_result;
+
+          draw_path(start_node,end_node,getpath)
+          return 0;
+      }
+
+      remove_from_array(open_set,current)
+      close_set.push(current);
+
+      for(i = 0; i < neighbors.length; i++){
+
+          var neighbor = neighbors[i];
+
+          check_dir(current,neighbor);
+
+
+          if(direction){
+              highlightNode(current, a_nodes);
+          if (!close_set.includes(neighbor)) {
+            get_weight(current,neighbor)
+              var tempG = gScore[current]+ current_weight;
+
+              // Is this a better path than before?
+              var newPath = false;
+              if (open_set.includes(neighbor)) {
+                if (tempG < gScore[neighbor]) {
+                  gScore[neighbor] = tempG;
+                  newPath = true;
+                }
+              } else {
+                gScore[neighbor] = tempG;
+                newPath = true;
+                open_set.push(neighbor);
+
+              }
+              if (newPath) {
+                  //console.log("Debug");
+                fScore[neighbor]=tempG;
+
+
+                const visit_Node_bool = await visit_Node(current, a_nodes, delay);
+
+                check_dir(neighbor,current);
+                 if(!direction){
+                    highlightEdge(edge_neighbors[i], a_edges, a_nodes, a_network,current);
+                 }
+                 getpath.push({now:neighbor,from:current});
+
+                  fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
+                  if (!came_from.includes(current)){
+                    came_from.push(current);
+                    a_result+=current;
+                    document.getElementById("a-result").innerHTML = a_result;
+                  }
+
+                  //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
               }
 
-              //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
-
           }
+          }else{}
 
-      }
-      }else{}
+    }
 
-}
-
-if(came_from.includes(current)){
-    a_result+=" -> ";
-}
+    if(came_from.includes(current)){
+        a_result+=" -> ";
+    }
 
 
- //else return no solution*/
+     //else return no solution*/
 
-}
-a_result="No se puede acceder al grafo"
-document.getElementById("a-result").innerHTML = a_result;
+    }
+    a_result="No se puede acceder al grafo"
+    document.getElementById("a-result").innerHTML = a_result;
 
-return;
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+    return;
 }
 
 async function draw_path(start_node,end_node,array){
@@ -811,7 +817,7 @@ async function check_dir(nodo,nodo_end){
 
 
 /* ---- Prim ---- */ // Gerry
-function Prim()
+function Prim(delay)
 {
     // Algoritmo para desplegar en HTML
     var prim_code = "";
@@ -852,12 +858,14 @@ function Prim()
 document.getElementById("prim-instruction").innerHTML = "Prim("+start_node+");";
 
 
-    PrimUtil(start_node, prim_network, prim_nodes, prim_edges);
+    PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay);
 }
 
 
-async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges)
+async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
 {
+    var ti = performance.now();
+
     var mst = [];
     var prim_result = ""; // Tendrá el contenido del MST para mostrar en HTML
     var distance = [];
@@ -962,6 +970,9 @@ document.getElementById("prim-instruction").innerHTML = "ELSE IF parent(w) = NUL
         }
     }
 document.getElementById("prim-instruction").innerHTML = "END";
+    var tf = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-prim").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 }
 
 
@@ -993,11 +1004,14 @@ function Kruskal(delay)
 // Se 'imprime' instruccion en ejecución
 document.getElementById("kruskal-instruction").innerHTML = "Kruskal("+start_node+");";
 
-    KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges);
+    KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, delay);
 }
 
 function KruskalUtil(delay)
 {
+    var ti = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-dfs").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
     var visited = [];
     for (var i = 0; i < node_number; i++){
         visited[i] = false;
@@ -1005,7 +1019,9 @@ function KruskalUtil(delay)
 
     Aristas.sort(function(a, b){return a.peso-b.peso});
 
-
+    var tf = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-kruskal").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 }
 
 
@@ -1060,11 +1076,15 @@ function Dijkstra(delay) {
 
     // Se 'imprime' instruccion en ejecución
 
-    DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes, dij_edges, Tabla, Padres);
+    DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes, dij_edges, Tabla, Padres, delay);
 
 
 }
 async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes, dij_edges, Tabla, Padres, delay) {
+
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var ti = performance.now();
+
     var visited = [];
     var toAnalize = [];
     var queue = new Queue();
@@ -1153,14 +1173,60 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
     }
     document.getElementById("dijkstra-result").innerHTML = Dijkstra_sol;
 
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-dijkstra").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+
 }
 
 
 /* ---- Bellman-Ford ---- */
+function Belford(delay)
+{
 
+}
+
+async function BelfordUtil(delay)
+{
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
+
+
+
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+}
 
 /* ---- Floyd-Warshall ---- */
+function Floyd(delay)
+{
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
 
+
+
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+}
+
+async function FloydUtil(delay)
+{
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
+
+
+
+    // Obtencion tiempos ejecucion; NO TOCAR
+    var tf = performance.now();
+    execution_time = tf - ti;
+    document.getElementById("tiempo-floyd").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+}
 
 
 /* -------------------------------------------------------------------------- */
@@ -1209,8 +1275,6 @@ async function test_graph(){
 
 /* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
 function runAlgorithm(algorithm) {
-
-    sleep(20000);
 
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;

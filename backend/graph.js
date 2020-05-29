@@ -524,7 +524,7 @@ document.getElementById("bfs-instruction").innerHTML = "var queue = new Queue();
         var neighbors = bfs_network.getConnectedEdges(node_analized);
 
 document.getElementById("bfs-instruction").innerHTML = "while queue NOT EMPTY<br>&emsp;current_node = queue.dequeue();<br>";
-await sleep(delay);
+await sleep(delay-100);
 
         for (var i = 0; i < neighbors.length; i++)
         {
@@ -626,9 +626,13 @@ function A_star(delay){
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
-
+    
+    document.getElementById("a-instruction").innerHTML = "openSet.push(nodo_inicial);<br>fScore[nodo_inicial]=h(nodo_inicial);<br>";
      var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
-
+     if(delay>100){
+        await sleep(1000);
+     }
+     
      var open_set = [];
      var close_set= [];
      var came_from =[];
@@ -643,6 +647,8 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
      getpath.push({now:start_node,from:zero});
 
      while(open_set.length>0){
+
+
       var winner =0;
       for (var i=0;i<open_set.length;++i){
           if(fScore[i]<fScore[winner]){
@@ -652,7 +658,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
       var current = open_set[winner];
       var neighbors = a_network.getConnectedNodes(current);
       var edge_neighbors = a_network.getConnectedEdges(current);
-
+      document.getElementById("a-instruction").innerHTML = "&emsp;for i in all neighbor(current)<br>&emsp;&emsp;new_gScore = gScore[current] + d(current, neighbor)<br>";
 
       if(current==end_node){
           came_from.push(current);
@@ -664,22 +670,29 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
           a_result+="<br>"
           document.getElementById("a-result").innerHTML = a_result;
 
-          draw_path(start_node,end_node,getpath)
+          draw_path(start_node,end_node,getpath);
+          document.getElementById("a-instruction").innerHTML = "END";
+            var tf = performance.now();
+            var execution_time = tf - ti;
+            document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
           return 0;
       }
+      document.getElementById("a-instruction").innerHTML = "while openSet IS NOT EMPTY<br>&emsp;current = lowest_f(openSet);<br>";
+      await sleep(delay-50);
 
       remove_from_array(open_set,current)
       close_set.push(current);
 
       for(i = 0; i < neighbors.length; i++){
-
+    
           var neighbor = neighbors[i];
 
           check_dir(current,neighbor);
 
-
           if(direction){
+              
               highlightNode(current, a_nodes);
+
           if (!close_set.includes(neighbor)) {
             get_weight(current,neighbor)
               var tempG = gScore[current]+ current_weight;
@@ -697,6 +710,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
                 open_set.push(neighbor);
 
               }
+              document.getElementById("a-instruction").innerHTML = "&emsp;&emsp;if new_gScore < gScore[neighbor]<br>&emsp;&emsp;&emsp;fScore[neighbor] = gScore[neighbor] + h(neighbor)<br>";
               if (newPath) {
                   //console.log("Debug");
                 fScore[neighbor]=tempG;
@@ -733,9 +747,10 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
      //else return no solution*/
 
     }
+    document.getElementById("a-instruction").innerHTML = "END";
     a_result="No se puede acceder al grafo"
     document.getElementById("a-result").innerHTML = a_result;
-
+    
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;

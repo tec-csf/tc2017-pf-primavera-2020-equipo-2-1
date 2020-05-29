@@ -116,8 +116,8 @@ function drawTestGraph() {
     edges_array.length=0;
     destroy();
 
-    node_number = 14;
-    edge_number = 18;
+    node_number = 7;
+    edge_number = 10;
     var no_nodes = node_number;
     var no_edges = edge_number;
 
@@ -129,36 +129,78 @@ function drawTestGraph() {
     for (i = 1; i <= no_nodes; ++i) {
         addNode(i);
     }
-      
-      //Se colocan aristas entre los nodos
-      addEdge(1, 3, 2, 1);
-      addEdge(2, 3, 7, 2);
-      addEdge(3, 2, 8, 8);
-      addEdge(4, 2, 1, 6);
-      addEdge(5, 7, 6, 4);
-      addEdge(6, 7, 8, 3);
-      addEdge(7, 7, 14, 2);
-      addEdge(8, 8, 10, 6);
-      addEdge(9, 8, 6, 2);
-      addEdge(10, 1, 4, 7);
-      addEdge(11, 1, 5, 9);
-      addEdge(12, 6, 9, 9);
-      addEdge(13, 14, 10, 4);
-      addEdge(14, 10, 12, 7);
-      addEdge(15, 10, 11, 8);
-      addEdge(16, 5, 11, 9);
-      addEdge(17, 9, 8, 9);
-      addEdge(18, 11, 13, 2);
 
-      var container = document.getElementById('mynetwork');
-      var data = {
-          nodes: nodes,
-          edges: edges
-      };
-      var options = {};
-  
-      // Inicializar Network
-      network = new vis.Network(container, data, options);
+    i = 1;
+    var origin = 1;
+    var destination = 2;
+    var weight = 3;
+    i += addEdge(i, origin, destination, weight);
+
+    i = 2;
+    origin = 1;
+    destination = 5;
+    weight = 9;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 3;
+    origin = 1;
+    destination = 3;
+    weight = 8;
+    i += addEdge(i, origin, destination, weight);
+
+    i = 4;
+    origin = 1;
+    destination = 7;
+    weight = 5;
+    i += addEdge(i, origin, destination, weight);
+
+    i = 5;
+    origin = 2;
+    destination = 2;
+    weight = 2;
+    i += addEdge(i, origin, destination, weight);
+
+    i = 6;
+    origin = 3;
+    destination = 5;
+    weight = 10;
+    i += addEdge(i, origin, destination, weight);
+
+    i = 7;
+    origin = 3;
+    destination = 7;
+    weight = 10;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 8;
+    origin = 4;
+    destination = 1;
+    weight = 11;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 9;
+    origin = 6;
+    destination = 3;
+    weight = 7;
+    i+=addEdge(i, origin, destination, weight);
+
+    i = 10;
+    origin = 7;
+    destination = 4;
+    weight = 8;
+    i+=addEdge(i, origin, destination, weight);
+
+    var container = document.getElementById('mynetwork');
+    var data = {
+        nodes: nodes,
+        edges: edges
+    };
+    var options = {
+        //nodes: {shape: "circle"}
+    };
+
+    // Inicializar Network
+    network = new vis.Network(container, data, options);
 }
 
 
@@ -585,13 +627,13 @@ function A_star(delay){
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
-    
+
     document.getElementById("a-instruction").innerHTML = "openSet.push(nodo_inicial);<br>fScore[nodo_inicial]=h(nodo_inicial);<br>";
      var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
      if(delay>100){
         await sleep(1000);
      }
-     
+
      var open_set = [];
      var close_set= [];
      var came_from =[];
@@ -643,13 +685,13 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
       close_set.push(current);
 
       for(i = 0; i < neighbors.length; i++){
-    
+
           var neighbor = neighbors[i];
 
           check_dir(current,neighbor);
 
           if(direction){
-              
+
               highlightNode(current, a_nodes);
 
           if (!close_set.includes(neighbor)) {
@@ -709,7 +751,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
     document.getElementById("a-instruction").innerHTML = "END";
     a_result="No se puede acceder al grafo"
     document.getElementById("a-result").innerHTML = a_result;
-    
+
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
@@ -875,26 +917,19 @@ console.log("test");
 
 document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<br>";
 
-console.log("queue dentro while: "+queue);
-
-
         // Obtener el nodo que tenga la arista más corta
         var min = Infinity;
         var pos_min = 0, pos_edge = 0;
         for (var i = 0; i < queue.length; i++)
         {
             var temp = prim_network.getConnectedEdges(queue[i]);
-            // console.log("queue["+i+"]: " +queue[i] +" y "+temp);
-
 
             for (var j = 0; j < temp.length; j++)
             {
-                // console.log("connected edges de "+queue[i]+": "+temp[j]);
                 if (prim_edges.get(temp[j]).from == queue[i])
                 {
                     if(parseInt(prim_edges.get(temp[j]).label) < min)
                     {
-                      // console.log(queue[i]+" sustituye min :"+min+ " con: "+ parseInt(prim_edges.get(temp[j]).label))
                         min = parseInt(prim_edges.get(temp[j]).label);
                         pos_min = i;
                         pos_edge = j;
@@ -906,12 +941,6 @@ console.log("queue dentro while: "+queue);
         var node_analized = queue[pos_min];
         console.log("nodo analizado: "+node_analized);
         await visit_Node(node_analized, prim_nodes, delay);
-        // Evita error de iluminar arista en 1era iteracion:
-        // if(node_analized != start_node)
-        // {
-        //     var edge = prim_network.getConnectedEdges(queue[]);
-        //     highlightEdge(edge[pos_edge], prim_edges, prim_nodes, prim_network);
-        // }
         queue.splice(pos_min, 1);
         // Fin Obtener el nodo que tenga la arista más corta
 
@@ -951,6 +980,21 @@ document.getElementById("prim-instruction").innerHTML = "ELSE IF parent(w) = NUL
 
                 highlightNode(prim_edges.get(neighbors[i]).to, prim_nodes);
             }
+        }
+        // Evita error de iluminar arista en 1era iteracion:
+        if(node_analized != start_node)
+        {
+            var dad = parent[node_analized - 1];
+            var edge = prim_network.getConnectedEdges(dad);
+
+            for (var i = 0; i < edge.length; ++i)
+            {
+                if(prim_edges.get(edge[i]).to == node_analized)
+                {
+                    highlightEdge(edge[i], prim_edges, prim_nodes, prim_network);
+                }
+            }
+
         }
     }
 document.getElementById("prim-instruction").innerHTML = "END";
@@ -1013,6 +1057,49 @@ function KruskalUtil(delay)
     return execution_time;
 
 }
+
+// class DisjointSet
+// {
+//    constructor(elements)
+//    {
+//       this.count = elements.length;
+//       this.parent = {};
+//
+//       /* Al inicio, cada cluster será padre de si mismo */
+//       elements.forEach(e => (this.parent[e] = e));
+//    }
+//
+//    union(a, b)
+//    {
+//       let rootA = this.find(a);
+//       let rootB = this.find(b);
+//
+//       // Roots are same so these are already connected.
+//       if (rootA === rootB) return;
+//
+//       // Always make the element with smaller root the parent.
+//       if (rootA < rootB) {
+//          if (this.parent[b] != b) this.union(this.parent[b], a);
+//          this.parent[b] = this.parent[a];
+//       } else {
+//          if (this.parent[a] != a) this.union(this.parent[a], b);
+//          this.parent[a] = this.parent[b];
+//       }
+//    }
+//
+//    // Returns final parent of a node
+//    find(a) {
+//       while (this.parent[a] !== a) {
+//          a = this.parent[a];
+//       }
+//       return a;
+//    }
+//
+//    // Checks connectivity of the 2 nodes
+//    connected(a, b) {
+//       return this.find(a) === this.find(b);
+//    }
+// }
 
 
 /* ---- Dijkstra ---- */ // Rojo
@@ -1240,12 +1327,12 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
 
     visited.splice(start_node-1,1);
     visited.unshift(start_node);
-    
+
     var queue = new Queue();
     queue.enqueue(start_node)
     Tabla[start_node - 1] = 0;
     var iteracion=1;
-    
+
     for(var i=0;i<1/*node_number-2*/;++i){
         cleanGraph(bel_nodes,bel_edges);
         for(var j=0;j<visited.length;j++){
@@ -1286,7 +1373,7 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
     }
     document.getElementById("belford-result").innerHTML = Bellman_sol;
 
-    
+
 
 
 
@@ -1425,7 +1512,7 @@ $('#exportar_pdf').click(function () {
 });
 
 
-  
+
 
 async function test_graph(){
 

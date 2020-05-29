@@ -129,7 +129,7 @@ function drawTestGraph() {
     for (i = 1; i <= no_nodes; ++i) {
         addNode(i);
     }
-      
+
       //Se colocan aristas entre los nodos
       addEdge(1, 3, 2, 1);
       addEdge(2, 3, 7, 2);
@@ -156,7 +156,7 @@ function drawTestGraph() {
           edges: edges
       };
       var options = {};
-  
+
       // Inicializar Network
       network = new vis.Network(container, data, options);
 }
@@ -368,6 +368,7 @@ document.getElementById("dfs-instruction").innerHTML = "stack.push["+start_node+
     while (stack.length > 0)
     {
         var node_analized = stack.pop();
+        var temp_stack = [];
         if(!visited[node_analized - 1])
         {
             await visit_Node(node_analized, dfs_nodes, delay);
@@ -390,11 +391,17 @@ await sleep(delay * 1.5);
                     var destination = dfs_edges.get(neighbors[i]).to;
 
 document.getElementById("dfs-instruction").innerHTML = "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;&emsp;stack.push(i)";
-
-                    stack.push(destination);
+                    // Organizo edges para que siga un orden ascendente de nodos
+                    temp_stack.push(destination);
                     highlightEdge(neighbors[i], dfs_edges, dfs_nodes, dfs_network, node_analized);
                 }
             }
+        }
+        // Con esto, el recorrido se hace en orden de nodos acendente
+        temp_stack.sort(function(a, b){return  b - a});
+        for(var i = 0; i < temp_stack.length; ++i)
+        {
+            stack.push(temp_stack[i]);
         }
     }
 document.getElementById("dfs-instruction").innerHTML = "END";
@@ -484,6 +491,7 @@ document.getElementById("bfs-instruction").innerHTML = "var queue = new Queue();
 document.getElementById("bfs-instruction").innerHTML = "while queue NOT EMPTY<br>&emsp;current_node = queue.dequeue();<br>";
 await sleep(delay-100);
 
+        var temp_queue = [];
         for (var i = 0; i < neighbors.length; i++)
         {
             if (bfs_edges.get(neighbors[i]).from == node_analized)
@@ -493,12 +501,18 @@ await sleep(delay-100);
                 {
 
 document.getElementById("bfs-instruction").innerHTML = "&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;if i NOT VISITED<br>&emsp;&emsp;&emsp;i = VISITED;<br>&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-
+                    // Organizo edges para que siga un orden ascendente de nodos
+                    temp_queue.push(destination);
                     highlightEdge(neighbors[i], bfs_edges, bfs_nodes, bfs_network, node_analized);
-                    queue.enqueue(destination);
                     visited[destination - 1] = true;
                 }
             }
+        }
+        // Con esto, el recorrido se hace en orden de nodos acendente
+        temp_queue.sort(function(a, b){return a - b});
+        for(var i = 0; i < temp_queue.length; ++i)
+        {
+            queue.enqueue(temp_queue[i]);
         }
     }
 document.getElementById("bfs-instruction").innerHTML = "END";
@@ -582,27 +596,28 @@ function A_star(delay){
 }
 
 var current_weight;
-
+var heuristics=0;
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
-    
+
     document.getElementById("a-instruction").innerHTML = "openSet.push(nodo_inicial);<br>fScore[nodo_inicial]=h(nodo_inicial);<br>";
      var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
      if(delay>100){
         await sleep(1000);
      }
-     
+
      var open_set = [];
      var close_set= [];
      var came_from =[];
      var getpath =[];
-     var heuristics=h(start_node,end_node,a_network);
+     heuristics=h(start_node,end_node,a_network);
      open_set.push(start_node);
      gScore[start_node]=0;
      fScore[start_node]=heuristics;
 
+     let tempG =heuristics
      var zero=0;
 
-     getpath.push({now:start_node,from:zero});
+     getpath.push({now:start_node,heuristics ,from:zero});
 
      while(open_set.length>0){
 
@@ -627,7 +642,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
           a_result+=current;
           a_result+="<br>"
           document.getElementById("a-result").innerHTML = a_result;
-
+          console.log(getpath);
           draw_path(start_node,end_node,getpath);
           document.getElementById("a-instruction").innerHTML = "END";
             var tf = performance.now();
@@ -642,18 +657,18 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
       close_set.push(current);
 
       for(i = 0; i < neighbors.length; i++){
-    
+
           var neighbor = neighbors[i];
 
           check_dir(current,neighbor);
 
           if(direction){
-              
+
               highlightNode(current, a_nodes);
 
           if (!close_set.includes(neighbor)) {
             get_weight(current,neighbor)
-              var tempG = gScore[current]+ current_weight;
+             tempG = gScore[current]+ current_weight;
 
               // Is this a better path than before?
               var newPath = false;
@@ -680,7 +695,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
                  if(!direction){
                     highlightEdge(edge_neighbors[i], a_edges, a_nodes, a_network,current);
                  }
-                 getpath.push({now:neighbor,from:current});
+                 getpath.push({now:neighbor,tempG,from:current});
 
                   fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
                   if (!came_from.includes(current)){
@@ -708,7 +723,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
     document.getElementById("a-instruction").innerHTML = "END";
     a_result="No se puede acceder al grafo"
     document.getElementById("a-result").innerHTML = a_result;
-    
+
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
@@ -720,12 +735,18 @@ async function draw_path(start_node,end_node,array){
     var start=start_node;
     var temp=[];
     var print="";
+    var save;
     a_result+="<br>Camino Óptimo:<br>"
+    array[0].tempG=1;
+    temp.push(end_node);
+
     for(var i = 0; i<array.length;++i){
         for(var j = 0; j<array.length;++j){
             if(array[j].now==end){
+
                 if(end==start_node){
-                    temp.push(start_node);
+ 
+                    //temp.push(start_node);
                     temp=temp.reverse();
 
                     print+=start;
@@ -737,10 +758,23 @@ async function draw_path(start_node,end_node,array){
                     document.getElementById("a-result").innerHTML = a_result;
                     return;
                 }
-                if(!temp.includes(end)){
+                save=array[j].tempG;
+                end=array[j].from;
 
+                for(var h = j; h<array.length;++h){
+                    if(array[h].now==array[j].now){
+
+                    
+                    if(array[h].tempG<save){
+                        save=array[h].tempG
+                        end=array[h].from;
+                    }
+                }
+
+                }
+                if(!temp.includes(end)){
+                    console.log(end);
                     temp.push(end);
-                    end= array[j].from;
                 }
 
             }
@@ -757,7 +791,7 @@ async function h (start_node,end_node,network){
   var e = network.getPosition(end_node);
 
 
-  var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/20);
+  var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/60);
   return h;
 }
 
@@ -874,26 +908,19 @@ console.log("test");
 
 document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<br>";
 
-console.log("queue dentro while: "+queue);
-
-
         // Obtener el nodo que tenga la arista más corta
         var min = Infinity;
         var pos_min = 0, pos_edge = 0;
         for (var i = 0; i < queue.length; i++)
         {
             var temp = prim_network.getConnectedEdges(queue[i]);
-            // console.log("queue["+i+"]: " +queue[i] +" y "+temp);
-
 
             for (var j = 0; j < temp.length; j++)
             {
-                // console.log("connected edges de "+queue[i]+": "+temp[j]);
                 if (prim_edges.get(temp[j]).from == queue[i])
                 {
                     if(parseInt(prim_edges.get(temp[j]).label) < min)
                     {
-                      // console.log(queue[i]+" sustituye min :"+min+ " con: "+ parseInt(prim_edges.get(temp[j]).label))
                         min = parseInt(prim_edges.get(temp[j]).label);
                         pos_min = i;
                         pos_edge = j;
@@ -905,12 +932,6 @@ console.log("queue dentro while: "+queue);
         var node_analized = queue[pos_min];
         console.log("nodo analizado: "+node_analized);
         await visit_Node(node_analized, prim_nodes, delay);
-        // Evita error de iluminar arista en 1era iteracion:
-        // if(node_analized != start_node)
-        // {
-        //     var edge = prim_network.getConnectedEdges(queue[]);
-        //     highlightEdge(edge[pos_edge], prim_edges, prim_nodes, prim_network);
-        // }
         queue.splice(pos_min, 1);
         // Fin Obtener el nodo que tenga la arista más corta
 
@@ -950,6 +971,21 @@ document.getElementById("prim-instruction").innerHTML = "ELSE IF parent(w) = NUL
 
                 highlightNode(prim_edges.get(neighbors[i]).to, prim_nodes);
             }
+        }
+        // Evita error de iluminar arista en 1era iteracion:
+        if(node_analized != start_node)
+        {
+            var dad = parent[node_analized - 1];
+            var edge = prim_network.getConnectedEdges(dad);
+
+            for (var i = 0; i < edge.length; ++i)
+            {
+                if(prim_edges.get(edge[i]).to == node_analized)
+                {
+                    highlightEdge(edge[i], prim_edges, prim_nodes, prim_network);
+                }
+            }
+
         }
     }
 document.getElementById("prim-instruction").innerHTML = "END";
@@ -1012,6 +1048,49 @@ function KruskalUtil(delay)
     return execution_time;
 
 }
+
+// class DisjointSet
+// {
+//    constructor(elements)
+//    {
+//       this.count = elements.length;
+//       this.parent = {};
+//
+//       /* Al inicio, cada cluster será padre de si mismo */
+//       elements.forEach(e => (this.parent[e] = e));
+//    }
+//
+//    union(a, b)
+//    {
+//       let rootA = this.find(a);
+//       let rootB = this.find(b);
+//
+//       // Roots are same so these are already connected.
+//       if (rootA === rootB) return;
+//
+//       // Always make the element with smaller root the parent.
+//       if (rootA < rootB) {
+//          if (this.parent[b] != b) this.union(this.parent[b], a);
+//          this.parent[b] = this.parent[a];
+//       } else {
+//          if (this.parent[a] != a) this.union(this.parent[a], b);
+//          this.parent[a] = this.parent[b];
+//       }
+//    }
+//
+//    // Returns final parent of a node
+//    find(a) {
+//       while (this.parent[a] !== a) {
+//          a = this.parent[a];
+//       }
+//       return a;
+//    }
+//
+//    // Checks connectivity of the 2 nodes
+//    connected(a, b) {
+//       return this.find(a) === this.find(b);
+//    }
+// }
 
 
 /* ---- Dijkstra ---- */ // Rojo
@@ -1229,7 +1308,7 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
     var ti = performance.now();
     visited.splice(start_node-1,1);
     visited.unshift(start_node);
-    
+
     var queue = new Queue();
     queue.enqueue(start_node)
     Tabla[start_node - 1] = 0;
@@ -1315,7 +1394,7 @@ $('#exportar_pdf').click(function () {
 });
 
 
-  
+
 
 async function test_graph(){
 

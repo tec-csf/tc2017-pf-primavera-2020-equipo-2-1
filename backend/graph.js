@@ -385,7 +385,8 @@ function DFS(delay) {
 // Se 'imprime' instrucción en ejecución
 document.getElementById("dfs-instruction").innerHTML = "DFS("+start_node+");";
 
-    DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay);
+    var time = DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay);
+    return time;
 }
 
 
@@ -443,6 +444,7 @@ document.getElementById("dfs-instruction").innerHTML = "END";
     var tf = performance.now();
     execution_time = tf - ti;
     document.getElementById("tiempo-dfs").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+    return execution_time; 
 }
 
 
@@ -1208,10 +1210,7 @@ async function test_graph(){
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 
 /* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
-function runAlgorithm(algorithm) {
-
-    sleep(20000);
-
+async function runAlgorithm(algorithm) {
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;
     var time_id = "medicion-" + algorithm;
@@ -1229,7 +1228,7 @@ function runAlgorithm(algorithm) {
 
         switch(algorithm) {
             case "dfs":
-                //Ingresar codigo del algoritmo con velocidad normal
+                await DFS(50);
                 dataGraph.push(parseInt(document.getElementById("medicion-dfs").textContent));
                 categories_graph.push("DFS");
 
@@ -1302,34 +1301,3 @@ function compareAlgorithms() {
 
 /* ---- "MAIN" ---- */
 drawRandomGraph();
-// console.log(Aristas[0].origen);
-
-// Aristas.sort(function (a,b){
-//     if(a.origen<b.origen){
-//         return -1;
-//     }
-//     else if(a.origen<b.origen){
-//         return 1;
-//     }
-//     return 0;
-// });
-
-// console.log(Aristas[1].origen);
-// var Tabla=[node_number-1]
-// for(var i=0;i<node_number;i++){
-//     Tabla[i]=Infinity;
-// }
-// console.log(Tabla[0]);
-// var prueba=[];
-// prueba.push("hola");
-// prueba.push("como");
-// prueba.push("estas");
-// prueba.push("atm");
-// prueba.forEach(element => {
-//     console.log(element);
-// });
-// console.log("----");
-// prueba.splice(1,1);
-// prueba.forEach(element => {
-//     console.log(element);
-// });

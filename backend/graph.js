@@ -1291,7 +1291,7 @@ function Dijkstra(delay)
 {
     console.log("flag Dijkstra");
     // Algoritmo para desplegar en HTML
-    var dijkstra_code += "var visitados[]; <br>";
+    var dijkstra_code = "var visitados[]; <br>";
     dijkstra_code += "var toAnalize[]; <br>";
     dijkstra_code += "var Tabla[]; <br>";
     dijkstra_code += "var Padres[]; <br>";
@@ -1328,11 +1328,11 @@ function Dijkstra(delay)
     var dijkstra_network = new vis.Network(container, data, options);
     //Hasta aqui es el proceso para tener grafos independientes
 
-    var Tabla = [node_number - 1]
-    var Padres = [node_number - 1]
+    var Tabla = [node_number - 1];
+    var Padres = [node_number - 1];
     //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
 
-    for (var i = 0; i < node_number; ++i
+    for (var i = 0; i < node_number; ++i)
     {
         Tabla[i] = Infinity;
         Padres[i] = Infinity;
@@ -1350,16 +1350,17 @@ function Dijkstra(delay)
 }
 
 
-/* Función principal que ejecuta algoritmo de A*
+/* Función principal que ejecuta algoritmo de Dijkstra
  * @param start_node: indica cual será el nodo de inicio del recorrido;
           recibido de html
-* @param target_node:
+* @param target_node: indica cial será el nodo destino de recorrido;
+        recibido por html
  * @param dijkstra_network: grafo que se utilizará para ejecución de algoritmo;
           esto evita que se ejecuten comandos sobre otros algoritmos
  * @param dij_nodes: grupo de nodos sobre el cual se ejecutan comandos
  * @param dij_edges: grupo de aristas sobre el cual se ejecutan comandos
- * @param Tabla:
- * @param Padres:
+ * @param Tabla: Array donde se almacenan los pesos acumulados de cada nodo
+ * @param Padres: Array donde se almacenan los predecesores de cada nodo
  * @param delay: cantidad de milisegundos que se hará el atraso;
           recibido de html y funciona para correr algoritmo rapido o lento
  */
@@ -1389,7 +1390,7 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
 
         var node_analized = queue.dequeue();
         console.log(node_analized);
-        await visit_Node(node_analized, dij_nodes, delay);
+        await  markVisited_Node(node_analized, dij_nodes, delay);
 
         document.getElementById("dijkstra-instruction").innerHTML = "node_analized <- "+ node_analized + "<br> FOR ALL (node_analized,destino) DO";
 
@@ -1430,6 +1431,12 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
                         highlightNode(Aristas[i].destino, dij_nodes);
                         highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstra_network);
                     }
+                    else{
+                        dashEdge(Aristas[i].ID,dij_edges);
+                    }
+                }
+                else{
+                    dashEdge(Aristas[i].ID,dij_edges);
                 }
             }
         }
@@ -1461,6 +1468,7 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
         /* Se agrega el nodo a los analizados, se elimina
         de los posibles a analizar y se agrega a la cola
         para ser analizado en la siguiente iteracion */
+
         document.getElementById("dijkstra-instruction").innerHTML ="queue.insert("+min+") , "+"visited.insert("+min+")";
 
         visited.push(min);
@@ -1499,7 +1507,13 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
 }
 
 
-/* ---- Bellman-Ford ---- */
+/* ---- Bellman-Ford ---- // Rojo
+
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
+
+
 function Belford(delay)
 {
     // Algoritmo para desplegar en HTML
@@ -1534,10 +1548,11 @@ function Belford(delay)
     var belford_network = new vis.Network(container, data, options);
     //Hasta aqui es el proceso para tener grafos independientes
 
-    var Tabla = [node_number - 1]
-    var Padres = [node_number - 1]
+    var Tabla = [node_number - 1];
+    var Padres = [node_number - 1];
     //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
     var visited = [];
+    
     for (var i = 0; i < node_number; ++i)
     {
         Tabla[i] = Infinity;
@@ -1549,6 +1564,21 @@ function Belford(delay)
     return time;
 }
 
+/* Función principal que ejecuta algoritmo de Bellman-Ford
+ * @param start_node: indica cual será el nodo de inicio del recorrido;
+          recibido de html
+* @param target_node: indica cial será el nodo destino de recorrido;
+        recibido por html
+ * @param belfordnetwork: grafo que se utilizará para ejecución de algoritmo;
+          esto evita que se ejecuten comandos sobre otros algoritmos
+ * @param bel_nodes: grupo de nodos sobre el cual se ejecutan comandos
+ * @param bel_edges: grupo de aristas sobre el cual se ejecutan comandos
+ * @param Tabla: Array donde se almacenan los pesos acumulados de cada nodo
+ * @param Padres: Array donde se almacenan los predecesores de cada nodo
+ * @param visited: Array donde se almacenan los nodos que se analizan
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
 
 async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, bel_edges, Tabla, Padres, visited,delay)
 {
@@ -1572,11 +1602,11 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
             {
                 if (Aristas[k].origen==visited[j])
                 {
-                    highlightEdge(Aristas[k].ID,bel_edges,bel_nodes,belfordnetwork,-1)
+                    highlightEdge(Aristas[k].ID,bel_edges,bel_nodes,belfordnetwork,-1);
                     await sleep(delay);
                     if (Tabla[Aristas[k].destino-1]>Aristas[k].peso+Tabla[ [Aristas[k].origen] -1])
                     {
-                        Tabla[Aristas[k].destino-1]=Aristas[k].peso+Tabla[visited[j]-1]
+                        Tabla[Aristas[k].destino-1]=Aristas[k].peso+Tabla[visited[j]-1];
                         Padres[[Aristas[k].destino - 1]] = Aristas[k].origen;
                     }
                 }
@@ -1585,7 +1615,7 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
     }
     if (Tabla[target_node - 1] == Infinity)
     {
-        Bellman_sol = "No hay un camino hacia ese nodo"
+        Bellman_sol = "No hay un camino hacia ese nodo";
     } else
     {
         var padre = Padres[target_node - 1];

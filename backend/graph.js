@@ -1320,8 +1320,9 @@ async function runAlgorithm(algorithm) {
 
                 break;
             case "bfs":
-
-
+                load_progressBar(algorithm, 60);
+                await BFS(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("BFS");
                 check_check_box=true;
                 break;
@@ -1347,7 +1348,9 @@ async function runAlgorithm(algorithm) {
                 break;
             case "dijkstra":
                 document.getElementById("target-dijkstra").value = parseInt(document.getElementById("target-all").value);
-
+                load_progressBar(algorithm, 60);
+                await Dijkstra(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("Dijkstra");
                 check_check_box=true;
                 break;

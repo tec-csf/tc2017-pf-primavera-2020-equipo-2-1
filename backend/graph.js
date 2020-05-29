@@ -116,8 +116,8 @@ function drawTestGraph() {
     edges_array.length=0;
     destroy();
 
-    node_number = 7;
-    edge_number = 10;
+    node_number = 14;
+    edge_number = 18;
     var no_nodes = node_number;
     var no_edges = edge_number;
 
@@ -129,78 +129,36 @@ function drawTestGraph() {
     for (i = 1; i <= no_nodes; ++i) {
         addNode(i);
     }
+      
+      //Se colocan aristas entre los nodos
+      addEdge(1, 3, 2, 1);
+      addEdge(2, 3, 7, 2);
+      addEdge(3, 2, 8, 8);
+      addEdge(4, 2, 1, 6);
+      addEdge(5, 7, 6, 4);
+      addEdge(6, 7, 8, 3);
+      addEdge(7, 7, 14, 2);
+      addEdge(8, 8, 10, 6);
+      addEdge(9, 8, 6, 2);
+      addEdge(10, 1, 4, 7);
+      addEdge(11, 1, 5, 9);
+      addEdge(12, 6, 9, 9);
+      addEdge(13, 14, 10, 4);
+      addEdge(14, 10, 12, 7);
+      addEdge(15, 10, 11, 8);
+      addEdge(16, 5, 11, 9);
+      addEdge(17, 9, 8, 9);
+      addEdge(18, 11, 13, 2);
 
-    i = 1;
-    var origin = 1;
-    var destination = 2;
-    var weight = 3;
-    i += addEdge(i, origin, destination, weight);
-
-    i = 2;
-    origin = 1;
-    destination = 5;
-    weight = 9;
-    i+=addEdge(i, origin, destination, weight);
-
-    i = 3;
-    origin = 1;
-    destination = 3;
-    weight = 8;
-    i += addEdge(i, origin, destination, weight);
-
-    i = 4;
-    origin = 1;
-    destination = 7;
-    weight = 5;
-    i += addEdge(i, origin, destination, weight);
-
-    i = 5;
-    origin = 2;
-    destination = 2;
-    weight = 2;
-    i += addEdge(i, origin, destination, weight);
-
-    i = 6;
-    origin = 3;
-    destination = 5;
-    weight = 10;
-    i += addEdge(i, origin, destination, weight);
-
-    i = 7;
-    origin = 3;
-    destination = 7;
-    weight = 10;
-    i+=addEdge(i, origin, destination, weight);
-
-    i = 8;
-    origin = 4;
-    destination = 1;
-    weight = 11;
-    i+=addEdge(i, origin, destination, weight);
-
-    i = 9;
-    origin = 6;
-    destination = 3;
-    weight = 7;
-    i+=addEdge(i, origin, destination, weight);
-
-    i = 10;
-    origin = 7;
-    destination = 4;
-    weight = 8;
-    i+=addEdge(i, origin, destination, weight);
-
-    var container = document.getElementById('mynetwork');
-    var data = {
-        nodes: nodes,
-        edges: edges
-    };
-    var options = {
-        //nodes: {shape: "circle"}
-    };
-
-    // Inicializar Network
-    network = new vis.Network(container, data, options);
+      var container = document.getElementById('mynetwork');
+      var data = {
+          nodes: nodes,
+          edges: edges
+      };
+      var options = {};
+  
+      // Inicializar Network
+      network = new vis.Network(container, data, options);
 }
 
 

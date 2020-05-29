@@ -448,6 +448,7 @@ document.getElementById("dfs-instruction").innerHTML = "END";
 }
 
 
+
 /* ---- BFS ---- */ // Gerry
 function BFS(delay)
 {
@@ -614,13 +615,16 @@ function A_star(delay){
 
     // Se 'imprime' instrucción en ejecución
     document.getElementById("a-instruction").innerHTML = "A("+start_node+");";
-    AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node,delay);
+    
+    var time =AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node,delay);
+    return time;
 
 }
 
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
+ var ti = performance.now();
  var open_set = [];
  var close_set= [];
  var came_from =[];
@@ -730,7 +734,10 @@ if(came_from.includes(current)){
 a_result="No se puede acceder al grafo"
 document.getElementById("a-result").innerHTML = a_result;
 
-return;
+var tf = performance.now();
+execution_time = tf - ti;
+document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+return execution_time; 
 }
 
 async function draw_path(start_node,end_node,array){
@@ -1168,16 +1175,9 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 /* -------------------------------------------------------------------------- */
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
 
-function get_data_graph(){
-
-    var time = parseInt(document.getElementById("medicion-dfs").textContent);
-    console.log(time);
-
-}
 
 async function test_graph(){
 
-        get_data_graph();
 
 
         var options = Highcharts.chart('grafico-algoritmos', {
@@ -1242,7 +1242,7 @@ async function runAlgorithm(algorithm) {
                 break;
             case "a":
                 //Ingresar codigo del algoritmo con velocidad normal
-
+                await A_star(50);
                 categories_graph.push("A*");
                 check_check_box=true;
                 break;

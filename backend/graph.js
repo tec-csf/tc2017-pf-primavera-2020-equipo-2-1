@@ -829,7 +829,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
     a_result = "No se puede acceder al grafo"
     document.getElementById("a-result").innerHTML = a_result;
 
-    // Obtencion tiempos ejecucion; NO TOCAR
+    // Obtención tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
@@ -1283,43 +1283,38 @@ function KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, 
 // }
 
 
-/* ---- Dijkstra ---- */ // Rojo
-var Dijkstra_sol;
-var Dijkstra_code = " ";
-function Dijkstra(delay) {
+/* ---- Dijkstra ----  // Rojo
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
+function Dijkstra(delay)
+{
+    console.log("flag Dijkstra");
     // Algoritmo para desplegar en HTML
-    var Dijkstra_code = "";
-    Dijkstra_sol = " ";
-    console.log("flag Dikjkstra");
-    Dijkstra_code += "var visitados[]; <br>";
-    Dijkstra_code += "var toAnalize[]; <br>";
-    Dijkstra_code += "var Tabla[]; <br>";
-    Dijkstra_code += "var Padres[]; <br>";
-    Dijkstra_code += "BEGIN <br>";
+    var dijkstra_code += "var visitados[]; <br>";
+    dijkstra_code += "var toAnalize[]; <br>";
+    dijkstra_code += "var Tabla[]; <br>";
+    dijkstra_code += "var Padres[]; <br>";
+    dijkstra_code += "BEGIN <br>";
 
-    Dijkstra_code += "FOR i = 1,....,n DO <br>";
-    Dijkstra_code += "&emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
-    Dijkstra_code += "Tabla[Origen] <- 0 <br>";
-    Dijkstra_code += "queue.insert(Origen) <br>";
-    Dijkstra_code += "WHILE visitados != num_nodos DO <br>";
-    Dijkstra_code += "&emsp;node_analized <- queue.extract() <br>";
-    Dijkstra_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
-    Dijkstra_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+Padres[node_analized] <br>";
-    Dijkstra_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Padres[node_analized], Padres[destino]<-node_analized <br>";
-    Dijkstra_code += "&emsp;&emsp;IF destino IS NOT IN visitados AND destino IS NOT IN toAnalize <br>";
-    Dijkstra_code += "&emsp;&emsp;&emsp;toAnalize.insert(destino)<br>";
-    Dijkstra_code += "&emsp;IF toAnalize IS EMPTY <br>";
-    Dijkstra_code += "&emsp;&emsp;BREAK;<br>";
-    Dijkstra_code += "&emsp;queue.insert(toAnalize.extractMin),visited.insert(toAnalize.extractMin)<br>";
-    Dijkstra_code += "END <br>";
+    dijkstra_code += "FOR i = 1,....,n DO <br>";
+    dijkstra_code += "&emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
+    dijkstra_code += "Tabla[Origen] <- 0 <br>";
+    dijkstra_code += "queue.insert(Origen) <br>";
+    dijkstra_code += "WHILE visitados != num_nodos DO <br>";
+    dijkstra_code += "&emsp;node_analized <- queue.extract() <br>";
+    dijkstra_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
+    dijkstra_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+Padres[node_analized] <br>";
+    dijkstra_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Padres[node_analized], Padres[destino]<-node_analized <br>";
+    dijkstra_code += "&emsp;&emsp;IF destino IS NOT IN visitados AND destino IS NOT IN toAnalize <br>";
+    dijkstra_code += "&emsp;&emsp;&emsp;toAnalize.insert(destino)<br>";
+    dijkstra_code += "&emsp;IF toAnalize IS EMPTY <br>";
+    dijkstra_code += "&emsp;&emsp;BREAK;<br>";
+    dijkstra_code += "&emsp;queue.insert(toAnalize.extractMin),visited.insert(toAnalize.extractMin)<br>";
+    dijkstra_code += "END <br>";
 
+    document.getElementById("dijkstra-code").innerHTML = dijkstra_code;
 
-    document.getElementById("dijkstra-code").innerHTML = Dijkstra_code;
-
-    // Se obtiene el nodo de origen usansdo el id del input
-    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
-    var start_node = parseInt(document.getElementById("origin-dijkstra").value); // En algunos algoritmos no se necesitará esto
-    var target_node = parseInt(document.getElementById("target-dijkstra").value);
     // Se tiene que volver a hacer un dibujo del grafo
     // para tener animaciones individuales
     var dij_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
@@ -1331,132 +1326,171 @@ function Dijkstra(delay) {
     };
     var options = {};
     var dijkstra_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+    //Hasta aqui es el proceso para tener grafos independientes
 
     var Tabla = [node_number - 1]
     var Padres = [node_number - 1]
     //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
 
-    for (var i = 0; i < node_number; ++i) {
+    for (var i = 0; i < node_number; ++i
+    {
         Tabla[i] = Infinity;
         Padres[i] = Infinity;
     }
+    // Se 'imprime' instruccion en ejecución
     document.getElementById("dijkstra-instruction").innerHTML = "FOR i = 1,....,n DO <br> &emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
 
-    // Se 'imprime' instruccion en ejecución
+    // Se obtiene el nodo de origen usansdo el id del input
+    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
+    var start_node = parseInt(document.getElementById("origin-dijkstra").value); // En algunos algoritmos no se necesitará esto
+    var target_node = parseInt(document.getElementById("target-dijkstra").value);
 
     var time = DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes, dij_edges, Tabla, Padres, delay);
     return time;
-
 }
-async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes, dij_edges, Tabla, Padres, delay) {
 
-    // Obtencion tiempos ejecucion; NO TOCAR
+
+/* Función principal que ejecuta algoritmo de A*
+ * @param start_node: indica cual será el nodo de inicio del recorrido;
+          recibido de html
+* @param target_node:
+ * @param dijkstra_network: grafo que se utilizará para ejecución de algoritmo;
+          esto evita que se ejecuten comandos sobre otros algoritmos
+ * @param dij_nodes: grupo de nodos sobre el cual se ejecutan comandos
+ * @param dij_edges: grupo de aristas sobre el cual se ejecutan comandos
+ * @param Tabla:
+ * @param Padres:
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
+async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes, dij_edges, Tabla, Padres, delay)
+{
+    // Obtención tiempos ejecucion; NO TOCAR
     var ti = performance.now();
 
+    var dijkstra_sol = "";
     var visited = [];
     var toAnalize = [];
     var queue = new Queue();
 
     visited.push(start_node);
     queue.enqueue(start_node)
+
     console.log(Aristas.length);
+
     Tabla[start_node - 1] = 0;
+
     document.getElementById("dijkstra-instruction").innerHTML = "Tabla["+start_node-1+"] <- 0";
     document.getElementById("dijkstra-instruction").innerHTML = "queue.insert("+start_node+")";
-    while (visited.length != node_number){
-    document.getElementById("dijkstra-instruction").innerHTML = "WHILE visitados != "+node_number+" DO";
+
+    while (visited.length != node_number)
+    {
+        document.getElementById("dijkstra-instruction").innerHTML = "WHILE visitados != "+node_number+" DO";
+
         var node_analized = queue.dequeue();
         console.log(node_analized);
         await visit_Node(node_analized, dij_nodes, delay);
-        document.getElementById("dijkstra-instruction").innerHTML = "node_analized <- "+node_analized;
-        document.getElementById("dijkstra-instruction").innerHTML = "FOR ALL (node_analized,destino) DO";
+
+        document.getElementById("dijkstra-instruction").innerHTML = "node_analized <- "+ node_analized + "<br> FOR ALL (node_analized,destino) DO";
+
         await sleep(delay * 1.5);
         markVisited_Node(node_analized, dij_nodes);
         await sleep(delay);
-        for (var i = 0; i < Aristas.length; ++i) {
 
-            if (Aristas[i].origen == node_analized) {
+        for (var i = 0; i < Aristas.length; ++i)
+        {
+            if (Aristas[i].origen == node_analized)
+            {
                 var flag = true;
 
-                /*Se Comprueba si el peso en los nodos destino requieren de una actualizacion */
+                /*Se Comprueba si el peso en los nodos destino requieren de una actualización */
                 document.getElementById("dijkstra-instruction").innerHTML = "IF "+Tabla[Aristas[i].destino-1]+" > "+ Aristas[i].peso + Tabla[node_analized - 1];
-                if (Tabla[Aristas[i].destino - 1] > Aristas[i].peso + Tabla[node_analized - 1]) {
+
+                if (Tabla[Aristas[i].destino - 1] > Aristas[i].peso + Tabla[node_analized - 1])
+                {
                     Tabla[Aristas[i].destino - 1] = Aristas[i].peso + Tabla[node_analized - 1];
                     Padres[[Aristas[i].destino - 1]] = node_analized;
                     document.getElementById("dijkstra-instruction").innerHTML = "Tabla["+Aristas[i].destino - 1+"] <- "+Aristas[i].peso + Tabla[node_analized - 1]+" , "+ "Padres["+Aristas[i].destino - 1+"]<-"+node_analized;
 
                     /*Comprueba si el nodo ya fue analizado o no*/
-                    
-                    for (var j = 0; j < visited.length; j++) {
-                        if (Aristas[i].destino == visited[j]||Aristas[i].destino==toAnalize[j]) {
+                    for (var j = 0; j < visited.length; j++)
+                    {
+                        if (Aristas[i].destino == visited[j]||Aristas[i].destino==toAnalize[j])
+                        {
                             flag = false;
                             break;
                         }
                     }
+
                     document.getElementById("dijkstra-instruction").innerHTML = "IF destino IS NOT IN visitados AND destino IS NOT IN toAnalize"
-                    if (flag) {
+                    if (flag)
+                    {
                         document.getElementById("dijkstra-instruction").innerHTML ="toAnalize.insert("+Aristas[i].destino+")";
                         toAnalize.push(Aristas[i].destino);
                         highlightNode(Aristas[i].destino, dij_nodes);
-                        highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstranetwork, -1);
+                        highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstra_network);
                     }
-
-
                 }
             }
         }
+
         document.getElementById("dijkstra-instruction").innerHTML = "IF toAnalize = 0";
-        if (toAnalize.length == 0) {
+
+        if (toAnalize.length == 0)
+        {
             console.log("???");
             document.getElementById("dijkstra-instruction").innerHTML = "END";
             break;
-
         }
-        var pesominimo = Infinity;
+
+        var peso_minimo = Infinity;
         var min = Infinity;
         var aux;
         //Variables auxiliares para detectar el menor peso dentro de los nodos que no se han analizado
 
-        /*De los nodos que se han descubierto, selecciona el de menor peso  */
-        for (var i = 0; i < toAnalize.length; ++i) {
-            if ((Tabla[toAnalize[i] - 1]) < pesominimo) {
-                pesominimo = Tabla[toAnalize[i] - 1];
+        /* De los nodos que se han descubierto, selecciona el de menor peso */
+        for (var i = 0; i < toAnalize.length; ++i)
+        {
+            if ((Tabla[toAnalize[i] - 1]) < peso_minimo)
+            {
+                peso_minimo = Tabla[toAnalize[i] - 1];
                 min = toAnalize[i];
                 aux = i;
             }
         }
-        /*Se agrega el nodo a los analizados, se elimina de los posibles a analizar y se agrega a la cola para ser analizado en la
-        siguiente iteracion */
-        
+        /* Se agrega el nodo a los analizados, se elimina
+        de los posibles a analizar y se agrega a la cola
+        para ser analizado en la siguiente iteracion */
         document.getElementById("dijkstra-instruction").innerHTML ="queue.insert("+min+") , "+"visited.insert("+min+")";
+
         visited.push(min);
         toAnalize.splice(aux, 1);
         queue.enqueue(min);
     }
+
     /*Detecta si existe o no el camino mediante la tabla de pesos*/
-    if (Tabla[target_node - 1] == Infinity) {
-        Dijkstra_sol = "No hay un camino hacia ese nodo"
-    }
-    else {
+    if (Tabla[target_node - 1] == Infinity)
+    {
+        dijkstra_sol = "No hay un camino hacia ese nodo";
+    } else
+    {
         var padre = Padres[target_node - 1];
         var path = target_node;
         var cont = 0;
 
-        /*Ciclo que construye el path a través de las posiciones de los padres */
-
-        while (padre != start_node && start_node != target_node) {
-
+        /* Ciclo que construye el path a través de las posiciones de los padres */
+        while (padre != start_node && start_node != target_node)
+        {
             path = padre + " -> " + path;
             padre = Padres[padre - 1];
             cont++;
         }
         path = start_node + " -> " + path;
-        Dijkstra_sol = path + "<br>" + "Distancia: " + Tabla[target_node - 1];
+        dijkstra_sol = path + "<br>" + "Distancia: " + Tabla[target_node - 1];
     }
-    document.getElementById("dijkstra-result").innerHTML = Dijkstra_sol;
+    document.getElementById("dijkstra-result").innerHTML = dijkstra_sol;
 
-    // Obtencion tiempos ejecucion; NO TOCAR
+    // Obtención tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-dijkstra").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
@@ -1466,12 +1500,10 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
 
 /* ---- Bellman-Ford ---- */
-var Bellman_sol;
 function Belford(delay)
 {
     // Algoritmo para desplegar en HTML
     var Bellman_code = "";
-    Bellman_sol = " ";
     console.log("Bellford");
     /*bfs_code += "var queue = new Queue();<br>";
     bfs_code += "nodo_inicial = VISITED;<br>";
@@ -1482,13 +1514,12 @@ function Belford(delay)
     bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
     bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
     bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-    Codigo a
     */
     document.getElementById("belford-code").innerHTML = Bellman_code;
 
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
-    var start_node = parseInt(document.getElementById("origin-belford").value); // En algunos algoritmos no se necesitará esto
+    var start_node = parseInt(document.getElementById("origin-belford").value);
     var target_node = parseInt(document.getElementById("target-belford").value);
     // Se tiene que volver a hacer un dibujo del grafo
     // para tener animaciones individuales
@@ -1501,64 +1532,69 @@ function Belford(delay)
     };
     var options = {};
     var belford_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+    //Hasta aqui es el proceso para tener grafos independientes
 
     var Tabla = [node_number - 1]
     var Padres = [node_number - 1]
     //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
     var visited = [];
-    for (var i = 0; i < node_number; ++i) {
+    for (var i = 0; i < node_number; ++i)
+    {
         Tabla[i] = Infinity;
         Padres[i] = Infinity;
-        visited[i]=i+1;
+        visited[i]= i + 1;
     }
-    //highlightNode(2,bel_nodes);
-    var time =BelfordUtil(start_node,target_node,belford_network,bel_nodes,bel_edges,Tabla,Padres,visited,delay);
 
-
+    var time = BelfordUtil(start_node, target_node, belford_network, bel_nodes, bel_edges, Tabla, Padres, visited, delay);
     return time;
 }
 
-async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, bel_edges, Tabla, Padres, visited,delay) {
+
+async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, bel_edges, Tabla, Padres, visited,delay)
+{
     var ti = performance.now();
-    visited.splice(start_node-1,1);
+    visited.splice(start_node - 1, 1);
     visited.unshift(start_node);
 
     var queue = new Queue();
     queue.enqueue(start_node)
     Tabla[start_node - 1] = 0;
 
-
-    for (var i=0;i<node_number-2;++i) {
+    for (var i=0;i<node_number-2;++i)
+    {
         cleanGraph(bel_nodes,bel_edges);
-        for (var j=0;j<visited.length;++j) {
-             await sleep(delay * 1.5);
-             markVisited_Node(visited[j],bel_nodes);
-             await sleep(delay);
-            for (var k=0;k<Aristas.length;++k) {
-                if (Aristas[k].origen==visited[j]) {
+        for (var j=0;j<visited.length;++j)
+        {
+            await sleep(delay * 1.5);
+            markVisited_Node(visited[j],bel_nodes);
+            await sleep(delay);
+            for (var k=0;k<Aristas.length;++k)
+            {
+                if (Aristas[k].origen==visited[j])
+                {
                     highlightEdge(Aristas[k].ID,bel_edges,bel_nodes,belfordnetwork,-1)
                     await sleep(delay);
-                    if (Tabla[Aristas[k].destino-1]>Aristas[k].peso+Tabla[ [Aristas[k].origen] -1]) {
+                    if (Tabla[Aristas[k].destino-1]>Aristas[k].peso+Tabla[ [Aristas[k].origen] -1])
+                    {
                         Tabla[Aristas[k].destino-1]=Aristas[k].peso+Tabla[visited[j]-1]
                         Padres[[Aristas[k].destino - 1]] = Aristas[k].origen;
-
                     }
                 }
             }
         }
     }
-    if (Tabla[target_node - 1] == Infinity) {
+    if (Tabla[target_node - 1] == Infinity)
+    {
         Bellman_sol = "No hay un camino hacia ese nodo"
-    }
-    else {
+    } else
+    {
         var padre = Padres[target_node - 1];
         var path = target_node;
         var cont = 0;
 
-        /*Ciclo que construye el path a través de las posiciones de los padres */
-
-        while (padre != start_node && start_node != target_node) {
+        /* Ciclo que construye el path a través de las posiciones de los padres */
+        while (padre != start_node && start_node != target_node)
+        {
 
             path = padre + " -> " + path;
             padre = Padres[padre - 1];
@@ -1570,7 +1606,7 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
 
     document.getElementById("belford-result").innerHTML = Bellman_sol;
 
-    // Obtencion tiempos ejecucion; NO TOCAR
+    // Obtención tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
@@ -1581,28 +1617,32 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
 function Floyd(delay)
 {
 
+  var time = FloydUtil(delay);
+  return time;
 }
+
 
 async function FloydUtil(delay)
 {
-    // Obtencion tiempos ejecucion; NO TOCAR
+    // Obtención tiempos ejecucion; NO TOCAR
     var ti = performance.now();
 
 
 
-    // Obtencion tiempos ejecucion; NO TOCAR
+    // Obtención tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-floyd").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+    return execution_time;
 }
 
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
 var chart;
-
-
-$('#exportar_pdf').click(function () {
+$('#exportar_pdf').click(function ()
+{
     chart.exportChart({
         type: 'application/pdf',
         filename: 'my-pdf'
@@ -1610,57 +1650,43 @@ $('#exportar_pdf').click(function () {
 });
 
 
-
-
-async function test_graph() {
-
-
-
-         chart = Highcharts.chart('grafico-algoritmos', {
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: 'Tiempos de Comparación'
-            },
-            xAxis: {
-                categories:categories_graph
-            },
-            yAxis: {
-                title: {
-                    text: 'Milisegundos'
-                }
-            },
-            series: [{
-                name: 'Grafo 1',
-                data: dataGraph
-            }
-
-        ],  exporting: {
-
+async function test_graph()
+{
+    chart = Highcharts.chart('grafico-algoritmos',
+    {
+        chart: { type: 'bar' },
+        title: { text: 'Tiempos de Comparación' },
+        xAxis: { categories:categories_graph },
+        yAxis: { title: { text: 'Milisegundos' } },
+        series: [ { name: 'Grafo 1', data: dataGraph } ],
+        exporting: {
             csv: {
-                columnHeaderFormatter: function(item, key) {
-                    if (item.name) {
+                columnHeaderFormatter: function(item, key)
+                {
+                    if (item.name)
+                    {
                       return item.name
                     }
                     return item.bar
-                  },
+                },
                 lineDelimiter: '\n'
-
             }
-          }
-        });
-
+        }
+    });
 }
-function downlaodCsv() {
-    chart.downloadCSV()
-  }
+
+
+function downlaodCsv() { chart.downloadCSV() }
+
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 
-/* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
-async function runAlgorithm(algorithm) {
+/* Todos las funciones que se ejecutan cuando
+ se corre un algoritmo desde la sección de comparación
+*/
+async function runAlgorithm(algorithm)
+{
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;
     var time_id = "medicion-" + algorithm;
@@ -1674,18 +1700,19 @@ async function runAlgorithm(algorithm) {
 
     document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
 
-    if (document.getElementById(algorithm_checkbox).checked) {
+    if (document.getElementById(algorithm_checkbox).checked)
+    {
         var ti = performance.now();
         //load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
 
-        switch(algorithm) {
+        switch(algorithm)
+        {
             case "dfs":
                 load_progressBar(algorithm, 60);
                 await DFS(50);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("DFS");
                 check_check_box=true;
-
                 break;
             case "bfs":
                 load_progressBar(algorithm, 60);
@@ -1744,7 +1771,8 @@ async function runAlgorithm(algorithm) {
         execution_time = tf - ti;
 
         document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
-        if (check_check_box) {
+        if (check_check_box)
+        {
         dataGraph.push(execution_time);
         }
 
@@ -1752,12 +1780,13 @@ async function runAlgorithm(algorithm) {
     test_graph();
 }
 
-/* Ejecuta todos los allgoritmos seleccionados en la sección de comparación */
-function compareAlgorithms() {
+/* Ejecuta todos los algoritmos seleccionados en la sección de comparación */
+function compareAlgorithms()
+{
     dataGraph.length=0;
     categories_graph.length=0;
-    /* Paralelisación: sirve, pero no para esto (no puede hacer métodos para accesar al HTML) */
-    //var p = new Parallel(["dfs", "bfs", "a", "prim", "kruskal", "dijktra", "belford", "floyd"], {evalPath: './eval.js'});
+    /* Paralelización: sirve, pero no para esto (no puede hacer métodos para accesar al HTML) */
+    //var p = new Parallel(["dfs", "bfs", "a", "prim", "kruskal", "dijkstra", "belford", "floyd"], {evalPath: './eval.js'});
     //console.log(p.data);
     //p.map(runAlgorithm);
 

@@ -968,7 +968,10 @@ async function check_dir(nodo, nodo_end)
 }
 
 
-/* ---- Prim ---- */ // Gerry
+/* ---- Prim ----  // Gerry
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
 function Prim(delay)
 {
     // Algoritmo para desplegar en HTML
@@ -1001,10 +1004,10 @@ function Prim(delay)
     };
     var options = { };
     var prim_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+    //Hasta aqui es el proceso para tener grafos independientes
 
     // Se obtiene el nodo de origen usansdo el id del input del html
-    var start_node = parseInt(document.getElementById("origin-prim").value); // En algunos algoritmos no se necesitará esto
+    var start_node = parseInt(document.getElementById("origin-prim").value);
 
     // Se 'imprime' instruccion en ejecución
     document.getElementById("prim-instruction").innerHTML = "Prim("+start_node+");";
@@ -1014,6 +1017,16 @@ function Prim(delay)
 }
 
 
+/* Función principal que ejecuta algoritmo de Prim
+ * @param start_node: indica cual será el nodo de inicio del recorrido;
+          recibido de html
+ * @param prim_network: grafo que se utilizará para ejecución de algoritmo;
+          esto evita que se ejecuten comandos sobre otros algoritmos
+ * @param prim_nodes: grupo de nodos sobre el cual se ejecutan comandos
+ * @param prim_edges: grupo de aristas sobre el cual se ejecutan comandos
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+*/
 async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
 {
     var ti = performance.now();
@@ -1042,25 +1055,24 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     queue.push(start_node);
     highlightNode(start_node, prim_nodes);
 
-    console.log("queue begin: "+queue);
+    console.log("Queue begin: " + queue);
     while (queue.length > 0)
     {
-
         document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<br>";
+        console.log("Queue while: " + queue);
 
-        console.log("queue while: "+queue);
         // Obtener el nodo que tenga la arista más corta
         var min = Infinity;
         var pos_min = 0, pos_edge = 0;
         for (var i = 0; i < queue.length; ++i)
         {
-            console.log("for de: " + queue[i] + ", sacaremos sus edges.");
+            console.log("For de: " + queue[i] + ", sacaremos sus edges.");
             var temp = prim_network.getConnectedEdges(queue[i]);
 
             for (var j = 0; j < temp.length; ++j)
             {
-                console.log("prim_edges.get(temp[j]).from  = "+prim_edges.get(temp[j]).from);
-                console.log("parent[queue[i] - 1]  = "+parent[queue[i] - 1]);
+                console.log("prim_edges.get(temp[j]).from  = " + prim_edges.get(temp[j]).from);
+                console.log("parent[queue[i] - 1]  = " + parent[queue[i] - 1]);
                 if (prim_edges.get(temp[j]).from == parent[queue[i] - 1])
                 {
                     if (parseInt(prim_edges.get(temp[j]).label) < min)
@@ -1075,7 +1087,8 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
         }
 
         var node_analized = queue[pos_min];
-        console.log("nodo analizado: "+ node_analized);
+        console.log("Nodo analizado: " + node_analized);
+
         await sleep(delay * 1.5);
         markVisited_Node(node_analized, prim_nodes);
         queue.splice(pos_min, 1);
@@ -1119,6 +1132,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
                 highlightNode(prim_edges.get(neighbors[i]).to, prim_nodes);
             }
         }
+
         // Evita error de iluminar arista en 1era iteracion:
         if (node_analized != start_node)
         {
@@ -1146,24 +1160,26 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     ids_edges = [];
     for (var i = 0; i < edges_array.length; ++i)
     {
-      ids_edges.push(edges_array[i].id);
-      console.log("id: "+ids_edges[i]);
+        ids_edges.push(edges_array[i].id);
+        console.log("id: "+ids_edges[i]);
     }
 
     for (var i = 0; i < ids_edges.length; ++i)
     {
-      if (!edges_recorridas.includes(ids_edges[i]))
-      {
-           dashEdge(ids_edges[i], prim_edges);
-      }
+        if (!edges_recorridas.includes(ids_edges[i]))
+        {
+             dashEdge(ids_edges[i], prim_edges);
+        }
     }
-
 
     return execution_time;
 }
 
 
-/* ---- Kruskal ---- */ // Gerry
+/* ---- Kruskal ----  // Gerry
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
 function Kruskal(delay)
 {
     // Algoritmo para desplegar en HTML
@@ -1183,19 +1199,29 @@ function Kruskal(delay)
     };
     var options = { };
     var kruskal_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+    //Hasta aqui es el proceso para tener grafos independientes
 
     // Se obtiene el nodo de origen usansdo el id del input en html
-    var start_node = parseInt(document.getElementById("origin-kruskal").value); // En algunos algoritmos no se necesitará esto
+    var start_node = parseInt(document.getElementById("origin-kruskal").value);
 
-// Se 'imprime' instruccion en ejecución
-document.getElementById("kruskal-instruction").innerHTML = "Kruskal("+start_node+");";
+    // Se 'imprime' instruccion en ejecución
+    document.getElementById("kruskal-instruction").innerHTML = "Kruskal("+start_node+");";
 
     var time = KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, delay);
     return time;
 }
 
-function KruskalUtil(delay)
+/* Función principal que ejecuta algoritmo de Kruskal
+ * @param start_node: indica cual será el nodo de inicio del recorrido;
+          recibido de html
+ * @param kruskal_network: grafo que se utilizará para ejecución de algoritmo;
+          esto evita que se ejecuten comandos sobre otros algoritmos
+ * @param kruskal_nodes: grupo de nodos sobre el cual se ejecutan comandos
+ * @param kruskal_edges: grupo de aristas sobre el cual se ejecutan comandos
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
+function KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, delay)
 {
     var ti = performance.now();
 
@@ -1211,7 +1237,6 @@ function KruskalUtil(delay)
     document.getElementById("tiempo-kruskal").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 
     return execution_time;
-
 }
 
 // class DisjointSet

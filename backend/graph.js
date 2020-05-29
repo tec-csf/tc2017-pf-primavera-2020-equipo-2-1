@@ -1438,6 +1438,13 @@ async function FloydUtil(delay)
 var chart;
 
 
+$('#exportar_pdf').click(function () {
+    chart.exportChart({
+        type: 'application/pdf',
+        filename: 'my-pdf'
+    });
+});
+
 
   
 

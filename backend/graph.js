@@ -603,7 +603,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
 
      var zero=0;
 
-     getpath.push({now:start_node,from:zero});
+     getpath.push({now:start_node,heuristics,from:zero});
 
      while(open_set.length>0){
 
@@ -628,7 +628,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
           a_result+=current;
           a_result+="<br>"
           document.getElementById("a-result").innerHTML = a_result;
-
+          //console.log(getpath);
           draw_path(start_node,end_node,getpath);
           document.getElementById("a-instruction").innerHTML = "END";
             var tf = performance.now();
@@ -681,7 +681,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
                  if(!direction){
                     highlightEdge(edge_neighbors[i], a_edges, a_nodes, a_network,current);
                  }
-                 getpath.push({now:neighbor,from:current});
+                 getpath.push({now:neighbor,tempG,from:current});
 
                   fScore[neighbor] = gScore[neighbor] + h(neighbor,end_node,a_network);
                   if (!came_from.includes(current)){
@@ -721,12 +721,17 @@ async function draw_path(start_node,end_node,array){
     var start=start_node;
     var temp=[];
     var print="";
+    var save;
     a_result+="<br>Camino Óptimo:<br>"
+    temp.push(end_node);
+
     for(var i = 0; i<array.length;++i){
         for(var j = 0; j<array.length;++j){
             if(array[j].now==end){
+
                 if(end==start_node){
-                    temp.push(start_node);
+ 
+                    //temp.push(start_node);
                     temp=temp.reverse();
 
                     print+=start;
@@ -738,10 +743,18 @@ async function draw_path(start_node,end_node,array){
                     document.getElementById("a-result").innerHTML = a_result;
                     return;
                 }
-                if(!temp.includes(end)){
+                save=array[j].tempG;
+                end=array[j].from;
 
+                for(var h = j; h<array.length;++h){
+                    if(array[h].tempG<save){
+                        save=array[h].tempG
+                        end=array[h].from;
+                    }
+
+                }
+                if(!temp.includes(end)){
                     temp.push(end);
-                    end= array[j].from;
                 }
 
             }
@@ -758,7 +771,7 @@ async function h (start_node,end_node,network){
   var e = network.getPosition(end_node);
 
 
-  var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/20);
+  var h = Math.round((Math.abs(s.x-e.x)+Math.abs(s.y-e.y))/60);
   return h;
 }
 

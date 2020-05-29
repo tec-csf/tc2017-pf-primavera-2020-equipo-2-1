@@ -9,6 +9,11 @@
 <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <script src="parallel.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>  
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>  
+
 <style>
 body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
 body {font-size:16px;}
@@ -74,7 +79,7 @@ body {font-size:16px;}
 
         <button type="button" class="w3-button w3-blue-grey w3-ripple" style="margin-bottom: 0px;" onclick="drawSetGraph();"> Generar </button>
         <button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="margin-bottom: 5px;" onclick="drawRandomGraph();"> Generar Aleatorio </button>
-        <p><button type="button" class="w3-button w3-blue-grey w3-ripple" onclick="drawTestGraph();"> Generar Test </button></p>
+        <p><button type="button" class="w3-button w3-light-grey w3-ripple" onclick="drawTestGraph();"> Importar Grafo </button></p>
     </form>
     <div style="float:left; width: 5%;"><p></p></div>
     <div id="mynetwork" class="w3-card-4" style="float:left; width: 600px; height: 430px;"></div>
@@ -106,11 +111,11 @@ body {font-size:16px;}
               <p id="tiempo-dfs" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="dfs-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="dfs-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
@@ -154,11 +159,11 @@ body {font-size:16px;}
               <p id="tiempo-bfs" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="bfs-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="bfs-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
@@ -202,23 +207,23 @@ body {font-size:16px;}
                 <p id="tiempo-a" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
               </div>
               <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-              <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+              <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                   <p id="a-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
               </div>
               <div><p> Camino </p></div>
-              <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+              <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                   <p id="a-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
               </div>
               <div style="margin-top:20px;">
                   <div style="float: left; width: 30%;"><input id="origin-a" type="text" class="w3-input" style="width:70%" value="1"><label> Origen </label></div>
                   <div style="float: left; width: 30%;"><input id="end-a" type="text" class="w3-input" style="width:70%" value="1"><label> Destino </label></div>
-                  <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="A_star(1)"> Ejecutar </button></div>
+                  <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="A_star(2000);"> Ejecutar </button></div>
 
                   <div class="w3-dropdown">
                     <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                     <div class="w3-dropdown-content" style="float: left;">
-                      <a onclick="A_star(2)"> Lento </a>
-                      <a onclick="A_star(3)"> Normal </a>
+                      <a onclick="A_star(2000);"> Lento </a>
+                      <a onclick="A_star(50);"> Normal </a>
                     </div>
                   </div>
               </div>
@@ -252,11 +257,11 @@ body {font-size:16px;}
               <p id="tiempo-prim" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="prim-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="prim-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
@@ -300,11 +305,11 @@ body {font-size:16px;}
               <p id="tiempo-kruskal" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="kruskal-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="kruskal-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
@@ -348,22 +353,22 @@ body {font-size:16px;}
               <p id="tiempo-dijkstra" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="dijkstra-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="dijkstra-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 30%;"><input id="origin-dijkstra" type="text" class="w3-input" style="width:70%" value="1"><label> Origen </label></div>
                 <div style="float: left; width: 30%;"><input id="target-dijkstra" type="text" class="w3-input" style="width:70%" value="1"><label> Destino </label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Dijkstra();"> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Dijkstra(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick=""> Lento </a>
-                    <a onclick=""> Normal </a>
+                    <a onclick="Dijkstra(2000);"> Lento </a>
+                    <a onclick="Dijkstra(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -397,22 +402,21 @@ body {font-size:16px;}
               <p id="tiempo-belford" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="belford-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="belford-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-belford" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left; width: 50%;"><input id="target-belford" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo destino</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Bellman_Ford();"> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Belford(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick=""> Lento </a>
-                    <a onclick=""> Normal </a>
+                    <a onclick="Belford(2000);"> Lento </a>
+                    <a onclick="Belford(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -446,21 +450,21 @@ body {font-size:16px;}
               <p id="tiempo-floyd" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 47px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="floyd-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 170px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
                 <div style="float: left; width: 50%;"><input id="origin-floyd" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
-                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Ejecutar </button></div>
+                <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Floyd(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
-                    <a onclick=""> Lento </a>
-                    <a onclick=""> Normal </a>
+                    <a onclick="Floyd(2000);"> Lento </a>
+                    <a onclick="Floyd(2000);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -564,7 +568,9 @@ body {font-size:16px;}
       </tr>
     </table>
     <div class="w3-container">
-      <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="float: right" onclick="compareAlgorithms();"> Ejecutar Algoritmos </button></p>
+      <p><button id="comparar_Algoritmos" type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="float: right" onclick="compareAlgorithms();" onclick="chart = new Highcharts.Chart(options);">Ejecutar Algoritmos </button></p>
+      <div style="float: right; width: 10%;"><input id="target-all" type="text" class="w3-input" style="width:70%" value="1"><label> Destino </label></div>
+      <div style="float: right; width: 10%;"><input id="origin-all" type="text" class="w3-input" style="width:70%" value="1"><label> Origen </label></div>
     </div>
     <hr>
     <!-- Gráfico -->
@@ -574,10 +580,13 @@ body {font-size:16px;}
         <div id="grafico-algoritmos" class="w3-card-4 w3-container" style="width: 600px; height: 340px;"></div>
       </div>
       <div class="w3-container" style="float: left">
-        <p><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick=""> Resultados Históricos </button></p>
-        <div><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a PDF </button></div>
-        <div><button type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 60px;" onclick=""> Exportar a CSV </button></div>
-        <div><button type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick=""> Exportar a JSON </button></div>
+        <p><button type="button" class="w3-button w3-blue-grey w3-ripple" onclick=""> Resultados Históricos </button></p>
+        <p style="margin-top: 30px;">Opciones de Gráfica</p>
+        <div><button id ="exportar_pdf" type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a PDF </button></div>
+        <div><button type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick="downlaodCsv()"> Exportar a CSV </button></div>
+        <p style="margin-top: 30px;">Opciones de Grafo</p>
+        <div><button type="button" class="w3-button w3-light-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a CSV </button></div>
+        <div><button type="button" class="w3-button w3-light-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick=""> Exportar a JSON </button></div>
       </div>
     </div>
   </div>

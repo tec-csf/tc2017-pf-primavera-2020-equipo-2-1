@@ -2,7 +2,8 @@
 var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
 var network = null;
-var dataGraph=[]
+var dataGraph=[];
+var categories_graph=[];
 
 var node_number, edge_number;
 var edges_array = [];
@@ -1166,13 +1167,16 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
 
 function get_data_graph(){
-    var time = document.getElementById("medicion-dfs").value;
+
+    var time = parseInt(document.getElementById("medicion-dfs").textContent);
     console.log(time);
 
 }
 
+async function test_graph(){
 
-    $('#comparar_Algoritmos').on('click', function() {
+        get_data_graph();
+
 
         var options = Highcharts.chart('grafico-algoritmos', {
             chart: {
@@ -1182,7 +1186,7 @@ function get_data_graph(){
                 text: 'Tiempos de Comparación'
             },
             xAxis: {
-                categories: ['DFS', 'BFS', 'A*','Prim', 'Kruskal', 'Dijkstra','Bellman','Floyd']
+                categories:categories_graph
             },
             yAxis: {
                 title: {
@@ -1191,20 +1195,23 @@ function get_data_graph(){
             },
             series: [{
                 name: 'Grafo 1',
-                data: [1,5,1,7,8,1,1,2]
-            },{
-                name: 'Grafo 2',
-                data: [2,3,4,5,6,1,8,1]
+                data: dataGraph
             }
 
         ]
         });
-    });
+
+}
+
+
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 
 /* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
 function runAlgorithm(algorithm) {
+
+    sleep(20000);
+
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;
     var time_id = "medicion-" + algorithm;
@@ -1222,28 +1229,45 @@ function runAlgorithm(algorithm) {
 
         switch(algorithm) {
             case "dfs":
-                DFS(50);
+                //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-dfs").textContent));
+                categories_graph.push("DFS");
+
                 break;
             case "bfs":
-                BFS(50);
+                //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-bfs").textContent));
+                categories_graph.push("BFS");
                 break;
             case "a":
                 //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-a").textContent));
+                categories_graph.push("A*");
                 break;
             case "prim":
                 //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-prim").textContent));
+                categories_graph.push("Prim");
                 break;
             case "kruskal":
                 //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-kruskal").textContent));
+                categories_graph.push("Kruskal");
                 break;
             case "dijkstra":
                 //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-dijkstra").textContent));
+                categories_graph.push("Dijkstra");
                 break;
             case "belford":
                 //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-belford").textContent));
+                categories_graph.push("Belford");
                 break;
             case "floyd":
                 //Ingresar codigo del algoritmo con velocidad normal
+                dataGraph.push(parseInt(document.getElementById("medicion-floyd").textContent));
+                categories_graph.push("floyd");
                 break;
         }
 
@@ -1251,10 +1275,13 @@ function runAlgorithm(algorithm) {
         execution_time = tf - ti;
         document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
     }
+    test_graph();
 }
 
 /* Ejecuta todos los allgoritmos seleccionados en la sección de comparación */
 function compareAlgorithms() {
+    dataGraph.length=0;
+    categories_graph.length=0;
     /* Paralelisación: sirve, pero no para esto (no puede hacer métodos para accesar al HTML) */
     //var p = new Parallel(["dfs", "bfs", "a", "prim", "kruskal", "dijktra", "belford", "floyd"], {evalPath: './eval.js'});
     //console.log(p.data);

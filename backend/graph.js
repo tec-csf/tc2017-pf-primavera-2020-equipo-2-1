@@ -1119,6 +1119,7 @@ function KruskalUtil(delay)
 
 /* ---- Dijkstra ---- */ // Rojo
 var Dijkstra_sol;
+var Dijkstra_code = " ";
 function Dijkstra(delay) {
     // Algoritmo para desplegar en HTML
     var Dijkstra_code = "";
@@ -1138,7 +1139,6 @@ function Dijkstra(delay) {
 
 
     document.getElementById("dijkstra-code").innerHTML = Dijkstra_code;
-    bfs_result = ""; // Limpia string
 
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
@@ -1183,11 +1183,13 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
     visited.push(start_node);
     queue.enqueue(start_node)
+    console.log(Aristas.length);
     Tabla[start_node - 1] = 0;
 
     while (visited.length != node_number) {
+        Dijkstra_code=" ";
         var node_analized = queue.dequeue();
-
+        console.log(node_analized);
         await visit_Node(node_analized, dij_nodes, delay);
         await sleep(delay);
         for (var i = 0; i < Aristas.length; i++) {
@@ -1205,7 +1207,7 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
                     for (var j = 0; j < visited.length; j++) {
 
-                        if (Aristas[i].destino == visited[j]) {
+                        if (Aristas[i].destino == visited[j]||Aristas[i].destino==toAnalize[j]) {
                             flag = false;
                             break;
                         }
@@ -1216,10 +1218,15 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
                         highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstranetwork, -1)
                     }
 
+
                 }
             }
         }
+        toAnalize.forEach(element => {
+            Dijkstra_code+=" "+element;
+        });
         if (toAnalize.length == 0) {
+            console.log("???");
             break;
 
         }
@@ -1242,6 +1249,7 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
         visited.push(min);
         toAnalize.splice(aux, 1);
         queue.enqueue(min);
+        document.getElementById("dijkstra-code").innerHTML =node_analized+".>"+ Dijkstra_code;
     }
     /*Detecta si existe o no el camino mediante la tabla de pesos*/
     if (Tabla[target_node - 1] == Infinity) {

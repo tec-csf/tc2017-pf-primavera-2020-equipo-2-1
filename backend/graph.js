@@ -444,7 +444,7 @@ document.getElementById("dfs-instruction").innerHTML = "END";
     var tf = performance.now();
     execution_time = tf - ti;
     document.getElementById("tiempo-dfs").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
-    return execution_time; 
+    return execution_time;
 }
 
 
@@ -1206,15 +1206,7 @@ async function BelfordUtil(delay)
 /* ---- Floyd-Warshall ---- */
 function Floyd(delay)
 {
-    // Obtencion tiempos ejecucion; NO TOCAR
-    var tf = performance.now();
 
-
-
-    // Obtencion tiempos ejecucion; NO TOCAR
-    var tf = performance.now();
-    execution_time = tf - ti;
-    document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 }
 
 async function FloydUtil(delay)
@@ -1276,12 +1268,7 @@ async function test_graph(){
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 
 /* Todos las funciones que se ejecutan cuando se corre un algoritmo desde la sección de comparación*/
-<<<<<<< HEAD
-function runAlgorithm(algorithm) {
-
-=======
 async function runAlgorithm(algorithm) {
->>>>>>> f1e70183416dc48e33713717f77686d1027b84c7
     var algorithm_checkbox = "compare-" + algorithm;
     var bar_id = "bar-" + algorithm;
     var time_id = "medicion-" + algorithm;
@@ -1351,7 +1338,7 @@ async function runAlgorithm(algorithm) {
 
         var tf = performance.now()
         execution_time = tf - ti;
-        
+
         document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
         if(check_check_box){
         dataGraph.push(execution_time);

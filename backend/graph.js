@@ -292,7 +292,7 @@ function load_progressBar(algorithm, progress) {
     var progress_bar = document.getElementById(bar_id);
     progress_bar.innerHTML = "";
     var width = parseInt(progress_bar.style.width.substring(0, progress_bar.style.width.length - 1));
-    var id = setInterval(frame, 10);
+    var id = setInterval(frame, 2);
     function frame() {
       if (width >= progress) {
         clearInterval(id);
@@ -1235,7 +1235,7 @@ async function runAlgorithm(algorithm) {
 
                 break;
             case "bfs":
-                //Ingresar codigo del algoritmo con velocidad normal
+                
 
                 categories_graph.push("BFS");
                 check_check_box=true;

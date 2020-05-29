@@ -1300,50 +1300,63 @@ async function runAlgorithm(algorithm) {
         switch(algorithm) {
             case "dfs":
                 await DFS(50);
-                dataGraph.push(parseInt(document.getElementById("medicion-dfs").textContent));
+
                 categories_graph.push("DFS");
+                check_check_box=true;
 
                 break;
             case "bfs":
                 //Ingresar codigo del algoritmo con velocidad normal
-                dataGraph.push(parseInt(document.getElementById("medicion-bfs").textContent));
+
                 categories_graph.push("BFS");
+                check_check_box=true;
                 break;
             case "a":
                 //Ingresar codigo del algoritmo con velocidad normal
-                dataGraph.push(parseInt(document.getElementById("medicion-a").textContent));
+
                 categories_graph.push("A*");
+                check_check_box=true;
                 break;
             case "prim":
                 //Ingresar codigo del algoritmo con velocidad normal
-                dataGraph.push(parseInt(document.getElementById("medicion-prim").textContent));
+
                 categories_graph.push("Prim");
+                check_check_box=true;
                 break;
             case "kruskal":
                 //Ingresar codigo del algoritmo con velocidad normal
-                dataGraph.push(parseInt(document.getElementById("medicion-kruskal").textContent));
+
                 categories_graph.push("Kruskal");
+                check_check_box=true;
                 break;
             case "dijkstra":
                 //Ingresar codigo del algoritmo con velocidad normal
-                dataGraph.push(parseInt(document.getElementById("medicion-dijkstra").textContent));
+
                 categories_graph.push("Dijkstra");
+                check_check_box=true;
                 break;
             case "belford":
                 //Ingresar codigo del algoritmo con velocidad normal
-                dataGraph.push(parseInt(document.getElementById("medicion-belford").textContent));
+
                 categories_graph.push("Belford");
+                check_check_box=true;
                 break;
             case "floyd":
                 //Ingresar codigo del algoritmo con velocidad normal
-                dataGraph.push(parseInt(document.getElementById("medicion-floyd").textContent));
+
                 categories_graph.push("floyd");
+                check_check_box=true;
                 break;
         }
 
         var tf = performance.now()
         execution_time = tf - ti;
+        
         document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+        if(check_check_box){
+        dataGraph.push(execution_time);
+        }
+
     }
     test_graph();
 }

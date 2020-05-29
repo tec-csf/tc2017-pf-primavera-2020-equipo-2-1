@@ -1494,9 +1494,9 @@ async function runAlgorithm(algorithm) {
                 check_check_box=true;
                 break;
             case "kruskal":
-                load_progressBar(algorithm, 60);
-                await Kruskal(50);
-                load_progressBar(algorithm, 100);
+                //load_progressBar(algorithm, 60);
+                //await Kruskal(50);
+                //load_progressBar(algorithm, 100);
                 categories_graph.push("Kruskal");
                 check_check_box=true;
                 break;
@@ -1509,8 +1509,10 @@ async function runAlgorithm(algorithm) {
                 check_check_box=true;
                 break;
             case "belford":
-                //Ingresar codigo del algoritmo con velocidad normal
-
+                document.getElementById("target-belford").value = parseInt(document.getElementById("target-all").value);
+                load_progressBar(algorithm, 60);
+                await Belford(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("Belford");
                 check_check_box=true;
                 break;

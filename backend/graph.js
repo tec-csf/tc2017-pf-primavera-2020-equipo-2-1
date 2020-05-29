@@ -292,7 +292,7 @@ function load_progressBar(algorithm, progress) {
     var progress_bar = document.getElementById(bar_id);
     progress_bar.innerHTML = "";
     var width = parseInt(progress_bar.style.width.substring(0, progress_bar.style.width.length - 1));
-    var id = setInterval(frame, 10);
+    var id = setInterval(frame, 2);
     function frame() {
       if (width >= progress) {
         clearInterval(id);
@@ -624,31 +624,7 @@ function A_star(delay){
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
- var ti = performance.now();
- var open_set = [];
- var close_set= [];
- var came_from =[];
- var getpath =[];
- var heuristics=h(start_node,end_node,a_network);
- open_set.push(start_node);
- gScore[start_node]=0;
- fScore[start_node]=heuristics;
-
- var zero=0;
-
- getpath.push({now:start_node,from:zero});
-
- while(open_set.length>0){
-  var winner =0;
-  for (var i=0;i<open_set.length;++i){
-      if(fScore[i]<fScore[winner]){
-          winner =i;
-      }
-  }
-  var current = open_set[winner];
-  var neighbors = a_network.getConnectedNodes(current);
-  var edge_neighbors = a_network.getConnectedEdges(current);
-
+ 
      var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
 
      var open_set = [];
@@ -762,12 +738,6 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
     var tf = performance.now();
     execution_time = tf - ti;
     document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
-
-var tf = performance.now();
-execution_time = tf - ti;
-document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
-return execution_time; 
-}
 }
 
 async function draw_path(start_node,end_node,array){
@@ -1256,13 +1226,25 @@ async function FloydUtil(delay)
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
+var chart;
 
+$('#exportar_pdf').click(function () {
+    chart.exportChart({
+        type: 'application/pdf',
+        filename: 'my-pdf'
+    });
+});
+
+function downlaodCsv() {
+    chart.downloadCSV()
+  }
+  
 
 async function test_graph(){
 
 
 
-        var options = Highcharts.chart('grafico-algoritmos', {
+         chart = Highcharts.chart('grafico-algoritmos', {
             chart: {
                 type: 'bar'
             },
@@ -1282,7 +1264,12 @@ async function test_graph(){
                 data: dataGraph
             }
 
-        ]
+        ],  exporting: {
+            
+            csv: {
+                itemDelimiter: ';'
+            }
+          }
         });
 
 }
@@ -1304,27 +1291,32 @@ async function runAlgorithm(algorithm) {
 
     document.getElementById(time_id).innerHTML = "0.00 milisegundos"
 
+    document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
+
     if(document.getElementById(algorithm_checkbox).checked) {
         var ti = performance.now();
-        load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
+        //load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
 
         switch(algorithm) {
             case "dfs":
+                load_progressBar(algorithm, 60);
                 await DFS(50);
-
+                load_progressBar(algorithm, 100);
                 categories_graph.push("DFS");
                 check_check_box=true;
 
                 break;
             case "bfs":
-                //Ingresar codigo del algoritmo con velocidad normal
+                
 
                 categories_graph.push("BFS");
                 check_check_box=true;
                 break;
             case "a":
-                //Ingresar codigo del algoritmo con velocidad normal
+                document.getElementById("end-a").value = parseInt(document.getElementById("target-all").value);
+                load_progressBar(algorithm, 60);
                 await A_star(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("A*");
                 check_check_box=true;
                 break;
@@ -1341,7 +1333,7 @@ async function runAlgorithm(algorithm) {
                 check_check_box=true;
                 break;
             case "dijkstra":
-                //Ingresar codigo del algoritmo con velocidad normal
+                document.getElementById("target-dijkstra").value = parseInt(document.getElementById("target-all").value);
 
                 categories_graph.push("Dijkstra");
                 check_check_box=true;

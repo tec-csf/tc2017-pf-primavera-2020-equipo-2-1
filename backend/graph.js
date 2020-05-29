@@ -198,7 +198,7 @@ function dashNode(id, node_group) {
  * denota que esa arista no se recorre
  */
 function dashEdge(id, edge_group) {
-    edge_group.update({id: id, width: 1, color: {color: "#2B7CE9"}, dashes: [5, 5]});
+    edge_group.update({id: id, width: 0, color: {color: "#2B7CE9"}, dashes: [5, 5]});
 }
 
 
@@ -764,7 +764,7 @@ async function draw_path(start_node,end_node,array){
                 for(var h = j; h<array.length;++h){
                     if(array[h].now==array[j].now){
 
-                    
+
                     if(array[h].tempG<save){
                         save=array[h].tempG
                         end=array[h].from;
@@ -882,6 +882,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     var prim_result = ""; // Tendrá el contenido del MST para mostrar en HTML
     var distance = [];
     var parent = [];
+    var edges_recorridas = [];
 
     for (var i = 0; i < node_number; i++)
     {
@@ -988,6 +989,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
                 if(prim_edges.get(edge[i]).to == node_analized)
                 {
                     highlightEdge(edge[i], prim_edges, prim_nodes, prim_network);
+                    edges_recorridas.push(prim_edges.get(edge[i]).id);
                 }
             }
 
@@ -998,6 +1000,23 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-prim").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+    // Elimina aristas que sobran
+    ids_edges = [];
+    for (var i = 0; i < edges_array.length; i++)
+    {
+      ids_edges.push(edges_array[i].id);
+      console.log("id: "+ids_edges[i]);
+    }
+
+    for (var i = 0; i < ids_edges.length; i++)
+    {
+      if (!edges_recorridas.includes(ids_edges[i]))
+      {
+           dashEdge(ids_edges[i], prim_edges);
+      }
+    }
+
 
     return execution_time;
 }
@@ -1317,8 +1336,8 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
     var queue = new Queue();
     queue.enqueue(start_node)
     Tabla[start_node - 1] = 0;
-    
-    
+
+
     for(var i=0;i<node_number-2;++i){
         cleanGraph(bel_nodes,bel_edges);
         for(var j=0;j<visited.length;j++){
@@ -1356,9 +1375,9 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
         path = start_node + " -> " + path;
         Bellman_sol = path + "<br>" + "Distancia: " + Tabla[target_node - 1];
     }
-    
+
     document.getElementById("belford-result").innerHTML = Bellman_sol;
-    
+
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
@@ -1524,7 +1543,7 @@ async function runAlgorithm(algorithm) {
             case "floyd":
                 //Ingresar codigo del algoritmo con velocidad normal
 
-                categories_graph.push("floyd");
+                categories_graph.push("Floyd");
                 check_check_box=true;
                 break;
         }

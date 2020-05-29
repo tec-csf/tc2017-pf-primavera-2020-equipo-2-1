@@ -448,6 +448,7 @@ document.getElementById("dfs-instruction").innerHTML = "END";
 }
 
 
+
 /* ---- BFS ---- */ // Gerry
 function BFS(delay)
 {
@@ -614,13 +615,39 @@ function A_star(delay){
 
     // Se 'imprime' instrucción en ejecución
     document.getElementById("a-instruction").innerHTML = "A("+start_node+");";
-    AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node,delay);
+    
+    var time =AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node,delay);
+    return time;
 
 }
 
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
+ var ti = performance.now();
+ var open_set = [];
+ var close_set= [];
+ var came_from =[];
+ var getpath =[];
+ var heuristics=h(start_node,end_node,a_network);
+ open_set.push(start_node);
+ gScore[start_node]=0;
+ fScore[start_node]=heuristics;
+
+ var zero=0;
+
+ getpath.push({now:start_node,from:zero});
+
+ while(open_set.length>0){
+  var winner =0;
+  for (var i=0;i<open_set.length;++i){
+      if(fScore[i]<fScore[winner]){
+          winner =i;
+      }
+  }
+  var current = open_set[winner];
+  var neighbors = a_network.getConnectedNodes(current);
+  var edge_neighbors = a_network.getConnectedEdges(current);
 
      var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
 
@@ -736,7 +763,11 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
     execution_time = tf - ti;
     document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 
-    return;
+var tf = performance.now();
+execution_time = tf - ti;
+document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+return execution_time; 
+}
 }
 
 async function draw_path(start_node,end_node,array){
@@ -1226,16 +1257,9 @@ async function FloydUtil(delay)
 /* -------------------------------------------------------------------------- */
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
 
-function get_data_graph(){
-
-    var time = parseInt(document.getElementById("medicion-dfs").textContent);
-    console.log(time);
-
-}
 
 async function test_graph(){
 
-        get_data_graph();
 
 
         var options = Highcharts.chart('grafico-algoritmos', {
@@ -1300,7 +1324,7 @@ async function runAlgorithm(algorithm) {
                 break;
             case "a":
                 //Ingresar codigo del algoritmo con velocidad normal
-
+                await A_star(50);
                 categories_graph.push("A*");
                 check_check_box=true;
                 break;

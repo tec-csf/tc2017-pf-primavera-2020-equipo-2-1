@@ -583,7 +583,7 @@ function A_star(delay){
 }
 
 var current_weight;
-
+var heuristics=0;
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
 
     document.getElementById("a-instruction").innerHTML = "openSet.push(nodo_inicial);<br>fScore[nodo_inicial]=h(nodo_inicial);<br>";
@@ -596,14 +596,15 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
      var close_set= [];
      var came_from =[];
      var getpath =[];
-     var heuristics=h(start_node,end_node,a_network);
+     heuristics=h(start_node,end_node,a_network);
      open_set.push(start_node);
      gScore[start_node]=0;
      fScore[start_node]=heuristics;
 
+     let tempG =heuristics
      var zero=0;
 
-     getpath.push({now:start_node,heuristics,from:zero});
+     getpath.push({now:start_node,heuristics ,from:zero});
 
      while(open_set.length>0){
 
@@ -628,7 +629,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
           a_result+=current;
           a_result+="<br>"
           document.getElementById("a-result").innerHTML = a_result;
-          //console.log(getpath);
+          console.log(getpath);
           draw_path(start_node,end_node,getpath);
           document.getElementById("a-instruction").innerHTML = "END";
             var tf = performance.now();
@@ -654,7 +655,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
 
           if (!close_set.includes(neighbor)) {
             get_weight(current,neighbor)
-              var tempG = gScore[current]+ current_weight;
+             tempG = gScore[current]+ current_weight;
 
               // Is this a better path than before?
               var newPath = false;
@@ -723,6 +724,7 @@ async function draw_path(start_node,end_node,array){
     var print="";
     var save;
     a_result+="<br>Camino Óptimo:<br>"
+    array[0].tempG=1;
     temp.push(end_node);
 
     for(var i = 0; i<array.length;++i){
@@ -747,13 +749,18 @@ async function draw_path(start_node,end_node,array){
                 end=array[j].from;
 
                 for(var h = j; h<array.length;++h){
+                    if(array[h].now==array[j].now){
+
+                    
                     if(array[h].tempG<save){
                         save=array[h].tempG
                         end=array[h].from;
                     }
+                }
 
                 }
                 if(!temp.includes(end)){
+                    console.log(end);
                     temp.push(end);
                 }
 

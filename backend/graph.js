@@ -1260,7 +1260,7 @@ async function test_graph(){
             },
             yAxis: {
                 title: {
-                    text: 'Segundos'
+                    text: 'Milisegundos'
                 }
             },
             series: [{

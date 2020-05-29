@@ -19,6 +19,7 @@ function destroy() {
         network.destroy();
         network = null;
         Aristas = [];
+        edges_array = [];
     }
 }
 
@@ -905,34 +906,38 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     document.getElementById("prim-result").innerHTML = prim_result;
     prim_result += " -> ";
 
-    var visited = [];
-    visited.push(start_node);
+    var queue = [];
+    queue.push(start_node);
     highlightNode(start_node, prim_nodes);
 
-    while (visited.length > 0)
+    console.log("queue begin: "+queue);
+console.log("test");
+    while (queue.length > 0)
     {
 
 document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<br>";
 
+console.log("queue dentro while: "+queue);
+
+
         // Obtener el nodo que tenga la arista más corta
         var min = Infinity;
-        var pos_min, pos_edge;
-        for (var i = 0; i < visited.length; i++)
+        var pos_min = 0, pos_edge = 0;
+        for (var i = 0; i < queue.length; i++)
         {
+            var temp = prim_network.getConnectedEdges(queue[i]);
+            // console.log("queue["+i+"]: " +queue[i] +" y "+temp);
 
-          prim_result += "<br>queue:";
-          prim_result += visited;
-          prim_result += "<br>";
-          document.getElementById("prim-result").innerHTML = prim_result;
 
-            var temp = prim_network.getConnectedEdges(visited[i]);
             for (var j = 0; j < temp.length; j++)
             {
-                if (prim_edges.get(temp[j]).from == visited[i])
+                // console.log("connected edges de "+queue[i]+": "+temp[j]);
+                if (prim_edges.get(temp[j]).from == queue[i])
                 {
-                    if(prim_edges.get(temp[j]).label < min)
+                    if(parseInt(prim_edges.get(temp[j]).label) < min)
                     {
-                        min = prim_edges.get(temp[j]).label;
+                      // console.log(queue[i]+" sustituye min :"+min+ " con: "+ parseInt(prim_edges.get(temp[j]).label))
+                        min = parseInt(prim_edges.get(temp[j]).label);
                         pos_min = i;
                         pos_edge = j;
                     }
@@ -940,15 +945,16 @@ document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<
             }
         }
 
-        var node_analized = visited[pos_min];
+        var node_analized = queue[pos_min];
+        console.log("nodo analizado: "+node_analized);
         await visit_Node(node_analized, prim_nodes, delay);
         // Evita error de iluminar arista en 1era iteracion:
-        if(node_analized != start_node)
-        {
-            var edge = prim_network.getConnectedEdges(node_analized);
-            highlightEdge(edge[pos_edge], prim_edges, prim_nodes, prim_network);
-        }
-        visited.splice(pos_min, 1);
+        // if(node_analized != start_node)
+        // {
+        //     var edge = prim_network.getConnectedEdges(queue[]);
+        //     highlightEdge(edge[pos_edge], prim_edges, prim_nodes, prim_network);
+        // }
+        queue.splice(pos_min, 1);
         // Fin Obtener el nodo que tenga la arista más corta
 
         if(parent[node_analized - 1] != node_analized)
@@ -966,14 +972,14 @@ document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<
 
 document.getElementById("prim-instruction").innerHTML = "FOR ALL {u, w} ∈ E do<br>";
 
-            if (visited.indexOf(prim_edges.get(neighbors[i]).to) != -1)
+            if (queue.indexOf(prim_edges.get(neighbors[i]).to) != -1)
             {
-                if (prim_edges.get(neighbors[i]).label < distance[prim_edges.get(neighbors[i]).to - 1])
+                if (parseInt(prim_edges.get(neighbors[i]).label) < distance[prim_edges.get(neighbors[i]).to - 1])
                 {
 
 document.getElementById("prim-instruction").innerHTML = "IF w ∈ queue AND l(u, w) < distance(w) THEN<br>&emsp;distance(w) ← l(u, w), parent(w) ← u<br>";
 
-                    distance[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).label;
+                    distance[prim_edges.get(neighbors[i]).to - 1] = parseInt(prim_edges.get(neighbors[i]).label);
                     parent[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).from;
                 }
             } else if (parent[prim_edges.get(neighbors[i]).to - 1] == null)
@@ -981,9 +987,9 @@ document.getElementById("prim-instruction").innerHTML = "IF w ∈ queue AND l(u,
 
 document.getElementById("prim-instruction").innerHTML = "ELSE IF parent(w) = NULL THEN<br>&emsp;distance(w) ← l(u, w), parent(w) ← u<br>&emsp;queue.insert(w)<br>";
 
-                distance[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).label;
+                distance[prim_edges.get(neighbors[i]).to - 1] = parseInt(prim_edges.get(neighbors[i]).label);
                 parent[prim_edges.get(neighbors[i]).to - 1] = prim_edges.get(neighbors[i]).from;
-                visited.push(prim_edges.get(neighbors[i]).to);
+                queue.push(prim_edges.get(neighbors[i]).to);
 
                 highlightNode(prim_edges.get(neighbors[i]).to, prim_nodes);
             }
@@ -1554,14 +1560,16 @@ async function runAlgorithm(algorithm) {
                 check_check_box=true;
                 break;
             case "prim":
-                //Ingresar codigo del algoritmo con velocidad normal
-
+                load_progressBar(algorithm, 60);
+                await Prim(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("Prim");
                 check_check_box=true;
                 break;
             case "kruskal":
-                //Ingresar codigo del algoritmo con velocidad normal
-
+                load_progressBar(algorithm, 60);
+                await Kruskal(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("Kruskal");
                 check_check_box=true;
                 break;

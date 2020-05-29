@@ -743,6 +743,7 @@ var tf = performance.now();
 execution_time = tf - ti;
 document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 return execution_time; 
+
 }
 
 async function draw_path(start_node,end_node,array){
@@ -1239,13 +1240,25 @@ async function FloydUtil(delay)
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
+var chart;
 
+$('#exportar_pdf').click(function () {
+    chart.exportChart({
+        type: 'application/pdf',
+        filename: 'my-pdf'
+    });
+});
+
+function downlaodCsv() {
+    chart.downloadCSV()
+  }
+  
 
 async function test_graph(){
 
 
 
-        var options = Highcharts.chart('grafico-algoritmos', {
+         chart = Highcharts.chart('grafico-algoritmos', {
             chart: {
                 type: 'bar'
             },
@@ -1265,7 +1278,12 @@ async function test_graph(){
                 data: dataGraph
             }
 
-        ]
+        ],  exporting: {
+            
+            csv: {
+                itemDelimiter: ';'
+            }
+          }
         });
 
 }

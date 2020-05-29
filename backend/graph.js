@@ -1125,17 +1125,27 @@ function Dijkstra(delay) {
     var Dijkstra_code = "";
     Dijkstra_sol = " ";
     console.log("flag Dikjkstra");
-    /*bfs_code += "var queue = new Queue();<br>";
-    bfs_code += "nodo_inicial = VISITED;<br>";
-    bfs_code += "queue.enqueue(nodo_inicial);<br>";
-    bfs_code += "while queue NOT EMPTY<br>";
-    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
-    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
-    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
-    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
-    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-    Codigo a
-    */
+    Dijkstra_code += "var visitados[]; <br>";
+    Dijkstra_code += "var toAnalize[]; <br>";
+    Dijkstra_code += "var Tabla[]; <br>";
+    Dijkstra_code += "var Padres[]; <br>";
+    Dijkstra_code += "BEGIN <br>";
+
+    Dijkstra_code += "FOR i = 1,....,n DO <br>";
+    Dijkstra_code += "&emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
+    Dijkstra_code += "Tabla[Origen] <- 0 <br>";
+    Dijkstra_code += "queue.insert(Origen) <br>";
+    Dijkstra_code += "WHILE visitados != num_nodos DO <br>";
+    Dijkstra_code += "&emsp;node_analized <- queue.extract() <br>";
+    Dijkstra_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
+    Dijkstra_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+Padres[node_analized] <br>";
+    Dijkstra_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Padres[node_analized], Padres[destino]<-node_analized <br>";
+    Dijkstra_code += "&emsp;&emsp;IF destino IS NOT IN visitados AND destino IS NOT IN toAnalize <br>";
+    Dijkstra_code += "&emsp;&emsp;&emsp;toAnalize.insert(destino)<br>";
+    Dijkstra_code += "&emsp;IF toAnalize IS EMPTY <br>";
+    Dijkstra_code += "&emsp;&emsp;BREAK;<br>";
+    Dijkstra_code += "&emsp;queue.insert(toAnalize.extractMin),visited.insert(toAnalize.extractMin)<br>";
+    Dijkstra_code += "END <br>";
 
 
     document.getElementById("dijkstra-code").innerHTML = Dijkstra_code;
@@ -1165,6 +1175,7 @@ function Dijkstra(delay) {
         Tabla[i] = Infinity;
         Padres[i] = Infinity;
     }
+    document.getElementById("dijkstra-instruction").innerHTML = "FOR i = 1,....,n DO <br> &emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
 
     // Se 'imprime' instruccion en ejecución
 
@@ -1185,12 +1196,15 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
     queue.enqueue(start_node)
     console.log(Aristas.length);
     Tabla[start_node - 1] = 0;
-
-    while (visited.length != node_number) {
-        Dijkstra_code=" ";
+    document.getElementById("dijkstra-instruction").innerHTML = "Tabla["+start_node-1+"] <- 0";
+    document.getElementById("dijkstra-instruction").innerHTML = "queue.insert("+start_node+")";
+    while (visited.length != node_number){
+    document.getElementById("dijkstra-instruction").innerHTML = "WHILE visitados != "+node_number+" DO";
         var node_analized = queue.dequeue();
         console.log(node_analized);
         await visit_Node(node_analized, dij_nodes, delay);
+        document.getElementById("dijkstra-instruction").innerHTML = "node_analized <- "+node_analized;
+        document.getElementById("dijkstra-instruction").innerHTML = "FOR ALL (node_analized,destino) DO";
         await sleep(delay);
         for (var i = 0; i < Aristas.length; i++) {
 
@@ -1198,35 +1212,36 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
                 var flag = true;
 
                 /*Se Comprueba si el peso en los nodos destino requieren de una actualizacion */
-
+                document.getElementById("dijkstra-instruction").innerHTML = "IF "+Tabla[Aristas[i].destino-1]+" > "+ Aristas[i].peso + Tabla[node_analized - 1];
                 if (Tabla[Aristas[i].destino - 1] > Aristas[i].peso + Tabla[node_analized - 1]) {
                     Tabla[Aristas[i].destino - 1] = Aristas[i].peso + Tabla[node_analized - 1];
                     Padres[[Aristas[i].destino - 1]] = node_analized;
+                    document.getElementById("dijkstra-instruction").innerHTML = "Tabla["+Aristas[i].destino - 1+"] <- "+Aristas[i].peso + Tabla[node_analized - 1]+" , "+ "Padres["+Aristas[i].destino - 1+"]<-"+node_analized;
 
                     /*Comprueba si el nodo ya fue analizado o no*/
-
+                    
                     for (var j = 0; j < visited.length; j++) {
-
                         if (Aristas[i].destino == visited[j]||Aristas[i].destino==toAnalize[j]) {
                             flag = false;
                             break;
                         }
                     }
+                    document.getElementById("dijkstra-instruction").innerHTML = "IF destino IS NOT IN visitados AND destino IS NOT IN toAnalize"
                     if (flag) {
+                        document.getElementById("dijkstra-instruction").innerHTML ="toAnalize.insert("+Aristas[i].destino+")";
                         toAnalize.push(Aristas[i].destino);
                         highlightNode(Aristas[i].destino, dij_nodes);
-                        highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstranetwork, -1)
+                        highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstranetwork, -1);
                     }
 
 
                 }
             }
         }
-        toAnalize.forEach(element => {
-            Dijkstra_code+=" "+element;
-        });
+        document.getElementById("dijkstra-instruction").innerHTML = "IF toAnalize = 0";
         if (toAnalize.length == 0) {
             console.log("???");
+            document.getElementById("dijkstra-instruction").innerHTML = "END";
             break;
 
         }
@@ -1245,11 +1260,11 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
         }
         /*Se agrega el nodo a los analizados, se elimina de los posibles a analizar y se agrega a la cola para ser analizado en la
         siguiente iteracion */
-
+        
+        document.getElementById("dijkstra-instruction").innerHTML ="queue.insert("+min+") , "+"visited.insert("+min+")";
         visited.push(min);
         toAnalize.splice(aux, 1);
         queue.enqueue(min);
-        document.getElementById("dijkstra-code").innerHTML =node_analized+".>"+ Dijkstra_code;
     }
     /*Detecta si existe o no el camino mediante la tabla de pesos*/
     if (Tabla[target_node - 1] == Infinity) {

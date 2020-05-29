@@ -1132,6 +1132,203 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
 /* ---- Bellman-Ford ---- */
 
+var Bellman_sol;
+function Bellman_Ford() {
+    // Algoritmo para desplegar en HTML
+    var Bellman_code = "";
+    Bellman_sol = " ";
+    console.log("Bellford");
+    /*bfs_code += "var queue = new Queue();<br>";
+    bfs_code += "nodo_inicial = VISITED;<br>";
+    bfs_code += "queue.enqueue(nodo_inicial);<br>";
+    bfs_code += "while queue NOT EMPTY<br>";
+    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
+    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
+    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
+    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
+    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+    Codigo a
+    */
+    document.getElementById("belford-code").innerHTML = Bellman_code;
+
+    // Se obtiene el nodo de origen usansdo el id del input
+    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
+    var start_node = parseInt(document.getElementById("origin-belford").value); // En algunos algoritmos no se necesitará esto
+    var target_node = parseInt(document.getElementById("target-belford").value);
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var bel_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
+    var bel_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('belford-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var data = {
+        nodes: bel_nodes,
+        edges: bel_edges
+    };
+    var options = {};
+    var belford_network = new vis.Network(container, data, options);
+    //Hasta aqui es el proceso que siempre se debe de seguir para tener grafos independientes
+
+    var Tabla = [node_number - 1]
+    var Padres = [node_number - 1]
+    //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
+    var visited = [];
+    for (var i = 0; i < node_number; i++) {
+        Tabla[i] = Infinity;
+        Padres[i] = Infinity;
+        visited[i]=i+1;
+    }
+    //highlightNode(2,bel_nodes);
+    BelfordUtil(start_node,target_node,belford_network,bel_nodes,bel_edges,Tabla,Padres,visited);
+
+
+}
+
+async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, bel_edges, Tabla, Padres, visited) {
+
+    visited.splice(start_node-1,1);
+    visited.unshift(start_node);
+    
+    var queue = new Queue();
+    queue.enqueue(start_node)
+    Tabla[start_node - 1] = 0;
+    var iteracion=1;
+    
+    for(var i=0;i<1/*node_number-2*/;++i){
+        cleanGraph(bel_nodes,bel_edges);
+        for(var j=0;j<visited.length;j++){
+            console.log(visited[j]);
+            visit_Node(visited[j],bel_nodes);
+            for(var k=0;k<Aristas.length;k++){
+                if(Aristas[k].origen==visited[j]){
+                    highlightEdge(Aristas[k].ID,bel_edges,bel_nodes,belfordnetwork,-1)
+                    if(Tabla[Aristas[k].destino-1]>Aristas[k].peso+Tabla[ [Aristas[k].origen] -1]){
+                        Tabla[Aristas[k].destino-1]=Aristas[k].peso+Tabla[visited[j]-1]
+                        Padres[[Aristas[k].destino - 1]] = Aristas[k].origen;
+
+                    }
+                }
+            }
+        }
+        iteracion++;
+
+    }
+    if (Tabla[target_node - 1] == Infinity) {
+        Bellman_sol = "No hay un camino hacia ese nodo"
+    }
+    else {
+        var padre = Padres[target_node - 1];
+        var path = target_node;
+        var cont = 0;
+
+        /*Ciclo que construye el path a través de las posiciones de los padres */
+
+        while (padre != start_node && start_node != target_node) {
+
+            path = padre + " -> " + path;
+            padre = Padres[padre - 1];
+            cont++;
+        }
+        path = start_node + " -> " + path;
+        Bellman_sol = path + "<br>" + "Distancia: " + Tabla[target_node - 1];
+    }
+    document.getElementById("belford-result").innerHTML = Bellman_sol;
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+    // while (visited.length != node_number) {
+    //     var node_analized = queue.dequeue();
+
+    //     await visit_Node(node_analized, dij_nodes);
+    //     await sleep(1000);
+    //     for (var i = 0; i < Aristas.length; i++) {
+
+    //         if (Aristas[i].origen == node_analized) {
+    //             var flag = true;
+
+    //             /*Se Comprueba si el peso en los nodos destino requieren de una actualizacion */
+
+    //             if (Tabla[Aristas[i].destino - 1] > Aristas[i].peso + Tabla[node_analized - 1]) {
+    //                 Tabla[Aristas[i].destino - 1] = Aristas[i].peso + Tabla[node_analized - 1];
+    //                 Padres[[Aristas[i].destino - 1]] = node_analized;
+
+    //                 /*Comprueba si el nodo ya fue analizado o no*/
+
+    //                 for (var j = 0; j < visited.length; j++) {
+
+    //                     if (Aristas[i].destino == visited[j]) {
+    //                         flag = false;
+    //                         break;
+    //                     }
+    //                 }
+    //                 if (flag) {
+    //                     toAnalize.push(Aristas[i].destino);
+    //                     highlightNode(Aristas[i].destino, dij_nodes);
+    //                     highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstranetwork, -1)
+    //                 }
+
+    //             }
+    //         }
+    //     }
+    //     if (toAnalize.length == 0) {
+    //         break;
+
+    //     }
+    //     var pesominimo = Infinity;
+    //     var min = Infinity;
+    //     var aux;
+    //     //Variables auxiliares para detectar el menor peso dentro de los nodos que no se han analizado
+
+    //     /*De los nodos que se han descubierto, selecciona el de menor peso  */
+    //     for (var i = 0; i < toAnalize.length; i++) {
+    //         if ((Tabla[toAnalize[i] - 1]) < pesominimo) {
+    //             pesominimo = Tabla[toAnalize[i] - 1];
+    //             min = toAnalize[i];
+    //             aux = i;
+    //         }
+    //     }
+    //     /*Se agrega el nodo a los analizados, se elimina de los posibles a analizar y se agrega a la cola para ser analizado en la
+    //     siguiente iteracion */
+
+    //     visited.push(min);
+    //     toAnalize.splice(aux, 1);
+    //     queue.enqueue(min);
+    // }
+    // /*Detecta si existe o no el camino mediante la tabla de pesos*/
+    // if (Tabla[target_node - 1] == Infinity) {
+    //     Dijkstra_sol = "No hay un camino hacia ese nodo"
+    // }
+    // else {
+    //     var padre = Padres[target_node - 1];
+    //     var path = target_node;
+    //     var cont = 0;
+
+    //     /*Ciclo que construye el path a través de las posiciones de los padres */
+
+    //     while (padre != start_node && start_node != target_node) {
+
+    //         path = padre + " -> " + path;
+    //         padre = Padres[padre - 1];
+    //         cont++;
+    //     }
+    //     path = start_node + " -> " + path;
+    //     Dijkstra_sol = path + "<br>" + "Distancia: " + Tabla[target_node - 1];
+    // }
+    // document.getElementById("dijkstra-result").innerHTML = Dijkstra_sol;
+
+}
+
+
 
 /* ---- Floyd-Warshall ---- */
 

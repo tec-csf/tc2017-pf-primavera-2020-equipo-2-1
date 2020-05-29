@@ -442,9 +442,9 @@ document.getElementById("dfs-instruction").innerHTML = "&emsp;&emsp;for i in all
 document.getElementById("dfs-instruction").innerHTML = "END";
 
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-dfs").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
-    return execution_time; 
+    return execution_time;
 }
 
 
@@ -485,7 +485,8 @@ function BFS(delay)
 // Se 'imprime' instruccion en ejecución
 document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
 
-    BFSUtil(start_node, bfs_network, bfs_nodes, bfs_edges, delay);
+    var time = BFSUtil(start_node, bfs_network, bfs_nodes, bfs_edges, delay);
+    return time;
 }
 
 
@@ -545,8 +546,10 @@ document.getElementById("bfs-instruction").innerHTML = "&emsp;for i in all adyac
 document.getElementById("bfs-instruction").innerHTML = "END";
 
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-bfs").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+    return execution_time;
 }
 
 
@@ -615,16 +618,15 @@ function A_star(delay){
 
     // Se 'imprime' instrucción en ejecución
     document.getElementById("a-instruction").innerHTML = "A("+start_node+");";
-    
-    var time =AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node,delay);
-    return time;
 
+    var time = AUtil(start_node, a_network, a_nodes, a_edges,gScore,fScore,end_node,delay);
+    return time;
 }
 
 var current_weight;
 
 async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_node,delay) {
- 
+
      var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
 
      var open_set = [];
@@ -736,7 +738,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore,fScore,end_
 
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-a").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 }
 
@@ -860,8 +862,8 @@ function Prim(delay)
 // Se 'imprime' instruccion en ejecución
 document.getElementById("prim-instruction").innerHTML = "Prim("+start_node+");";
 
-
-    PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay);
+    var time = PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay);
+    return time;
 }
 
 
@@ -973,9 +975,12 @@ document.getElementById("prim-instruction").innerHTML = "ELSE IF parent(w) = NUL
         }
     }
 document.getElementById("prim-instruction").innerHTML = "END";
+
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-prim").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+    return execution_time;
 }
 
 
@@ -1007,14 +1012,14 @@ function Kruskal(delay)
 // Se 'imprime' instruccion en ejecución
 document.getElementById("kruskal-instruction").innerHTML = "Kruskal("+start_node+");";
 
-    KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, delay);
+    var time = KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, delay);
+    return time;
 }
 
 function KruskalUtil(delay)
 {
     var ti = performance.now();
-    execution_time = tf - ti;
-    document.getElementById("tiempo-dfs").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
     var visited = [];
     for (var i = 0; i < node_number; i++){
         visited[i] = false;
@@ -1023,8 +1028,11 @@ function KruskalUtil(delay)
     Aristas.sort(function(a, b){return a.peso-b.peso});
 
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-kruskal").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+    return execution_time;
+
 }
 
 
@@ -1079,8 +1087,8 @@ function Dijkstra(delay) {
 
     // Se 'imprime' instruccion en ejecución
 
-    DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes, dij_edges, Tabla, Padres, delay);
-
+    var time = DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes, dij_edges, Tabla, Padres, delay);
+    return time;
 
 }
 async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes, dij_edges, Tabla, Padres, delay) {
@@ -1178,10 +1186,10 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-dijkstra").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 
-
+    return execution_time;
 }
 
 
@@ -1189,45 +1197,41 @@ async function DijkstraUtil(start_node, target_node, dijkstranetwork, dij_nodes,
 function Belford(delay)
 {
 
+    var time = BelfordUtil(delay);
+    return time;
 }
 
 async function BelfordUtil(delay)
 {
     // Obtencion tiempos ejecucion; NO TOCAR
-    var tf = performance.now();
+    var ti = performance.now();
 
 
 
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+
+    return execution_time;
 }
 
 /* ---- Floyd-Warshall ---- */
 function Floyd(delay)
 {
-    // Obtencion tiempos ejecucion; NO TOCAR
-    var tf = performance.now();
 
-
-
-    // Obtencion tiempos ejecucion; NO TOCAR
-    var tf = performance.now();
-    execution_time = tf - ti;
-    document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 }
 
 async function FloydUtil(delay)
 {
     // Obtencion tiempos ejecucion; NO TOCAR
-    var tf = performance.now();
+    var ti = performance.now();
 
 
 
     // Obtencion tiempos ejecucion; NO TOCAR
     var tf = performance.now();
-    execution_time = tf - ti;
+    var execution_time = tf - ti;
     document.getElementById("tiempo-floyd").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 }
 
@@ -1265,7 +1269,7 @@ async function test_graph(){
             }
 
         ],  exporting: {
-            
+
             csv: {
                 columnHeaderFormatter: function(item, key) {
                     if (item.name) {
@@ -1316,7 +1320,7 @@ async function runAlgorithm(algorithm) {
 
                 break;
             case "bfs":
-                
+
 
                 categories_graph.push("BFS");
                 check_check_box=true;
@@ -1363,7 +1367,7 @@ async function runAlgorithm(algorithm) {
 
         var tf = performance.now()
         execution_time = tf - ti;
-        
+
         document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
         if(check_check_box){
         dataGraph.push(execution_time);

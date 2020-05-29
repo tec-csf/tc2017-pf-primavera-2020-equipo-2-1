@@ -129,7 +129,7 @@ function drawTestGraph() {
     for (i = 1; i <= no_nodes; ++i) {
         addNode(i);
     }
-      
+
       //Se colocan aristas entre los nodos
       addEdge(1, 3, 2, 1);
       addEdge(2, 3, 7, 2);
@@ -156,7 +156,7 @@ function drawTestGraph() {
           edges: edges
       };
       var options = {};
-  
+
       // Inicializar Network
       network = new vis.Network(container, data, options);
 }
@@ -369,6 +369,7 @@ document.getElementById("dfs-instruction").innerHTML = "stack.push["+start_node+
     while (stack.length > 0)
     {
         var node_analized = stack.pop();
+        var temp_stack = [];
         if(!visited[node_analized - 1])
         {
             await visit_Node(node_analized, dfs_nodes, delay);
@@ -391,11 +392,17 @@ await sleep(delay * 1.5);
                     var destination = dfs_edges.get(neighbors[i]).to;
 
 document.getElementById("dfs-instruction").innerHTML = "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;&emsp;stack.push(i)";
-
-                    stack.push(destination);
+                    // Organizo edges para que siga un orden ascendente de nodos
+                    temp_stack.push(destination);
                     highlightEdge(neighbors[i], dfs_edges, dfs_nodes, dfs_network, node_analized);
                 }
             }
+        }
+        // Con esto, el recorrido se hace en orden de nodos acendente
+        temp_stack.sort(function(a, b){return  b - a});
+        for(var i = 0; i < temp_stack.length; ++i)
+        {
+            stack.push(temp_stack[i]);
         }
     }
 document.getElementById("dfs-instruction").innerHTML = "END";
@@ -485,6 +492,7 @@ document.getElementById("bfs-instruction").innerHTML = "var queue = new Queue();
 document.getElementById("bfs-instruction").innerHTML = "while queue NOT EMPTY<br>&emsp;current_node = queue.dequeue();<br>";
 await sleep(delay-100);
 
+        var temp_queue = [];
         for (var i = 0; i < neighbors.length; i++)
         {
             if (bfs_edges.get(neighbors[i]).from == node_analized)
@@ -494,12 +502,18 @@ await sleep(delay-100);
                 {
 
 document.getElementById("bfs-instruction").innerHTML = "&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;if i NOT VISITED<br>&emsp;&emsp;&emsp;i = VISITED;<br>&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-
+                    // Organizo edges para que siga un orden ascendente de nodos
+                    temp_queue.push(destination);
                     highlightEdge(neighbors[i], bfs_edges, bfs_nodes, bfs_network, node_analized);
-                    queue.enqueue(destination);
                     visited[destination - 1] = true;
                 }
             }
+        }
+        // Con esto, el recorrido se hace en orden de nodos acendente
+        temp_queue.sort(function(a, b){return a - b});
+        for(var i = 0; i < temp_queue.length; ++i)
+        {
+            queue.enqueue(temp_queue[i]);
         }
     }
 document.getElementById("bfs-instruction").innerHTML = "END";

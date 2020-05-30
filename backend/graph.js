@@ -1552,7 +1552,7 @@ function Belford(delay)
     var Padres = [node_number - 1];
     //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
     var visited = [];
-    
+
     for (var i = 0; i < node_number; ++i)
     {
         Tabla[i] = Infinity;
@@ -1587,7 +1587,7 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
     visited.unshift(start_node);
 
     var queue = new Queue();
-    queue.enqueue(start_node)
+    queue.enqueue(start_node);
     Tabla[start_node - 1] = 0;
 
     for (var i=0;i<node_number-2;++i)
@@ -1644,21 +1644,122 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
 }
 
 /* ---- Floyd-Warshall ---- */
+var floyd_code;
 function Floyd(delay)
 {
+    // Algoritmo para desplegar en HTML
+    var floyd_code = "";
+    console.log("Floyd");
+    /*bfs_code += "var queue = new Queue();<br>";
+    bfs_code += "nodo_inicial = VISITED;<br>";
+    bfs_code += "queue.enqueue(nodo_inicial);<br>";
+    bfs_code += "while queue NOT EMPTY<br>";
+    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
+    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
+    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
+    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
+    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+    */
+    document.getElementById("floyd-code").innerHTML = floyd_code;
 
-  var time = FloydUtil(delay);
+    // Se obtiene el nodo de origen usansdo el id del input
+    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
+    // var start_node = parseInt(document.getElementById("origin-belford").value);
+    // var target_node = parseInt(document.getElementById("target-belford").value);
+    // Se tiene que volver a hacer un dibujo del grafo
+    // para tener animaciones individuales
+    var floyd_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
+    var floyd_edges = new vis.DataSet(edges.get());
+    var container = document.getElementById('floyd-network'); // Se hace la liga al contenedor del html respectivo a cada algoritmo (todos son 'algoritmo-network' -> checar html para obtener ids)
+    var data = {
+        nodes: floyd_nodes,
+        edges: floyd_edges
+    };
+    var options = {};
+    var floyd_network = new vis.Network(container, data, options);
+    //Hasta aqui es el proceso para tener grafos independientes
+
+    /*Proceso de creacion de matriz de adyacencia inicial*/
+
+    var dist = [];
+    for (var i = 0; i < node_number; i += 1) {
+      dist[i] = [];
+      for(var j=0;j<node_number;j++){
+          if(i==j){
+              dist[i][j]=0;
+          }
+          else{
+            dist[i][j]=Infinity;
+          }
+        }
+    }
+    dist.forEach(element => {
+        console.log(element);
+        
+    });
+    console.log("-----------------------")
+    for (var i = 0; i < node_number; i += 1) {
+        for(var j=0;j<node_number;j++){
+            for(var k=0;k<Aristas.length;k++){
+                if(Aristas[k].origen==i+1&&Aristas[k].destino==j+1){
+                    //console.log("si");
+                    dist[i][j]=Aristas[k].peso;
+                }
+            }
+          }
+      }
+      dist.forEach(element => {
+        console.log(element);
+    });
+    console.log("END")
+    //Fin inicializacion de matriz
+
+
+
+    var time = FloydUtil(floyd_network,floyd_nodes,floyd_edges,dist,delay);
+
   return time;
 }
 
 
-async function FloydUtil(delay)
+async function FloydUtil(floydnetwork, floyd_nodes, floyd_edges,dist,delay)
 {
     // Obtención tiempos ejecucion; NO TOCAR
     var ti = performance.now();
+    for(var k=0;k<node_number;++k){
+        for(var i=0;i<node_number;++i){
+            if(k!=i){
+                await sleep(delay*1.5);
+                markVisited_Node(i+1,floyd_nodes);
+                await sleep(delay*1.5);
+                for(var j=0;j<node_number;++j){
+                    if(j!=i&&j!=k){
+                        for(var n=0;n<Aristas.length;n++){
+                            if(Aristas[n].origen==i+1&&Aristas[n].destino==k+1){
+                                highlightEdge(Aristas[n].ID,floyd_edges,floyd_nodes,floydnetwork,-1);
+                            }
+                            if(Aristas[n].origen==k+1&&Aristas[n].destino==j+1){
+                                highlightEdge(Aristas[n].ID,floyd_edges,floyd_nodes,floydnetwork,-1);
+                            } 
 
-
-
+                        }
+                        await sleep(delay*1.5);
+                        markVisited_Node(j+1,floyd_nodes);
+                        await sleep(delay*1.5);
+                        if(dist[i][j]>dist[i][k]+dist[k][j]){
+                            dist[i][j]=dist[i][k]+dist[k][j]
+                        }
+                    }
+                }
+            }
+            cleanGraph(floyd_nodes,floyd_edges);
+        }
+        console.log("Iter: "+(k+1))
+        dist.forEach(element => {
+            console.log(element);
+        });
+        console.log("---------")
+    }
     // Obtención tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;

@@ -1344,49 +1344,6 @@ async function KruskalUtil(kruskal_nodes, kruskal_edges, delay)
     return execution_time;
 }
 
-class DisjointSet
-{
-   constructor(elements)
-   {
-      this.count = elements.length;
-      this.parent = { };
-
-      /* Al inicio, cada cluster será padre de si mismo */
-      elements.forEach(e => (this.parent[e] = e));
-   }
-
-   union(a, b)
-   {
-      let rootA = this.find(a);
-      let rootB = this.find(b);
-
-      // Roots are same so these are already connected.
-      if (rootA === rootB) return;
-
-      // Always make the element with smaller root the parent.
-      if (rootA < rootB) {
-         if (this.parent[b] != b) this.union(this.parent[b], a);
-         this.parent[b] = this.parent[a];
-      } else {
-         if (this.parent[a] != a) this.union(this.parent[a], b);
-         this.parent[a] = this.parent[b];
-      }
-   }
-
-   // Returns final parent of a node
-   find(a) {
-      while (this.parent[a] !== a) {
-         a = this.parent[a];
-      }
-      return a;
-   }
-
-   // Checks connectivity of the 2 nodes
-   connected(a, b) {
-      return this.find(a) === this.find(b);
-   }
-}
-
 
 /* ---- Dijkstra ----  // Rojo
  * @param delay: cantidad de milisegundos que se hará el atraso;

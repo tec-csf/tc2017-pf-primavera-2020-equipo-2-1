@@ -64,7 +64,7 @@ A continuación aparecen descritos los diferentes elementos que forman parte de 
 
 Para comenzar a desarrollar una solución con las características anteriormente descrita se realizó una arquitectura basada en un modelo de 3 capas, en el cual se detallaran los datos y componentes utilizados y las funciones anteriormente descritas. El diagrama es el siguiente: 
 
-![Settings Window](https://raw.github.com/tec-csf/tc2017-pf-primavera-2020-equipo-2-1/docs/Estructura_PFAlgoritmos.png)
+![Settings Window](https://github.com/tec-csf/tc2017-pf-primavera-2020-equipo-2-1/blob/master/docs/Estructura_PFAlgoritmos.png)
 
 Al observar la arquitectura anterior el flujo de la información fluye de la siguiente manera. El usuario puede acceder a la interfaz web a través del servicio de hosting elegido, en este caso una aplicación desplegada haciendo uso de *Google Cloud*. Esto permite acceder al usuario a todas las funciones, las cuales son presentadas gracias a un archivo *HTML* en combinación con *CSS*. Dese ahí, en primera instancia, el usuario podrá generar una gráfica, para lo cual se conectará a un archivo de *JavaScript*, el cual se encargará de la generación de la estructura del grafo y de las animaciones de este. Al generar un grafo el usuario también podrá optar por utilizar un archivo *.JSON* existente para cargar la información deseada, al hacerlo, el archivo de *JavaScript* también se encargará de cargar dicha información desde el archivo externo y mostrarla en el interfaz. Una vez echo esto, el usuario podrá navegar por la página para ejecutar los algoritmos de grafos, cuyo funcionamiento serpa ejecutado completamente por el código de *JavaScript*. Por último, el usuario tendrá la posibilidad de realizar una comparación con todos los algoritmos deseados, al hacerlo, se generará una gráfica con los resultados deseados, la cual podrá ser descargada a un archivo *.PDF* externo. También tendrá la opción de acceder a un gráfico con los resultados históricos, al hacerlo, el código de JavaScript se encargará de guardar los resultados actuales y también de obtener otros datos de un archivo *.TXT* o *.CSV* dado.  
 
@@ -90,10 +90,11 @@ Como tal no se hizo uso de ningún Framework para el desarrollo de la interfaz w
 #### 3.3.3 Librerías de funciones o dependencias
 
 Como fue mencionado anteriormente, *templates* para el desarrollo de la interfaz web fueron utilizados, lo cual únicamente representó el uso de las librerías para códigos de *CSS* que se encontraban incluidos en el mismo, dicha información fue adquirida de la página *w3schools*. De esta manera se hizo uso de las siguientes ligas:  
-	https://www.w3schools.com/w3css/tryw3css_templates_interior_design.htm#  
-	https://www.w3schools.com/w3css/4/w3.css   
-    https://fonts.googleapis.com/css?family=Poppins    
-	https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css  
+
+        https://www.w3schools.com/w3css/tryw3css_templates_interior_design.htm#  
+	    https://www.w3schools.com/w3css/4/w3.css   
+        https://fonts.googleapis.com/css?family=Poppins    
+	    https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css  
 
 ### 3.4 Backend
 
@@ -110,10 +111,11 @@ El *framework* de desarrollo utilizado fue en parte *Node.js*, ya que en él est
 #### 3.4.3 Librerías de funciones o dependencias
 
 Para el desarrollo de las funciones solicitadas por la aplicación se utilizaron 4 librerías: *vis.js*, utilizada para la estructura de los grafos, su visualización y animación; *JQuery*, utilizado para la lectura de y organización de la información obtenida de modo que esta pudiera ser graficada; *highcharts.js* para poder graficar los resultados obtenidos; y *parallel.js* para poder paralelizar ciertas secciones del código (a pesar de que en muchas ocasiones esto no era posible debido a la naturaleza propia de *JavaScript*).  
-    https://visjs.org/  
-	https://qunitjs.com/  
-	https://www.highcharts.com/  
-	https://parallel.js.org/  
+
+        https://visjs.org/  
+	    https://qunitjs.com/  
+	    https://www.highcharts.com/  
+	    https://parallel.js.org/  
 
 
 ### 3.5 API

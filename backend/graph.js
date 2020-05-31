@@ -1241,7 +1241,6 @@ function Kruskal(delay)
     kruskal_code += "&emsp;&emsp;let disj_set = new DisjointSet([nodo1, nodo2, ..., nodo#]);<br>";
     kruskal_code += "WHILE queue_edges ≠ ∅ AND disj_set.count > 1 DO<br>";
     kruskal_code += "&emsp;&emsp;{u, v} ← queue.extractMin();<br>";
-    kruskal_code += "&emsp;&emsp;{u, v} ← queue.extractMin();<br>";
     kruskal_code += "&emsp;&emsp;IF !(mst ∪ {{u, v}} has cycle)<br>";
     kruskal_code += "&emsp;&emsp;&emsp;&emsp;mst.add({u, v});<br>";
     kruskal_code += "&emsp;&emsp;&emsp;&emsp;merge(disj_set-of(u), disj_set-of(v))<br>";
@@ -1261,26 +1260,18 @@ function Kruskal(delay)
     var kruskal_network = new vis.Network(container, data, options);
     //Hasta aquí es el proceso para tener grafos independientes
 
-    // Se obtiene el nodo de origen usansdo el id del input en html
-    var start_node = parseInt(document.getElementById("origin-kruskal").value);
-
-    // Se 'imprime' instrucción en ejecución
-    document.getElementById("kruskal-instruction").innerHTML = "Kruskal("+start_node+");";
-
-    var time = KruskalUtil(start_node, kruskal_nodes, kruskal_edges, delay);
+    var time = KruskalUtil(kruskal_nodes, kruskal_edges, delay);
     return time;
 }
 
 
 /* Función principal que ejecuta algoritmo de Kruskal
- * @param start_node: indica cual será el nodo de inicio del recorrido;
-          recibido de html
  * @param kruskal_nodes: grupo de nodos sobre el cual se ejecutan comandos
  * @param kruskal_edges: grupo de aristas sobre el cual se ejecutan comandos
  * @param delay: cantidad de milisegundos que se hará el atraso;
           recibido de html y funciona para correr algoritmo rapido o lento
  */
-async function KruskalUtil(start_node, kruskal_nodes, kruskal_edges, delay)
+async function KruskalUtil(kruskal_nodes, kruskal_edges, delay)
 {
     kruskal_result = "";
     mst = [];
@@ -1298,15 +1289,22 @@ async function KruskalUtil(start_node, kruskal_nodes, kruskal_edges, delay)
     var cont = 0;
     var aristas = edge_number;
 
-    var ti = performance.now();
+    document.getElementById("kruskal-instruction").innerHTML = "mst ← ∅<br>queue_edges.sort(ascendente_peso);<br>FOREACH nodo in grafo<br>&emsp;&emsp;let disj_set = new DisjointSet([nodo1, nodo2, ..., nodo#]);<br>";
+    await sleep(delay * 0.6);
+
+    var ti = performance.now(); // Medición tiempo algoritmo
 
     while ((aristas > 0) && (disj_set.count > 1))
     {
+        document.getElementById("kruskal-instruction").innerHTML = "WHILE queue_edges ≠ ∅ AND disj_set.count > 1 DO<br>&emsp;&emsp;{u, v} ← queue.extractMin();<br>";
+
         highlightEdge(edges_array[cont].id, kruskal_edges);
         await sleep(delay);
 
         if (!disj_set.connected(edges_array[cont].from, edges_array[cont].to))
         {
+            document.getElementById("kruskal-instruction").innerHTML = "IF !(mst ∪ {{u, v}} has cycle)<br>&emsp;&emsp;mst.add({u, v});<br>&emsp;&emsp;merge(disj_set-of(u), disj_set-of(v))<br>";
+
             mst.push(edges_array[cont]);
             disj_set.union(edges_array[cont].from, edges_array[cont].to);
             aristas--;
@@ -1320,6 +1318,8 @@ async function KruskalUtil(start_node, kruskal_nodes, kruskal_edges, delay)
             kruskal_result += " -> ";
         } else
         {
+            document.getElementById("kruskal-instruction").innerHTML = "ELSE REMOVE EDGE<br>";
+
             resetAnimation_Edge(edges_array[cont].id, kruskal_edges);
             dashEdge(edges_array[cont].id, kruskal_edges);
             await sleep(delay);

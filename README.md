@@ -144,5 +144,5 @@ Para el desarrollo de las funciones solicitadas por la aplicación se utilizaron
 
 ## 4. Referencias
 
-\[1\] w3schools (1998) *HTML*. w3schools.com. Obtenido de: https://www.w3schools.com/
-\[2\] vis.js *Network*. vis.js. Obtenido de: https://visjs.github.io/vis-network/docs/network/
+\[1\] w3schools (1998) *HTML*. w3schools.com. Obtenido de: https://www.w3schools.com/  
+\[2\] vis.js *Network*. vis.js. Obtenido de: https://visjs.github.io/vis-network/docs/network/  

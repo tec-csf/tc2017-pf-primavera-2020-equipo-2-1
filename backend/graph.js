@@ -155,15 +155,15 @@ function drawTestGraph() {
       addEdge(6, 7, 8, 3);5
       addEdge(7, 7, 14, 2);6
       addEdge(8, 8, 10, 6);7
-      addEdge(9, 8, 6, -2);8
+      addEdge(9, 8, 6, 2);8
       addEdge(10, 1, 4, 7);9
       addEdge(11, 1, 5, 9);10
-      addEdge(12, 6, 9, -9);
+      addEdge(12, 6, 9, 9);
       addEdge(13, 14, 10, 4);
       addEdge(14, 10, 12, 7);
       addEdge(15, 10, 11, 8);
       addEdge(16, 5, 11, 9);
-      addEdge(17, 9, 8, -9);
+      addEdge(17, 9, 8, 9);
       addEdge(18, 11, 13, 2);
 
       var container = document.getElementById('mynetwork');

@@ -452,21 +452,20 @@ body {font-size:16px;}
               <p id="tiempo-floyd" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto; width: 500px;">
                 <p id="floyd-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
-            <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
-                <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            <div><p> Resultado </p></div>
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto; width: 500px;">
+                <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Caminos mínimos...</p>
             </div>
             <div style="margin-top:20px;">
-                <div style="float: left; width: 50%;"><input id="origin-floyd" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
                 <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Floyd(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
                     <a onclick="Floyd(2000);"> Lento </a>
-                    <a onclick="Floyd(2000);"> Normal </a>
+                    <a onclick="Floyd(50);"> Normal </a>
                   </div>
                 </div>
             </div>

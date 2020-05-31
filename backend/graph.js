@@ -147,23 +147,23 @@ function drawTestGraph() {
     }
 
       // Se colocan aristas entre los nodos
-      addEdge(1, 3, 2, 1);
-      addEdge(2, 3, 7, 2);
-      addEdge(3, 2, 8, 8);
-      addEdge(4, 2, 1, 6);
-      addEdge(5, 7, 6, 4);
-      addEdge(6, 7, 8, 3);
-      addEdge(7, 7, 14, 2);
-      addEdge(8, 8, 10, 6);
-      addEdge(9, 8, 6, 2);
-      addEdge(10, 1, 4, 7);
-      addEdge(11, 1, 5, 9);
+      addEdge(1, 3, 2, 1);0
+      addEdge(2, 3, 7, 2);1
+      addEdge(3, 2, 8, 8);2
+      addEdge(4, 2, 1, 6);3
+      addEdge(5, 7, 6, 4);4
+      addEdge(6, 7, 8, 3);5
+      addEdge(7, 7, 14, 2);6
+      addEdge(8, 8, 10, 6);7
+      addEdge(9, 8, 6, -2);8
+      addEdge(10, 1, 4, 7);9
+      addEdge(11, 1, 5, 9);10
       addEdge(12, 6, 9, -9);
       addEdge(13, 14, 10, 4);
       addEdge(14, 10, 12, 7);
       addEdge(15, 10, 11, 8);
       addEdge(16, 5, 11, 9);
-      addEdge(17, 9, 8, 9);
+      addEdge(17, 9, 8, -9);
       addEdge(18, 11, 13, 2);
 
       var container = document.getElementById('mynetwork');
@@ -1362,8 +1362,8 @@ function Dijkstra(delay)
     dijkstra_code += "WHILE visitados != num_nodos DO <br>";
     dijkstra_code += "&emsp;node_analized <- queue.extract() <br>";
     dijkstra_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
-    dijkstra_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+Padres[node_analized] <br>";
-    dijkstra_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Padres[node_analized], Padres[destino]<-node_analized <br>";
+    dijkstra_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+Tabla[node_analized] <br>";
+    dijkstra_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Tabla[node_analized], Padres[destino]<-node_analized <br>";
     dijkstra_code += "&emsp;&emsp;IF destino IS NOT IN visitados AND destino IS NOT IN toAnalize <br>";
     dijkstra_code += "&emsp;&emsp;&emsp;toAnalize.insert(destino)<br>";
     dijkstra_code += "&emsp;IF toAnalize IS EMPTY <br>";
@@ -1532,6 +1532,18 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
         toAnalize.splice(aux, 1);
         queue.enqueue(min);
     }
+    var str;
+    str=" ";
+    Padres.forEach(element => {
+        str+=" "+element;
+    });
+    console.log("PAdres: "+str);
+    str=" ";
+    Tabla.forEach(element => {
+        str+=" "+element;
+    });
+    console.log("PESOS: "+str);
+
 
     /* Detecta si existe o no el camino mediante la tabla de pesos */
     if (Tabla[target_node - 1] == Infinity)
@@ -1572,18 +1584,25 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
 function Belford(delay)
 {
     // Algoritmo para desplegar en HTML
-    var Bellman_code = "";
     console.log("Bellford");
-    // bfs_code += "var queue = new Queue();<br>";
-    // bfs_code += "nodo_inicial = VISITED;<br>";
-    // bfs_code += "queue.enqueue(nodo_inicial);<br>";
-    // bfs_code += "while queue NOT EMPTY<br>";
-    // bfs_code += "&emsp;current_node = queue.dequeue();<br>";
-    // bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
-    // bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
-    // bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
-    // bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-    document.getElementById("belford-code").innerHTML = Bellman_code;
+    document.getElementById("belford-result").innerHTML = " ";
+    var bellman_code = "var Tabla[]; <br>";
+    bellman_code += "var Padres[]; <br>";
+    bellman_code += "BEGIN <br>";
+
+    bellman_code += "FOR i = 1,....,n DO <br>";
+    bellman_code += "&emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
+    bellman_code += "Tabla[Origen] <- 0 <br>";
+    bellman_code += "FOR i= 1....,num_nodos DO <br>";
+    bellman_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
+    bellman_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+ Tabla[node_analized] <br>";
+    bellman_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Tabla[node_analized], Padres[destino]<-node_analized <br>";
+    bellman_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
+    bellman_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+ Tabla[node_analized] <br>";
+    bellman_code += "&emsp;&emsp;&emsp;ciclo_negativo <- true, BREAK <br>";
+    bellman_code += "END <br>";
+    document.getElementById("belford-code").innerHTML = bellman_code;
+    
 
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
@@ -1606,13 +1625,16 @@ function Belford(delay)
     var Padres = [node_number - 1];
     // Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
     var visited = [];
-
+    document.getElementById("belford-instruction").innerHTML = "BEGIN";
+    document.getElementById("belford-instruction").innerHTML = "FOR i = 1,....,n DO";
     for (var i = 0; i < node_number; ++i)
     {
         Tabla[i] = Infinity;
         Padres[i] = Infinity;
         visited[i]= i + 1;
     }
+    document.getElementById("belford-instruction").innerHTML = "Tabla[i] <- infinity, Padres[i] <- infinity,";
+
 
     var time = BelfordUtil(start_node, target_node, belford_network, bel_nodes, bel_edges, Tabla, Padres, visited, delay);
     return time;
@@ -1636,69 +1658,79 @@ function Belford(delay)
 async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, bel_edges, Tabla, Padres, visited,delay)
 {
     var ti = performance.now();
+    
     visited.splice(start_node - 1, 1);
     visited.unshift(start_node);
 
-    var queue = new Queue();
-    queue.enqueue(start_node);
     Tabla[start_node - 1] = 0;
 
-    for (var i = 0; i < node_number - 2; ++i)
+    document.getElementById("belford-instruction").innerHTML = "FOR i= 1....,"+(node_number -1)+ " DO";
+    
+    for (var i = 0; i < node_number - 1; ++i)
     {
         cleanGraph(bel_nodes, bel_edges);
         for (var j = 0;j < visited.length; ++j)
         {
             await sleep(delay * 1.5);
             markVisited_Node(visited[j], bel_nodes);
-            await sleep(delay);
-
+           await sleep(delay);
+            document.getElementById("belford-instruction").innerHTML = "FOR ALL (Aristas,origen,destino) DO";
             for (var k=0;k<Aristas.length;++k)
             {
                 if (Aristas[k].origen==visited[j])
                 {
                     highlightEdge(Aristas[k].ID, bel_edges);
                     await sleep(delay);
-
-                    if (Tabla[Aristas[k].destino - 1] > Aristas[k].peso + Tabla[[Aristas[k].origen] - 1])
+                    document.getElementById("belford-instruction").innerHTML = "Tabla["+(Aristas[k].destino - 1)+"]> "+Aristas[k].peso +" + Tabla["+(Aristas[k].origen- 1)+"]";
+                    if ( Tabla[Aristas[k].destino - 1] > Aristas[k].peso + Tabla[Aristas[k].origen - 1])
                     {
-                        Tabla[Aristas[k].destino-1] = Aristas[k].peso + Tabla[visited[j] - 1];
+                        Tabla[Aristas[k].destino-1] = Aristas[k].peso + Tabla[Aristas[k].origen - 1];
                         Padres[[Aristas[k].destino - 1]] = Aristas[k].origen;
+                        document.getElementById("belford-instruction").innerHTML = "IF Tabla["+(Aristas[k].destino - 1)+"] <- "+Aristas[k].peso +" + Tabla["+(Aristas[k].origen- 1)+"], Padres["+(Aristas[k].destino - 1)+"] <- "+(Aristas[k].origen - 1);
+
                     }
                 }
             }
+        
         }
+
     }
+
     var ciclo_n = false;
     // Hace una iteración mas para comprobar si hay o no un ciclo negativo
     for (var j = 0; j < visited.length; ++j)
+    {
+        await sleep(delay * 1.5);
+        markVisited_Node(visited[j], bel_nodes);
+        await sleep(delay);
+        document.getElementById("belford-instruction").innerHTML = "FOR ALL (Aristas,origen,destino) DO";
+        for (var k = 0; k < Aristas.length; ++k)
         {
-            await sleep(delay * 1.5);
-            markVisited_Node(visited[j], bel_nodes);
-            await sleep(delay);
-
-            for (var k = 0; k < Aristas.length; ++k)
+            if (Aristas[k].origen == visited[j])
             {
-                if (Aristas[k].origen == visited[j])
-                {
-                    highlightEdge(Aristas[k].ID, bel_edges);
-                    await sleep(delay);
-                    if (Tabla[Aristas[k].destino - 1] > Aristas[k].peso + Tabla[[Aristas[k].origen] - 1])
-                    console.log("WAT");
+                highlightEdge(Aristas[k].ID, bel_edges,bel_nodes,belfordnetwork,-1);
+                await sleep(delay);
+                document.getElementById("belford-instruction").innerHTML = "IF Tabla["+(Aristas[k].destino - 1)+"]> "+Aristas[k].peso +" + Tabla["+(Aristas[k].origen- 1)+"]";
+                if (Tabla[Aristas[k].destino - 1] > (Aristas[k].peso + Tabla[[Aristas[k].origen] - 1])){
                     ciclo_n = true;
+                    document.getElementById("belford-instruction").innerHTML = "ciclo_negativo <- true , BREAK";
                     break;
                 }
             }
-            if (ciclo_n) { break; }
         }
+        if (ciclo_n) { break; }
+    }
     if (ciclo_n)
     {
         Bellman_sol = "Hay un ciclo negativo, no existe solución";
     }
     else if (Tabla[target_node - 1] == Infinity)
     {
+        document.getElementById("belford-instruction").innerHTML = "END";
         Bellman_sol = "No hay un camino hacia ese nodo";
     } else
     {
+        document.getElementById("belford-instruction").innerHTML = "END";
         var padre = Padres[target_node - 1];
         var path = target_node;
         var cont = 0;

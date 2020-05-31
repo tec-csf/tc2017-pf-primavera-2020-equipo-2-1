@@ -158,7 +158,7 @@ function drawTestGraph() {
       addEdge(9, 8, 6, 2);
       addEdge(10, 1, 4, 7);
       addEdge(11, 1, 5, 9);
-      addEdge(12, 6, 9, 9);
+      addEdge(12, 6, 9, -9);
       addEdge(13, 14, 10, 4);
       addEdge(14, 10, 12, 7);
       addEdge(15, 10, 11, 8);
@@ -1657,10 +1657,39 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
             }
         }
     }
-    if (Tabla[target_node - 1] == Infinity)
+    var ciclo_n=false;
+    //Hace una iteracion mas para comprobar si hay o no un ciclo negativo
+    for (var j=0;j<visited.length;++j)
+        {
+            await sleep(delay * 1.5);
+            markVisited_Node(visited[j],bel_nodes);
+            await sleep(delay);
+            for (var k=0;k<Aristas.length;++k)
+            {
+                if (Aristas[k].origen==visited[j])
+                {
+                    highlightEdge(Aristas[k].ID,bel_edges,bel_nodes,belfordnetwork,-1);
+                    await sleep(delay);
+                    if (Tabla[Aristas[k].destino-1]>Aristas[k].peso+Tabla[ [Aristas[k].origen] -1])
+                    console.log("WAT");
+                    ciclo_n=true;
+                    break;
+                }
+            }
+            if(ciclo_n)
+            {
+                break;
+            }
+        }
+    if(ciclo_n)
+    {
+        Bellman_sol = "Hay un ciclo negativo, no existe solucion";
+    } 
+    else if (Tabla[target_node - 1] == Infinity)
     {
         Bellman_sol = "No hay un camino hacia ese nodo";
-    } else
+    }
+    else
     {
         var padre = Padres[target_node - 1];
         var path = target_node;

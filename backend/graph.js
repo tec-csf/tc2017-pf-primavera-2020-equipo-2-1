@@ -1437,12 +1437,14 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
     console.log(Aristas.length);
 
     Tabla[start_node - 1] = 0;
-
+    var progress=100/node_number
+    var cont=0;
     document.getElementById("dijkstra-instruction").innerHTML = "Tabla["+start_node-1+"] <- 0";
     document.getElementById("dijkstra-instruction").innerHTML = "queue.insert("+start_node+")";
 
     while (visited.length != node_number)
     {
+        load_progressBar("dijkstra",progress*cont);
         document.getElementById("dijkstra-instruction").innerHTML = "WHILE visitados != "+node_number+" DO";
 
         var node_analized = queue.dequeue();
@@ -1532,19 +1534,7 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
         toAnalize.splice(aux, 1);
         queue.enqueue(min);
     }
-    var str;
-    str=" ";
-    Padres.forEach(element => {
-        str+=" "+element;
-    });
-    console.log("PAdres: "+str);
-    str=" ";
-    Tabla.forEach(element => {
-        str+=" "+element;
-    });
-    console.log("PESOS: "+str);
-
-
+    load_progressBar("dijkstra",100);
     /* Detecta si existe o no el camino mediante la tabla de pesos */
     if (Tabla[target_node - 1] == Infinity)
     {
@@ -1658,16 +1648,17 @@ function Belford(delay)
 async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, bel_edges, Tabla, Padres, visited,delay)
 {
     var ti = performance.now();
-    
+    var progress=100/(node_number-1);
     visited.splice(start_node - 1, 1);
     visited.unshift(start_node);
 
     Tabla[start_node - 1] = 0;
 
     document.getElementById("belford-instruction").innerHTML = "FOR i= 1....,"+(node_number -1)+ " DO";
-    
     for (var i = 0; i < node_number - 1; ++i)
     {
+        load_progressBar("belford",progress*i);
+        console.log("p "+progress);
         cleanGraph(bel_nodes, bel_edges);
         for (var j = 0;j < visited.length; ++j)
         {
@@ -1753,6 +1744,7 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+    load_progressBar("belford",100);
     return execution_time;
 }
 
@@ -1843,7 +1835,7 @@ async function FloydUtil(floyd_nodes, floyd_edges, dist, delay)
 {
     // Obtención tiempos ejecucion; NO TOCAR
     var ti = performance.now();
-
+    var progress=100/node_number;
     var result = " ";
     document.getElementById("floyd-result").innerHTML = result;
     document.getElementById("floyd-instruction").innerHTML ="FOR k= 0....,"+(node_number-1) +" Do";
@@ -1852,6 +1844,7 @@ async function FloydUtil(floyd_nodes, floyd_edges, dist, delay)
 
     /* Ciclos anidados para analizar la distancia pasando por un nodo intermedio */
     for (var k = 0; k < node_number; ++k) {
+        load_progressBar("floyd",progress*k);
         for (var i = 0; i < node_number; ++i) {
             if (k != i) { // No se analiza esta posición k=i porque los pesos serían iguales
 
@@ -1908,6 +1901,7 @@ async function FloydUtil(floyd_nodes, floyd_edges, dist, delay)
     // Obtención tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
+    load_progressBar("floyd",100);
     document.getElementById("tiempo-floyd").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 
     return execution_time;
@@ -2020,23 +2014,23 @@ async function runAlgorithm(algorithm)
                 break;
             case "dijkstra":
                 document.getElementById("target-dijkstra").value = parseInt(document.getElementById("target-all").value);
-                load_progressBar(algorithm, 60);
+                //load_progressBar(algorithm, 60);
                 await Dijkstra(50);
-                load_progressBar(algorithm, 100);
+                //load_progressBar(algorithm, 100);
                 categories_graph.push("Dijkstra");
                 check_check_box = true;
                 break;
             case "belford":
                 document.getElementById("target-belford").value = parseInt(document.getElementById("target-all").value);
-                load_progressBar(algorithm, 60);
+                //load_progressBar(algorithm, 60);
                 await Belford(50);
-                load_progressBar(algorithm, 100);
+                //load_progressBar(algorithm, 100);
                 categories_graph.push("Belford");
                 check_check_box = true;
                 break;
             case "floyd":
                 // Ingresar código del algoritmo con velocidad normal
-
+                await Floyd(50);
                 categories_graph.push("Floyd");
                 check_check_box = true;
                 break;

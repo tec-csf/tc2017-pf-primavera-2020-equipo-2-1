@@ -1,4 +1,7 @@
 /* ---- VARIABLES GLOBALES ---- */
+// Start the main app logic.
+
+
 var nodes = new vis.DataSet();
 var edges = new vis.DataSet();
 var network = null;
@@ -8,6 +11,10 @@ var categories_graph = [];
 var node_number, edge_number;
 var edges_array = [];
 var Aristas = [];
+var global_counter=0;
+
+var series_chart=[];
+var all_categories=["DFS","BFS","A*","Prim","Kruskal","Dijkstra","Bellman","Floyd"]
 
 /* ---- ALGORITMOS PARA LA CREACIÓN DE GRAFO ---- */
 
@@ -739,9 +746,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
             a_result += "<br>"
             document.getElementById("a-result").innerHTML = a_result;
 
-            console.log(getpath);
-
-            draw_path(start_node,end_node,getpath);
+            draw_path(start_node,end_node,getpath,a_result);
             document.getElementById("a-instruction").innerHTML = "END";
 
             var tf = performance.now();
@@ -791,7 +796,6 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
 
                     if (newPath)
                     {
-                        //console.log("Debug");
 
                         fScore[neighbor] = tempG;
 
@@ -841,7 +845,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
  * @param end_node:
  * @param array:
  */
-async function draw_path(start_node, end_node, array)
+async function draw_path(start_node, end_node, array, a_result)
 {
     var end = end_node;
     var start = start_node;
@@ -849,7 +853,7 @@ async function draw_path(start_node, end_node, array)
     var print = "";
     var save;
 
-    a_result += "<br>Camino Óptimo:<br>"
+    a_result += "<br>Camino Óptimo:<br>";
 
     array[0].tempG = 1;
     temp.push(end_node);
@@ -894,7 +898,6 @@ async function draw_path(start_node, end_node, array)
                 }
                 if (!temp.includes(end))
                 {
-                    console.log(end);
                     temp.push(end);
                 }
             }
@@ -1055,29 +1058,27 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     queue.push(start_node);
     highlightNode(start_node, prim_nodes);
 
-    console.log("Queue begin: " + queue);
     while (queue.length > 0)
     {
         document.getElementById("prim-instruction").innerHTML = "WHILE queue ≠ ∅ DO<br>";
-        console.log("Queue while: " + queue);
+
 
         // Obtener el nodo que tenga la arista más corta
         var min = Infinity;
         var pos_min = 0, pos_edge = 0;
         for (var i = 0; i < queue.length; ++i)
         {
-            console.log("For de: " + queue[i] + ", sacaremos sus edges.");
+  
             var temp = prim_network.getConnectedEdges(queue[i]);
 
             for (var j = 0; j < temp.length; ++j)
             {
-                console.log("prim_edges.get(temp[j]).from  = " + prim_edges.get(temp[j]).from);
-                console.log("parent[queue[i] - 1]  = " + parent[queue[i] - 1]);
+
                 if (prim_edges.get(temp[j]).from == parent[queue[i] - 1])
                 {
                     if (parseInt(prim_edges.get(temp[j]).label) < min)
                     {
-                        console.log(queue[i]+ "sutituyó min == " + min + " con un valor de : "+ prim_edges.get(temp[j]).label);
+                       
                         min = parseInt(prim_edges.get(temp[j]).label);
                         pos_min = i;
                         pos_edge = j;
@@ -1087,7 +1088,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
         }
 
         var node_analized = queue[pos_min];
-        console.log("Nodo analizado: " + node_analized);
+
 
         await sleep(delay * 1.5);
         markVisited_Node(node_analized, prim_nodes);
@@ -1161,7 +1162,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     for (var i = 0; i < edges_array.length; ++i)
     {
         ids_edges.push(edges_array[i].id);
-        console.log("id: "+ids_edges[i]);
+ 
     }
 
     for (var i = 0; i < ids_edges.length; ++i)
@@ -1289,7 +1290,7 @@ function KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, 
  */
 function Dijkstra(delay)
 {
-    console.log("flag Dijkstra");
+
     // Algoritmo para desplegar en HTML
     var dijkstra_code = "var visitados[]; <br>";
     dijkstra_code += "var toAnalize[]; <br>";
@@ -1377,7 +1378,6 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
     visited.push(start_node);
     queue.enqueue(start_node)
 
-    console.log(Aristas.length);
 
     Tabla[start_node - 1] = 0;
 
@@ -1389,7 +1389,7 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
         document.getElementById("dijkstra-instruction").innerHTML = "WHILE visitados != "+node_number+" DO";
 
         var node_analized = queue.dequeue();
-        console.log(node_analized);
+
         await  markVisited_Node(node_analized, dij_nodes, delay);
 
         document.getElementById("dijkstra-instruction").innerHTML = "node_analized <- "+ node_analized + "<br> FOR ALL (node_analized,destino) DO";
@@ -1445,7 +1445,7 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
 
         if (toAnalize.length == 0)
         {
-            console.log("???");
+
             document.getElementById("dijkstra-instruction").innerHTML = "END";
             break;
         }
@@ -1771,10 +1771,10 @@ async function FloydUtil(floydnetwork, floyd_nodes, floyd_edges,dist,delay)
 
 /* -------------------------------------------------------------------------- */
 /* --------------------- TEST DE GRÁFICAS ------------------------ */
-var chart;
+var charts;
 $('#exportar_pdf').click(function ()
 {
-    chart.exportChart({
+    charts.exportChart({
         type: 'application/pdf',
         filename: 'my-pdf'
     });
@@ -1783,7 +1783,9 @@ $('#exportar_pdf').click(function ()
 
 async function test_graph()
 {
-    chart = Highcharts.chart('grafico-algoritmos',
+
+
+    charts = Highcharts.chart('grafico-algoritmos',
     {
         chart: { type: 'bar' },
         title: { text: 'Tiempos de Comparación' },
@@ -1804,10 +1806,116 @@ async function test_graph()
             }
         }
     });
+
+
 }
 
 
-function downlaodCsv() { chart.downloadCSV() }
+function downlaodCsv() { charts.downloadCSV() }
+
+function resultados_históricos(){
+    charts.length=0;
+     charts = Highcharts.chart('grafico-algoritmos',
+    {
+
+        chart: { type: 'bar' },
+        title: { text: 'Tiempos de Comparación' },
+        xAxis: { categories:all_categories },
+        yAxis: { title: { text: 'Milisegundos' } },
+        series: series_chart,
+        exporting: {
+            csv: {
+                columnHeaderFormatter: function(item, key)
+                {
+                    if (item.name)
+                    {
+                      return item.name
+                    }
+                    return item.bar
+                },
+                lineDelimiter: '\n'
+            }
+        }
+    });
+
+}
+
+
+/*
+$(function () {
+    $("#hist").click(testPOST);
+    
+    var exportUrl = 'http://export.highcharts.com/';
+
+    function testPOST() {
+        
+        var optionsStr = JSON.stringify({
+            "xAxis": {
+                "categories": ["Jan", "Feb", "Mar"]
+            },
+                "series": [{
+                "data": [29.9, 71.5, 106.4]
+            }]
+        }),
+        dataString = encodeURI('async=true&type=jpeg&width=400&options=' + optionsStr);
+
+        if (window.XDomainRequest) {
+            var xdr = new XDomainRequest();
+            xdr.open("post", exportUrl+ '?' + dataString);
+            xdr.onload = function () {
+                console.log(xdr.responseText);
+                $('#container').html('<img src="' + exporturl + xdr.responseText + '"/>');
+            };
+            xdr.send();
+        } else {
+            $.ajax({
+                type: 'POST',
+                data: dataString,
+                url: exportUrl,
+                success: function (data) {
+                    console.log('get the file from relative url: ', data);
+                    $('#container').html('<img src="' + exportUrl + data + '"/>');
+                },
+                error: function (err) {
+                    debugger;
+                    console.log('error', err.statusText)
+                }
+            });
+        }
+
+    }
+});
+*/
+
+
+async function balance_data(){
+    var temp=[]
+    var counter=0;
+    if(categories_graph.includes(all_categories[3])){
+        console.log("AHUEVIOO}")
+    }
+    //console.log(categories_graph);
+    for (var i =0;i<categories_graph.length;++i){
+        console.log("h "+categories_graph[i])
+        console.log(dataGraph[i])
+    }
+    for(var i =0;i<8;++i){
+        //algo=all_categories[i];
+        //console.log(categories_graph.indexOf(all_categories[i]));
+        //console.log(dataGraph[0])
+
+        if(categories_graph.indexOf(all_categories[i]) > -1){
+            temp.push(dataGraph[categories_graph.indexOf(all_categories[i])]);   
+        }else{
+            temp.push(0);
+        }
+    }
+    console.log(temp);
+
+    series_chart.push({name:"Grafo"+global_counter, data:temp});
+
+
+}
 
 
 /* -------------------------------------------------------------------------- */
@@ -1887,7 +1995,7 @@ async function runAlgorithm(algorithm)
                 load_progressBar(algorithm, 60);
                 await Belford(50);
                 load_progressBar(algorithm, 100);
-                categories_graph.push("Belford");
+                categories_graph.push("Bellman");
                 check_check_box=true;
                 break;
             case "floyd":
@@ -1912,13 +2020,11 @@ async function runAlgorithm(algorithm)
 }
 
 /* Ejecuta todos los algoritmos seleccionados en la sección de comparación */
-function compareAlgorithms()
+async function compareAlgorithms()
 {
-    dataGraph.length=0;
-    categories_graph.length=0;
+
     /* Paralelización: sirve, pero no para esto (no puede hacer métodos para accesar al HTML) */
     //var p = new Parallel(["dfs", "bfs", "a", "prim", "kruskal", "dijkstra", "belford", "floyd"], {evalPath: './eval.js'});
-    //console.log(p.data);
     //p.map(runAlgorithm);
 
     //Estas llamadas son las que deberemos paralelizar
@@ -1931,7 +2037,11 @@ function compareAlgorithms()
     runAlgorithm("belford");
     runAlgorithm("floyd");
 
+    global_counter++;
+
     //Se genera la gráfica
+    dataGraph.length=0;
+    categories_graph.length=0;
 }
 
 /* ---- "MAIN" ---- */

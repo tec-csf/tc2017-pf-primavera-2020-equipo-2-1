@@ -417,11 +417,12 @@ function DFS(delay)
     dfs_code += "var stack = [];<br>";
     dfs_code += "stack.push(nodo_inicial);<br>";
     dfs_code += "while stack NOT EMPTY<br>";
-    dfs_code += "&emsp;current_node = stack.pop();<br>";
-    dfs_code += "&emsp;if current_node NOT VISITED;<br>";
-    dfs_code += "&emsp;&emsp;current_node = VISITED;<br>";
-    dfs_code += "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>";
-    dfs_code += "&emsp;&emsp;&emsp;stack.push(i)";
+    dfs_code += "&emsp;&emsp;current_node = stack.pop();<br>";
+    dfs_code += "&emsp;&emsp;if current_node NOT VISITED;<br>";
+    dfs_code += "&emsp;&emsp;&emsp;&emsp;current_node = VISITED;<br>";
+    dfs_code += "&emsp;&emsp;&emsp;&emsp;for i in all adyacent_edges(current_node)<br>";
+    dfs_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;stack.push(i)";
+    dfs_code += "END";
     document.getElementById("dfs-code").innerHTML = dfs_code;
 
     // Se tiene que volver a hacer un dibujo del grafo
@@ -435,13 +436,10 @@ function DFS(delay)
     };
     var options = { };
     var dfs_network = new vis.Network(container, data, options);
-    // Hasta aqí es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
     // Se obtiene el nodo de origen usando el id del input en html
     var start_node = parseInt(document.getElementById("origin-dfs").value);
-
-    // Se 'imprime' instrucción en ejecución
-    document.getElementById("dfs-instruction").innerHTML = "DFS("+start_node+");";
 
     var time = DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay);
     return time;
@@ -472,16 +470,20 @@ async function DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay)
     var stack = [];
     stack.push(start_node);
 
-    document.getElementById("dfs-instruction").innerHTML = "stack.push["+start_node+"];";
+    document.getElementById("dfs-instruction").innerHTML = "var stack = [];<br>stack.push(nodo_inicial);<br>";
 
     highlightNode(start_node, dfs_nodes);
+    await sleep(delay);
+
     while (stack.length > 0)
     {
+        document.getElementById("dfs-instruction").innerHTML = "while stack NOT EMPTY<br>&emsp;&emsp;current_node = stack.pop();<br>";
+
         var node_analized = stack.pop();
         var temp_stack = [];
         if (!visited[node_analized - 1])
         {
-            await sleep(delay * 1.5);
+            await sleep(delay);
             markVisited_Node(node_analized, dfs_nodes)
 
             dfs_result += node_analized;
@@ -492,21 +494,29 @@ async function DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay)
 
             var neighbors = dfs_network.getConnectedEdges(node_analized);
 
-            document.getElementById("dfs-instruction").innerHTML = "while stack NOT EMPTY<br>&emsp;current_node = stack.pop();<br>&emsp;if current_node NOT VISITED;<br>&emsp;&emsp;current_node = VISITED;<br>";
+            document.getElementById("dfs-instruction").innerHTML = "if current_node NOT VISITED;<br>&emsp;&emsp;current_node = VISITED;<br>";
             await sleep(delay * 1.5);
 
+            document.getElementById("dfs-instruction").innerHTML = "for i in all adyacent_edges(current_node)<br>&emsp;&emsp;stack.push(i)";
             for (var i = 0; i < neighbors.length; ++i)
             {
                 if (dfs_edges.get(neighbors[i]).from == node_analized)
                 {
                     var destination = dfs_edges.get(neighbors[i]).to;
 
-                    document.getElementById("dfs-instruction").innerHTML = "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;&emsp;stack.push(i)";
                     // Organizo edges para que siga un orden ascendente de nodos
                     temp_stack.push(destination);
                     highlightEdge(neighbors[i], dfs_edges, dfs_nodes, dfs_network, node_analized);
+                    if (visited[destination - 1] == true)
+                    {
+                        dashEdge(neighbors[i], dfs_edges);
+                    }
                 }
             }
+            await sleep(delay);
+        } else
+        {
+            console.log("Else");
         }
         // Con esto, el recorrido se hace en orden de nodos acendente
         temp_stack.sort(function(a, b) {return  b - a});
@@ -536,11 +546,12 @@ function BFS(delay)
     bfs_code += "nodo_inicial = VISITED;<br>";
     bfs_code += "queue.enqueue(nodo_inicial);<br>";
     bfs_code += "while queue NOT EMPTY<br>";
-    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
-    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
-    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
-    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
-    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+    bfs_code += "&emsp;&emsp;current_node = queue.dequeue();<br>";
+    bfs_code += "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>";
+    bfs_code += "&emsp;&emsp;&emsp;&emsp;if i NOT VISITED<br>";
+    bfs_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;i = VISITED;<br>";
+    bfs_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+    bfs_code += "END";
     document.getElementById("bfs-code").innerHTML = bfs_code;
 
     // Se tiene que volver a hacer un dibujo del grafo
@@ -623,11 +634,14 @@ async function BFSUtil(start_node, bfs_network, bfs_nodes, bfs_edges, delay)
                 if (!visited[destination - 1])
                 {
 
-                    document.getElementById("bfs-instruction").innerHTML = "&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;if i NOT VISITED<br>&emsp;&emsp;&emsp;i = VISITED;<br>&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+                    document.getElementById("bfs-instruction").innerHTML = "for i in all adyacent_edges(current_node)<br>&emsp;&emsp;if i NOT VISITED<br>&emsp;&emsp;&emsp;&emsp;i = VISITED;<br>&emsp;&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
                     // Organizo edges para que siga un orden ascendente de nodos
                     temp_queue.push(destination);
                     highlightEdge(neighbors[i], bfs_edges, bfs_nodes, bfs_network, node_analized);
                     visited[destination - 1] = true;
+                } else
+                {
+                    dashEdge(neighbors[i], bfs_edges);
                 }
             }
         }
@@ -1313,7 +1327,7 @@ async function KruskalUtil(kruskal_nodes, kruskal_edges, delay)
             document.getElementById("kruskal-result").innerHTML = kruskal_result;
             await sleep(delay);
 
-            kruskal_result += " -> ";
+            kruskal_result += "<br>";
         } else
         {
             document.getElementById("kruskal-instruction").innerHTML = "ELSE REMOVE EDGE<br>";
@@ -1329,13 +1343,13 @@ async function KruskalUtil(kruskal_nodes, kruskal_edges, delay)
     var execution_time = tf - ti;
     document.getElementById("tiempo-kruskal").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 
+    document.getElementById("kruskal-instruction").innerHTML = "END";
+
     // Elimina aristas restantes
     for ( ; cont < edges_array.length; ++cont)
     {
         dashEdge(edges_array[cont].id, kruskal_edges);
     }
-
-    document.getElementById("kruskal-instruction").innerHTML = "END";
 
     return execution_time;
 }

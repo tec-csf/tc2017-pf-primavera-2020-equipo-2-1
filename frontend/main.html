@@ -3,6 +3,8 @@
 <title>Algoritmos de Grafos</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Liberías y estilos utilizados -->
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -11,10 +13,11 @@
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>  
+<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>  
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
+<!-- Estilos personalizados dados a las clases -->
 <style>
 body,h1,h2,h3,h4,h5 {font-family: "Poppins", sans-serif}
 body {font-size:16px;}
@@ -50,16 +53,14 @@ body {font-size:16px;}
   </div>
 </nav>
 
-<!-- Top menu on small screens -->
+<!-- Top menu (Utilizado en pantallas pequeñas) -->
 <header class="w3-container w3-top w3-hide-large w3-blue-grey w3-xlarge w3-padding">
   <a href="javascript:void(0)" class="w3-button w3-blue-grey w3-margin-right" onclick="w3_open()">☰</a>
   <span>Algoritmos de Grafos | <font size="-1">Equipo 2</font></span>
 </header>
-
-<!-- Overlay effect when opening sidebar on small screens -->
 <div class="w3-overlay w3-hide-large" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
 
-<!-- !PAGE CONTENT! -->
+<!-- Contenido de la página -->
 <div class="w3-main" style="margin-left:340px;margin-right:40px">
 
   <!-- Header -->
@@ -97,7 +98,7 @@ body {font-size:16px;}
           <div id="dfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="dfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="dfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -145,7 +146,7 @@ body {font-size:16px;}
           <div id="bfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="bfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="bfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -193,7 +194,7 @@ body {font-size:16px;}
             <div id="a-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
             <div ><p> Código </p></div>
             <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-              <p id="a-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+              <p id="a-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
             </div>
           </div>
           <div style="float:left; width: 2%;"><p></p></div>
@@ -243,7 +244,7 @@ body {font-size:16px;}
           <div id="prim-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="prim-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="prim-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -291,7 +292,7 @@ body {font-size:16px;}
           <div id="kruskal-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="kruskal-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="kruskal-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -306,15 +307,15 @@ body {font-size:16px;}
               <p id="tiempo-kruskal" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 95px; overflow: auto;">
                 <p id="kruskal-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 145px; overflow: auto;">
                 <p id="kruskal-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
-                <div style="float: left; width: 50%;"><input id="origin-kruskal" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <!-- <div style="float: left; width: 50%;"><input id="origin-kruskal" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div> -->
                 <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Kruskal(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
@@ -339,7 +340,7 @@ body {font-size:16px;}
           <div id="dijkstra-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="dijkstra-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="dijkstra-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -388,7 +389,7 @@ body {font-size:16px;}
           <div id="belford-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="belford-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="belford-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -437,7 +438,7 @@ body {font-size:16px;}
           <div id="floyd-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -452,21 +453,20 @@ body {font-size:16px;}
               <p id="tiempo-floyd" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto; width: 500px;">
                 <p id="floyd-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
-            <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
-                <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            <div><p> Resultado </p></div>
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto; width: 500px;">
+                <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Caminos mínimos...</p>
             </div>
             <div style="margin-top:20px;">
-                <div style="float: left; width: 50%;"><input id="origin-floyd" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
                 <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Floyd(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
                     <a onclick="Floyd(2000);"> Lento </a>
-                    <a onclick="Floyd(2000);"> Normal </a>
+                    <a onclick="Floyd(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -575,6 +575,7 @@ body {font-size:16px;}
       <div style="float: right; width: 10%;"><input id="origin-all" type="text" class="w3-input" style="width:70%" value="1"><label> Origen </label></div>
     </div>
     <hr>
+
     <!-- Gráfico -->
     <div class="w3-container" style="width: 900px; margin: auto;">
       <div class="w3-container" style="float: left;">
@@ -600,7 +601,7 @@ body {font-size:16px;}
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div>
       <p>Clase: Análisis y Diseño de Algoritmos</p>
-      <p style="margin-left: 20px; font-size: smaller;">Profesor: Dr. Vicente Cubells</p>
+      <p style="margin-left: 20px; font-size: smaller;">Profesor: Dr. Vicente Cubells Nonell</p>
       <p style="margin-top: 30px;">Integrantes Equipo 2: </p>
       <p style="margin-left: 20px; font-size: smaller;">Andrés Barragán Salas - A01026567</p>
       <p style="margin-left: 20px; font-size: smaller;">Abraham Garcia Del Corral - A01023256</p>
@@ -608,6 +609,8 @@ body {font-size:16px;}
       <p style="margin-left: 20px; font-size: smaller;">Rodrigo Quiroz Reyes - A01026546</p>
       <p style="margin-left: 20px; font-size: smaller;">Héctor Arturo Quinde García - A01339451</p>
       <p style="margin-top: 30px;">Referencias utilizadas: </p>
+      <p style="margin-left: 20px; font-size: smaller;">[1] w3schools (1998) HTML. w3schools.com. Obtenido de: https://www.w3schools.com/</p>
+      <p style="margin-left: 20px; font-size: smaller;">[2] vis.js Network. vis.js. Obtenido de: https://visjs.github.io/vis-network/docs/network/</p>
     </div>
   </div>
 
@@ -630,14 +633,6 @@ function w3_open() {
 function w3_close() {
   document.getElementById("mySidebar").style.display = "none";
   document.getElementById("myOverlay").style.display = "none";
-}
-
-// Modal Image Gallery
-function onClick(element) {
-  document.getElementById("img01").src = element.src;
-  document.getElementById("modal01").style.display = "block";
-  var captionText = document.getElementById("caption");
-  captionText.innerHTML = element.alt;
 }
 </script>
 

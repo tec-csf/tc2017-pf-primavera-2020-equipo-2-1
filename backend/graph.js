@@ -153,18 +153,18 @@ function drawTestGraph() {
         addNode(i);
     }
 
-      //Se colocan aristas entre los nodos
-      addEdge(1, 3, 2, 1);
-      addEdge(2, 3, 7, 2);
-      addEdge(3, 2, 8, 8);
-      addEdge(4, 2, 1, 6);
-      addEdge(5, 7, 6, 4);
-      addEdge(6, 7, 8, 3);
-      addEdge(7, 7, 14, 2);
-      addEdge(8, 8, 10, 6);
-      addEdge(9, 8, 6, 2);
-      addEdge(10, 1, 4, 7);
-      addEdge(11, 1, 5, 9);
+      // Se colocan aristas entre los nodos
+      addEdge(1, 3, 2, 1);0
+      addEdge(2, 3, 7, 2);1
+      addEdge(3, 2, 8, 8);2
+      addEdge(4, 2, 1, 6);3
+      addEdge(5, 7, 6, 4);4
+      addEdge(6, 7, 8, 3);5
+      addEdge(7, 7, 14, 2);6
+      addEdge(8, 8, 10, 6);7
+      addEdge(9, 8, 6, 2);8
+      addEdge(10, 1, 4, 7);9
+      addEdge(11, 1, 5, 9);10
       addEdge(12, 6, 9, 9);
       addEdge(13, 14, 10, 4);
       addEdge(14, 10, 12, 7);
@@ -178,7 +178,7 @@ function drawTestGraph() {
           nodes: nodes,
           edges: edges
       };
-      var options = {};
+      var options = { };
 
       // Inicializa Network
       network = new vis.Network(container, data, options);
@@ -260,7 +260,7 @@ function markVisited_Node(id, node_group) {
           esto para evitar quese marquen nodos en el grafo de otro algoritmo
  */
 function resetAnimation_Node(id, node_group) {
-    node_group.update({id: id, borderWidth: 1, color: {border: "#2B7CE9", background: ''}, font: {color: 'black'}});
+    node_group.update({id: id, borderWidth: 1, color: {border: "#2B7CE9", background: '#92C2FA'}, font: {color: '#343434'}, shapeProperties: {borderDashes: false}});
 }
 
 
@@ -313,6 +313,7 @@ function load_progressBar(algorithm, progress) {
     }
 }
 
+
 /* ---- FUNCIONES DE ACCESO ---- */
 
 /* Verifica si dos nodos están conectados directamente
@@ -347,6 +348,58 @@ function Queue() {
 };
 
 
+/* Estructura para utilizar un contendor DisjointSet */
+class DisjointSet
+{
+     constructor(elements)
+     {
+          this.count = elements.length;
+          this.parent = { };
+
+          // Al inicio, cada cluster será padre de sí mismo
+          elements.forEach(e => (this.parent[e] = e));
+     }
+
+     union(a, b)
+     {
+          let rootA = this.find(a);
+          let rootB = this.find(b);
+
+          // Si raíces son iguales, ya están conectadas
+          if (rootA === rootB) return;
+
+          // Siempre hace al elemento con raíz menor el padre
+          if (rootA < rootB) {
+              if (this.parent[b] != b) {
+                  this.count++;
+                  this.union(this.parent[b], a);
+              }
+              this.parent[b] = this.parent[a];
+          } else {
+              if (this.parent[a] != a) {
+                  this.count++;
+                  this.union(this.parent[a], b);
+              }
+               this.parent[a] = this.parent[b];
+          }
+          this.count -= 1;
+     }
+
+     // Regresa el último padre de un nodo
+     find(a) {
+          while (this.parent[a] !== a) {
+              a = this.parent[a];
+          }
+        return a;
+     }
+
+     // Verifica si están conectados
+     connected(a, b) {
+          return this.find(a) === this.find(b);
+     }
+}
+
+
 /* Crea un atraso de tiempo establecido para mejor visualización de recorrido
  * @param ms: cantidad de milisegundos que se hará el atraso
  */
@@ -371,12 +424,12 @@ function DFS(delay)
     dfs_code += "var stack = [];<br>";
     dfs_code += "stack.push(nodo_inicial);<br>";
     dfs_code += "while stack NOT EMPTY<br>";
-    dfs_code += "&emsp;current_node = stack.pop();<br>";
-    dfs_code += "&emsp;if current_node NOT VISITED;<br>";
-    dfs_code += "&emsp;&emsp;current_node = VISITED;<br>";
-    dfs_code += "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>";
-    dfs_code += "&emsp;&emsp;&emsp;stack.push(i)";
-
+    dfs_code += "&emsp;&emsp;current_node = stack.pop();<br>";
+    dfs_code += "&emsp;&emsp;if current_node NOT VISITED;<br>";
+    dfs_code += "&emsp;&emsp;&emsp;&emsp;current_node = VISITED;<br>";
+    dfs_code += "&emsp;&emsp;&emsp;&emsp;for i in all adyacent_edges(current_node)<br>";
+    dfs_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;stack.push(i)";
+    dfs_code += "END";
     document.getElementById("dfs-code").innerHTML = dfs_code;
 
     // Se tiene que volver a hacer un dibujo del grafo
@@ -388,15 +441,12 @@ function DFS(delay)
         nodes: dfs_nodes,
         edges: dfs_edges
     };
-    var options = {};
+    var options = { };
     var dfs_network = new vis.Network(container, data, options);
-    // Hasta aqí es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
     // Se obtiene el nodo de origen usando el id del input en html
     var start_node = parseInt(document.getElementById("origin-dfs").value);
-
-    // Se 'imprime' instrucción en ejecución
-    document.getElementById("dfs-instruction").innerHTML = "DFS("+start_node+");";
 
     var time = DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay);
     return time;
@@ -427,16 +477,20 @@ async function DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay)
     var stack = [];
     stack.push(start_node);
 
-    document.getElementById("dfs-instruction").innerHTML = "stack.push["+start_node+"];";
+    document.getElementById("dfs-instruction").innerHTML = "var stack = [];<br>stack.push(nodo_inicial);<br>";
 
     highlightNode(start_node, dfs_nodes);
+    await sleep(delay);
+
     while (stack.length > 0)
     {
+        document.getElementById("dfs-instruction").innerHTML = "while stack NOT EMPTY<br>&emsp;&emsp;current_node = stack.pop();<br>";
+
         var node_analized = stack.pop();
         var temp_stack = [];
         if (!visited[node_analized - 1])
         {
-            await sleep(delay * 1.5);
+            await sleep(delay);
             markVisited_Node(node_analized, dfs_nodes)
 
             dfs_result += node_analized;
@@ -447,21 +501,29 @@ async function DFSUtil(start_node, dfs_network, dfs_nodes, dfs_edges, delay)
 
             var neighbors = dfs_network.getConnectedEdges(node_analized);
 
-            document.getElementById("dfs-instruction").innerHTML = "while stack NOT EMPTY<br>&emsp;current_node = stack.pop();<br>&emsp;if current_node NOT VISITED;<br>&emsp;&emsp;current_node = VISITED;<br>";;
+            document.getElementById("dfs-instruction").innerHTML = "if current_node NOT VISITED;<br>&emsp;&emsp;current_node = VISITED;<br>";
             await sleep(delay * 1.5);
 
+            document.getElementById("dfs-instruction").innerHTML = "for i in all adyacent_edges(current_node)<br>&emsp;&emsp;stack.push(i)";
             for (var i = 0; i < neighbors.length; ++i)
             {
                 if (dfs_edges.get(neighbors[i]).from == node_analized)
                 {
                     var destination = dfs_edges.get(neighbors[i]).to;
 
-                    document.getElementById("dfs-instruction").innerHTML = "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;&emsp;stack.push(i)";
                     // Organizo edges para que siga un orden ascendente de nodos
                     temp_stack.push(destination);
                     highlightEdge(neighbors[i], dfs_edges, dfs_nodes, dfs_network, node_analized);
+                    if (visited[destination - 1] == true)
+                    {
+                        dashEdge(neighbors[i], dfs_edges);
+                    }
                 }
             }
+            await sleep(delay);
+        } else
+        {
+            console.log("Else");
         }
         // Con esto, el recorrido se hace en orden de nodos acendente
         temp_stack.sort(function(a, b) {return  b - a});
@@ -491,12 +553,12 @@ function BFS(delay)
     bfs_code += "nodo_inicial = VISITED;<br>";
     bfs_code += "queue.enqueue(nodo_inicial);<br>";
     bfs_code += "while queue NOT EMPTY<br>";
-    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
-    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
-    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
-    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
-    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-
+    bfs_code += "&emsp;&emsp;current_node = queue.dequeue();<br>";
+    bfs_code += "&emsp;&emsp;for i in all adyacent_edges(current_node)<br>";
+    bfs_code += "&emsp;&emsp;&emsp;&emsp;if i NOT VISITED<br>";
+    bfs_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;i = VISITED;<br>";
+    bfs_code += "&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+    bfs_code += "END";
     document.getElementById("bfs-code").innerHTML = bfs_code;
 
     // Se tiene que volver a hacer un dibujo del grafo
@@ -510,12 +572,12 @@ function BFS(delay)
     };
     var options = { };
     var bfs_network = new vis.Network(container, data, options);
-    // Hasta aqui es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
     // Se obtiene el nodo de origen usansdo el id del input en html
     var start_node = parseInt(document.getElementById("origin-bfs").value);
 
-    // Se 'imprime' instruccion en ejecución
+    // Se 'imprime' instrucción en ejecución
     document.getElementById("bfs-instruction").innerHTML = "BFS("+start_node+");";
 
     var time = BFSUtil(start_node, bfs_network, bfs_nodes, bfs_edges, delay);
@@ -579,11 +641,14 @@ async function BFSUtil(start_node, bfs_network, bfs_nodes, bfs_edges, delay)
                 if (!visited[destination - 1])
                 {
 
-                    document.getElementById("bfs-instruction").innerHTML = "&emsp;for i in all adyacent_edges(current_node)<br>&emsp;&emsp;if i NOT VISITED<br>&emsp;&emsp;&emsp;i = VISITED;<br>&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
+                    document.getElementById("bfs-instruction").innerHTML = "for i in all adyacent_edges(current_node)<br>&emsp;&emsp;if i NOT VISITED<br>&emsp;&emsp;&emsp;&emsp;i = VISITED;<br>&emsp;&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
                     // Organizo edges para que siga un orden ascendente de nodos
                     temp_queue.push(destination);
                     highlightEdge(neighbors[i], bfs_edges, bfs_nodes, bfs_network, node_analized);
                     visited[destination - 1] = true;
+                } else
+                {
+                    dashEdge(neighbors[i], bfs_edges);
                 }
             }
         }
@@ -637,7 +702,6 @@ function A_star(delay)
     a_code += "&emsp;&emsp;&emsp;if neighbor IS NOT in openSet<br>";
     a_code += "&emsp;&emsp;&emsp;&emsp;openSet.add(neighbor)<br>";
     a_code += "return UNREACHABLE<br>";
-
     document.getElementById("a-code").innerHTML = a_code;
 
     // Se obtiene el nodo de origen usando el id del input
@@ -654,12 +718,12 @@ function A_star(delay)
         nodes: a_nodes,
         edges: a_edges
     };
-    var options = {};
+    var options = { };
     var a_network = new vis.Network(container, data, options);
-    // Hasta aqui es el proceso  para tener grafos independientes
+    // Hasta aquí es el proceso  para tener grafos independientes
 
-    var gScore = [node_number - 1]
-    var fScore = [node_number - 1]
+    var gScore = [node_number - 1];
+    var fScore = [node_number - 1];
     for (var i = 0; i < node_number; ++i)
     {
         gScore[i] = Infinity;
@@ -695,8 +759,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
 
     document.getElementById("a-instruction").innerHTML = "openSet.push(nodo_inicial);<br>fScore[nodo_inicial]=h(nodo_inicial);<br>";
 
-    var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
-    if (delay>100)
+    if (delay > 100)
     {
         await sleep(1000);
     }
@@ -706,13 +769,15 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
     var came_from = [];
     var getpath = [];
 
+    var ti = performance.now(); // Obtención de tiempos ejecucion; NO TOCAR
+
     heuristics = h(start_node, end_node, a_network);
     open_set.push(start_node);
 
     gScore[start_node] = 0;
     fScore[start_node] = heuristics;
 
-    let tempG = heuristics
+    let tempG = heuristics;
     var zero = 0;
 
     getpath.push({ now:start_node,heuristics, from:zero });
@@ -743,7 +808,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
             highlightNode(current, a_nodes);
 
             a_result += current;
-            a_result += "<br>"
+            a_result += "<br>";
             document.getElementById("a-result").innerHTML = a_result;
 
             draw_path(start_node,end_node,getpath,a_result);
@@ -758,7 +823,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
         document.getElementById("a-instruction").innerHTML = "while openSet IS NOT EMPTY<br>&emsp;current = lowest_f(openSet);<br>";
         await sleep(delay-50);
 
-        remove_from_array(open_set, current)
+        remove_from_array(open_set, current);
         close_set.push(current);
 
         for (i = 0; i < neighbors.length; ++i)
@@ -773,7 +838,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
 
                 if (!close_set.includes(neighbor))
                 {
-                    get_weight(current,neighbor)
+                    get_weight(current,neighbor);
                     tempG = gScore[current] + current_weight;
 
                     // Is this a better path than before?
@@ -796,6 +861,7 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
 
                     if (newPath)
                     {
+                        // console.log("Debug");
 
                         fScore[neighbor] = tempG;
 
@@ -816,10 +882,10 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
                             a_result += current;
                             document.getElementById("a-result").innerHTML = a_result;
                         }
-                        //highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
+                        // highlightEdge(neighbor, a_edges, a_nodes, a_network,current);
                     }
                 }
-            } else{ }
+            } else { }
         }
 
         if (came_from.includes(current))
@@ -827,10 +893,10 @@ async function AUtil(start_node, a_network, a_nodes, a_edges, gScore, fScore, en
           a_result += " -> ";
         }
 
-        //else return no solution*/
+        // else return no solution */
     }
     document.getElementById("a-instruction").innerHTML = "END";
-    a_result = "No se puede acceder al grafo"
+    a_result = "No se puede acceder al grafo";
     document.getElementById("a-result").innerHTML = a_result;
 
     // Obtención tiempos ejecucion; NO TOCAR
@@ -866,12 +932,12 @@ async function draw_path(start_node, end_node, array, a_result)
             {
                 if (end == start_node)
                 {
-                    //temp.push(start_node);
+                    // temp.push(start_node);
                     temp = temp.reverse();
 
                     print += start;
 
-                    for (var h = 1; h < temp.length; h++)
+                    for (var h = 1; h < temp.length; ++h)
                     {
                         print += "->";
                         print += temp[h];
@@ -891,7 +957,7 @@ async function draw_path(start_node, end_node, array, a_result)
                     {
                         if (array[h].tempG < save)
                         {
-                            save = array[h].tempG
+                            save = array[h].tempG;
                             end = array[h].from;
                         }
                     }
@@ -948,7 +1014,7 @@ async function get_weight(nodo, nodo_end)
         if ((edges_array[i].from == nodo) && (edges_array[i].to == nodo_end))
         {
             current_weight = edges_array[i].weight;
-            return
+            return;
         }
     }
 }
@@ -964,7 +1030,7 @@ async function check_dir(nodo, nodo_end)
         if ((edges_array[i].from == nodo) && (edges_array[i].to == nodo_end))
         {
             direction = true;
-            return
+            return;
         }
     }
     direction = false;
@@ -1007,12 +1073,12 @@ function Prim(delay)
     };
     var options = { };
     var prim_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
     // Se obtiene el nodo de origen usansdo el id del input del html
     var start_node = parseInt(document.getElementById("origin-prim").value);
 
-    // Se 'imprime' instruccion en ejecución
+    // Se 'imprime' instrucción en ejecución
     document.getElementById("prim-instruction").innerHTML = "Prim("+start_node+");";
 
     var time = PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay);
@@ -1134,7 +1200,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
             }
         }
 
-        // Evita error de iluminar arista en 1era iteracion:
+        // Evita error de iluminar arista en 1era iteración:
         if (node_analized != start_node)
         {
             var dad = parent[node_analized - 1];
@@ -1184,9 +1250,16 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
 function Kruskal(delay)
 {
     // Algoritmo para desplegar en HTML
-    var kruskal_code = "holis";
-    kruskal_code += "<br>";
-    kruskal_code += "&emsp;<br>";
+    var kruskal_code = "mst ← ∅<br>";
+    kruskal_code += "queue_edges.sort(ascendente_peso);<br>";
+    kruskal_code += "FOREACH nodo in grafo<br>";
+    kruskal_code += "&emsp;&emsp;let disj_set = new DisjointSet([nodo1, nodo2, ..., nodo#]);<br>";
+    kruskal_code += "WHILE queue_edges ≠ ∅ AND disj_set.count > 1 DO<br>";
+    kruskal_code += "&emsp;&emsp;{u, v} ← queue.extractMin();<br>";
+    kruskal_code += "&emsp;&emsp;IF !(mst ∪ {{u, v}} has cycle)<br>";
+    kruskal_code += "&emsp;&emsp;&emsp;&emsp;mst.add({u, v});<br>";
+    kruskal_code += "&emsp;&emsp;&emsp;&emsp;merge(disj_set-of(u), disj_set-of(v))<br>";
+    kruskal_code += "END<br>";
     document.getElementById("kruskal-code").innerHTML = kruskal_code;
 
     // Se tiene que volver a hacer un dibujo del grafo
@@ -1200,88 +1273,89 @@ function Kruskal(delay)
     };
     var options = { };
     var kruskal_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
-    // Se obtiene el nodo de origen usansdo el id del input en html
-    var start_node = parseInt(document.getElementById("origin-kruskal").value);
-
-    // Se 'imprime' instruccion en ejecución
-    document.getElementById("kruskal-instruction").innerHTML = "Kruskal("+start_node+");";
-
-    var time = KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, delay);
+    var time = KruskalUtil(kruskal_nodes, kruskal_edges, delay);
     return time;
 }
 
+
 /* Función principal que ejecuta algoritmo de Kruskal
- * @param start_node: indica cual será el nodo de inicio del recorrido;
-          recibido de html
- * @param kruskal_network: grafo que se utilizará para ejecución de algoritmo;
-          esto evita que se ejecuten comandos sobre otros algoritmos
  * @param kruskal_nodes: grupo de nodos sobre el cual se ejecutan comandos
  * @param kruskal_edges: grupo de aristas sobre el cual se ejecutan comandos
  * @param delay: cantidad de milisegundos que se hará el atraso;
           recibido de html y funciona para correr algoritmo rapido o lento
  */
-function KruskalUtil(start_node, kruskal_network, kruskal_nodes, kruskal_edges, delay)
+async function KruskalUtil(kruskal_nodes, kruskal_edges, delay)
 {
-    var ti = performance.now();
+    kruskal_result = "";
+    mst = [];
 
-    var visited = [];
-    for (var i = 0; i < node_number; ++i) {
-        visited[i] = false;
+    nodos = [];
+    edges_array.sort(function(a, b) { return (a.weight - b.weight) });
+    for (var i = 0; i < node_number; ++i)
+    {
+      nodos[i] = i+1;
     }
 
-    Aristas.sort(function(a, b) {return a.peso-b.peso});
+    let disj_set = new DisjointSet(nodos);
+
+    // document.getElementById("kruskal-instruction").innerHTML = "hola"+edges_array[0].from;
+    var cont = 0;
+    var aristas = edge_number;
+
+    document.getElementById("kruskal-instruction").innerHTML = "mst ← ∅<br>queue_edges.sort(ascendente_peso);<br>FOREACH nodo in grafo<br>&emsp;&emsp;let disj_set = new DisjointSet([nodo1, nodo2, ..., nodo#]);<br>";
+    await sleep(delay * 0.6);
+
+    var ti = performance.now(); // Medición tiempo algoritmo
+
+    while ((aristas > 0) && (disj_set.count > 1))
+    {
+        document.getElementById("kruskal-instruction").innerHTML = "WHILE queue_edges ≠ ∅ AND disj_set.count > 1 DO<br>&emsp;&emsp;{u, v} ← queue.extractMin();<br>";
+
+        highlightEdge(edges_array[cont].id, kruskal_edges);
+        await sleep(delay);
+
+        if (!disj_set.connected(edges_array[cont].from, edges_array[cont].to))
+        {
+            document.getElementById("kruskal-instruction").innerHTML = "IF !(mst ∪ {{u, v}} has cycle)<br>&emsp;&emsp;mst.add({u, v});<br>&emsp;&emsp;merge(disj_set-of(u), disj_set-of(v))<br>";
+
+            mst.push(edges_array[cont]);
+            disj_set.union(edges_array[cont].from, edges_array[cont].to);
+            aristas--;
+
+            markVisited_Node(edges_array[cont].from, kruskal_nodes);
+            markVisited_Node(edges_array[cont].to, kruskal_nodes);
+            kruskal_result += "(De: " + edges_array[cont].from + ", a: " + edges_array[cont].to + ", p: " + edges_array[cont].weight + ")";
+            document.getElementById("kruskal-result").innerHTML = kruskal_result;
+            await sleep(delay);
+
+            kruskal_result += "<br>";
+        } else
+        {
+            document.getElementById("kruskal-instruction").innerHTML = "ELSE REMOVE EDGE<br>";
+
+            resetAnimation_Edge(edges_array[cont].id, kruskal_edges);
+            dashEdge(edges_array[cont].id, kruskal_edges);
+            await sleep(delay);
+        }
+        cont++;
+    }
 
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-kruskal").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 
+    document.getElementById("kruskal-instruction").innerHTML = "END";
+
+    // Elimina aristas restantes
+    for ( ; cont < edges_array.length; ++cont)
+    {
+        dashEdge(edges_array[cont].id, kruskal_edges);
+    }
+
     return execution_time;
 }
-
-// class DisjointSet
-// {
-//    constructor(elements)
-//    {
-//       this.count = elements.length;
-//       this.parent = {};
-//
-//       /* Al inicio, cada cluster será padre de si mismo */
-//       elements.forEach(e => (this.parent[e] = e));
-//    }
-//
-//    union(a, b)
-//    {
-//       let rootA = this.find(a);
-//       let rootB = this.find(b);
-//
-//       // Roots are same so these are already connected.
-//       if (rootA === rootB) return;
-//
-//       // Always make the element with smaller root the parent.
-//       if (rootA < rootB) {
-//          if (this.parent[b] != b) this.union(this.parent[b], a);
-//          this.parent[b] = this.parent[a];
-//       } else {
-//          if (this.parent[a] != a) this.union(this.parent[a], b);
-//          this.parent[a] = this.parent[b];
-//       }
-//    }
-//
-//    // Returns final parent of a node
-//    find(a) {
-//       while (this.parent[a] !== a) {
-//          a = this.parent[a];
-//       }
-//       return a;
-//    }
-//
-//    // Checks connectivity of the 2 nodes
-//    connected(a, b) {
-//       return this.find(a) === this.find(b);
-//    }
-// }
 
 
 /* ---- Dijkstra ----  // Rojo
@@ -1305,15 +1379,14 @@ function Dijkstra(delay)
     dijkstra_code += "WHILE visitados != num_nodos DO <br>";
     dijkstra_code += "&emsp;node_analized <- queue.extract() <br>";
     dijkstra_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
-    dijkstra_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+Padres[node_analized] <br>";
-    dijkstra_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Padres[node_analized], Padres[destino]<-node_analized <br>";
+    dijkstra_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+Tabla[node_analized] <br>";
+    dijkstra_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Tabla[node_analized], Padres[destino]<-node_analized <br>";
     dijkstra_code += "&emsp;&emsp;IF destino IS NOT IN visitados AND destino IS NOT IN toAnalize <br>";
     dijkstra_code += "&emsp;&emsp;&emsp;toAnalize.insert(destino)<br>";
     dijkstra_code += "&emsp;IF toAnalize IS EMPTY <br>";
     dijkstra_code += "&emsp;&emsp;BREAK;<br>";
     dijkstra_code += "&emsp;queue.insert(toAnalize.extractMin),visited.insert(toAnalize.extractMin)<br>";
     dijkstra_code += "END <br>";
-
     document.getElementById("dijkstra-code").innerHTML = dijkstra_code;
 
     // Se tiene que volver a hacer un dibujo del grafo
@@ -1325,20 +1398,20 @@ function Dijkstra(delay)
         nodes: dij_nodes,
         edges: dij_edges
     };
-    var options = {};
+    var options = { };
     var dijkstra_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
     var Tabla = [node_number - 1];
     var Padres = [node_number - 1];
-    //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
+    // Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
 
     for (var i = 0; i < node_number; ++i)
     {
         Tabla[i] = Infinity;
         Padres[i] = Infinity;
     }
-    // Se 'imprime' instruccion en ejecución
+    // Se 'imprime' instrucción en ejecución
     document.getElementById("dijkstra-instruction").innerHTML = "FOR i = 1,....,n DO <br> &emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
 
     // Se obtiene el nodo de origen usansdo el id del input
@@ -1376,16 +1449,18 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
     var queue = new Queue();
 
     visited.push(start_node);
-    queue.enqueue(start_node)
+    queue.enqueue(start_node);
 
 
     Tabla[start_node - 1] = 0;
-
+    var progress=100/node_number
+    var cont=0;
     document.getElementById("dijkstra-instruction").innerHTML = "Tabla["+start_node-1+"] <- 0";
     document.getElementById("dijkstra-instruction").innerHTML = "queue.insert("+start_node+")";
 
     while (visited.length != node_number)
     {
+        load_progressBar("dijkstra",progress*cont);
         document.getElementById("dijkstra-instruction").innerHTML = "WHILE visitados != "+node_number+" DO";
 
         var node_analized = queue.dequeue();
@@ -1404,7 +1479,7 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
             {
                 var flag = true;
 
-                /*Se Comprueba si el peso en los nodos destino requieren de una actualización */
+                /* Se Comprueba si el peso en los nodos destino requieren de una actualización */
                 document.getElementById("dijkstra-instruction").innerHTML = "IF "+Tabla[Aristas[i].destino-1]+" > "+ Aristas[i].peso + Tabla[node_analized - 1];
 
                 if (Tabla[Aristas[i].destino - 1] > Aristas[i].peso + Tabla[node_analized - 1])
@@ -1413,8 +1488,8 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
                     Padres[[Aristas[i].destino - 1]] = node_analized;
                     document.getElementById("dijkstra-instruction").innerHTML = "Tabla["+Aristas[i].destino - 1+"] <- "+Aristas[i].peso + Tabla[node_analized - 1]+" , "+ "Padres["+Aristas[i].destino - 1+"]<-"+node_analized;
 
-                    /*Comprueba si el nodo ya fue analizado o no*/
-                    for (var j = 0; j < visited.length; j++)
+                    /* Comprueba si el nodo ya fue analizado o no */
+                    for (var j = 0; j < visited.length; ++j)
                     {
                         if (Aristas[i].destino == visited[j]||Aristas[i].destino==toAnalize[j])
                         {
@@ -1431,11 +1506,11 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
                         highlightNode(Aristas[i].destino, dij_nodes);
                         highlightEdge(Aristas[i].ID, dij_edges, dij_nodes, dijkstra_network);
                     }
-                    else{
+                    else {
                         dashEdge(Aristas[i].ID,dij_edges);
                     }
                 }
-                else{
+                else {
                     dashEdge(Aristas[i].ID,dij_edges);
                 }
             }
@@ -1450,24 +1525,24 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
             break;
         }
 
-        var peso_minimo = Infinity;
+        // Variables auxiliares para detectar el menor peso dentro de los nodos que no se han analizado
+        var peso_mínimo = Infinity;
         var min = Infinity;
         var aux;
-        //Variables auxiliares para detectar el menor peso dentro de los nodos que no se han analizado
 
         /* De los nodos que se han descubierto, selecciona el de menor peso */
         for (var i = 0; i < toAnalize.length; ++i)
         {
-            if ((Tabla[toAnalize[i] - 1]) < peso_minimo)
+            if ((Tabla[toAnalize[i] - 1]) < peso_mínimo)
             {
-                peso_minimo = Tabla[toAnalize[i] - 1];
+                peso_mínimo = Tabla[toAnalize[i] - 1];
                 min = toAnalize[i];
                 aux = i;
             }
         }
         /* Se agrega el nodo a los analizados, se elimina
         de los posibles a analizar y se agrega a la cola
-        para ser analizado en la siguiente iteracion */
+        para ser analizado en la siguiente iteración */
 
         document.getElementById("dijkstra-instruction").innerHTML ="queue.insert("+min+") , "+"visited.insert("+min+")";
 
@@ -1475,8 +1550,8 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
         toAnalize.splice(aux, 1);
         queue.enqueue(min);
     }
-
-    /*Detecta si existe o no el camino mediante la tabla de pesos*/
+    load_progressBar("dijkstra",100);
+    /* Detecta si existe o no el camino mediante la tabla de pesos */
     if (Tabla[target_node - 1] == Infinity)
     {
         dijkstra_sol = "No hay un camino hacia ese nodo";
@@ -1512,24 +1587,28 @@ async function DijkstraUtil(start_node, target_node, dijkstra_network, dij_nodes
  * @param delay: cantidad de milisegundos que se hará el atraso;
           recibido de html y funciona para correr algoritmo rapido o lento
  */
-
-
 function Belford(delay)
 {
     // Algoritmo para desplegar en HTML
-    var Bellman_code = "";
     console.log("Bellford");
-    /*bfs_code += "var queue = new Queue();<br>";
-    bfs_code += "nodo_inicial = VISITED;<br>";
-    bfs_code += "queue.enqueue(nodo_inicial);<br>";
-    bfs_code += "while queue NOT EMPTY<br>";
-    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
-    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
-    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
-    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
-    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-    */
-    document.getElementById("belford-code").innerHTML = Bellman_code;
+    document.getElementById("belford-result").innerHTML = " ";
+    var bellman_code = "var Tabla[]; <br>";
+    bellman_code += "var Padres[]; <br>";
+    bellman_code += "BEGIN <br>";
+
+    bellman_code += "FOR i = 1,....,n DO <br>";
+    bellman_code += "&emsp;Peso[i] <- infinity, Padres[i] <- infinity <br>";
+    bellman_code += "Tabla[Origen] <- 0 <br>";
+    bellman_code += "FOR i= 1....,num_nodos DO <br>";
+    bellman_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
+    bellman_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+ Tabla[node_analized] <br>";
+    bellman_code += "&emsp;&emsp;&emsp;Tabla[destino]<-destino.peso+Tabla[node_analized], Padres[destino]<-node_analized <br>";
+    bellman_code += "&emsp;FOR ALL (node_analized,destino) DO<br>";
+    bellman_code += "&emsp;&emsp;IF Tabla[destino] > destino.peso+ Tabla[node_analized] <br>";
+    bellman_code += "&emsp;&emsp;&emsp;ciclo_negativo <- true, BREAK <br>";
+    bellman_code += "END <br>";
+    document.getElementById("belford-code").innerHTML = bellman_code;
+    
 
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
@@ -1544,21 +1623,24 @@ function Belford(delay)
         nodes: bel_nodes,
         edges: bel_edges
     };
-    var options = {};
+    var options = { };
     var belford_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
     var Tabla = [node_number - 1];
     var Padres = [node_number - 1];
-    //Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
+    // Array Tabla para los pesos de los nodos y Padres para sus respectivos descendientes
     var visited = [];
-
+    document.getElementById("belford-instruction").innerHTML = "BEGIN";
+    document.getElementById("belford-instruction").innerHTML = "FOR i = 1,....,n DO";
     for (var i = 0; i < node_number; ++i)
     {
         Tabla[i] = Infinity;
         Padres[i] = Infinity;
         visited[i]= i + 1;
     }
+    document.getElementById("belford-instruction").innerHTML = "Tabla[i] <- infinity, Padres[i] <- infinity,";
+
 
     var time = BelfordUtil(start_node, target_node, belford_network, bel_nodes, bel_edges, Tabla, Padres, visited, delay);
     return time;
@@ -1579,45 +1661,83 @@ function Belford(delay)
  * @param delay: cantidad de milisegundos que se hará el atraso;
           recibido de html y funciona para correr algoritmo rapido o lento
  */
-
 async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, bel_edges, Tabla, Padres, visited,delay)
 {
     var ti = performance.now();
+    var progress=100/(node_number-1);
     visited.splice(start_node - 1, 1);
     visited.unshift(start_node);
 
-    var queue = new Queue();
-    queue.enqueue(start_node);
     Tabla[start_node - 1] = 0;
 
-    for (var i=0;i<node_number-2;++i)
+    document.getElementById("belford-instruction").innerHTML = "FOR i= 1....,"+(node_number -1)+ " DO";
+    for (var i = 0; i < node_number - 1; ++i)
     {
-        cleanGraph(bel_nodes,bel_edges);
-        for (var j=0;j<visited.length;++j)
+        load_progressBar("belford",progress*i);
+        console.log("p "+progress);
+        cleanGraph(bel_nodes, bel_edges);
+        for (var j = 0;j < visited.length; ++j)
         {
             await sleep(delay * 1.5);
-            markVisited_Node(visited[j],bel_nodes);
-            await sleep(delay);
+            markVisited_Node(visited[j], bel_nodes);
+           await sleep(delay);
+            document.getElementById("belford-instruction").innerHTML = "FOR ALL (Aristas,origen,destino) DO";
             for (var k=0;k<Aristas.length;++k)
             {
                 if (Aristas[k].origen==visited[j])
                 {
-                    highlightEdge(Aristas[k].ID,bel_edges,bel_nodes,belfordnetwork,-1);
+                    highlightEdge(Aristas[k].ID, bel_edges);
                     await sleep(delay);
-                    if (Tabla[Aristas[k].destino-1]>Aristas[k].peso+Tabla[ [Aristas[k].origen] -1])
+                    document.getElementById("belford-instruction").innerHTML = "Tabla["+(Aristas[k].destino - 1)+"]> "+Aristas[k].peso +" + Tabla["+(Aristas[k].origen- 1)+"]";
+                    if ( Tabla[Aristas[k].destino - 1] > Aristas[k].peso + Tabla[Aristas[k].origen - 1])
                     {
-                        Tabla[Aristas[k].destino-1]=Aristas[k].peso+Tabla[visited[j]-1];
+                        Tabla[Aristas[k].destino-1] = Aristas[k].peso + Tabla[Aristas[k].origen - 1];
                         Padres[[Aristas[k].destino - 1]] = Aristas[k].origen;
+                        document.getElementById("belford-instruction").innerHTML = "IF Tabla["+(Aristas[k].destino - 1)+"] <- "+Aristas[k].peso +" + Tabla["+(Aristas[k].origen- 1)+"], Padres["+(Aristas[k].destino - 1)+"] <- "+(Aristas[k].origen - 1);
+
                     }
                 }
             }
+        
         }
+
     }
-    if (Tabla[target_node - 1] == Infinity)
+
+    var ciclo_n = false;
+    // Hace una iteración mas para comprobar si hay o no un ciclo negativo
+    for (var j = 0; j < visited.length; ++j)
     {
+        await sleep(delay * 1.5);
+        markVisited_Node(visited[j], bel_nodes);
+        await sleep(delay);
+        document.getElementById("belford-instruction").innerHTML = "FOR ALL (Aristas,origen,destino) DO";
+        for (var k = 0; k < Aristas.length; ++k)
+        {
+            if (Aristas[k].origen == visited[j])
+            {
+                highlightEdge(Aristas[k].ID, bel_edges,bel_nodes,belfordnetwork,-1);
+                await sleep(delay);
+                document.getElementById("belford-instruction").innerHTML = "IF Tabla["+(Aristas[k].destino - 1)+"]> "+Aristas[k].peso +" + Tabla["+(Aristas[k].origen- 1)+"]";
+                if (Tabla[Aristas[k].destino - 1] > (Aristas[k].peso + Tabla[[Aristas[k].origen] - 1])){
+                    ciclo_n = true;
+                    document.getElementById("belford-instruction").innerHTML = "ciclo_negativo <- true , BREAK";
+                    break;
+                }
+            }
+        }
+        if (ciclo_n) { break; }
+    }
+    if (ciclo_n)
+    {
+        Bellman_sol = "Hay un ciclo negativo, no existe solución";
+    }
+    else if (Tabla[target_node - 1] == Infinity)
+    {
+        document.getElementById("belford-instruction").innerHTML = "END";
         Bellman_sol = "No hay un camino hacia ese nodo";
     } else
     {
+        document.getElementById("belford-instruction").innerHTML = "END";
         var padre = Padres[target_node - 1];
         var path = target_node;
         var cont = 0;
@@ -1640,32 +1760,40 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
     var tf = performance.now();
     var execution_time = tf - ti;
     document.getElementById("tiempo-belford").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
+    load_progressBar("belford",100);
     return execution_time;
 }
 
-/* ---- Floyd-Warshall ---- */
+/* ---- Floyd-Warshall ---- // Rojo
+
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
 var floyd_code;
 function Floyd(delay)
 {
     // Algoritmo para desplegar en HTML
     var floyd_code = "";
     console.log("Floyd");
-    /*bfs_code += "var queue = new Queue();<br>";
-    bfs_code += "nodo_inicial = VISITED;<br>";
-    bfs_code += "queue.enqueue(nodo_inicial);<br>";
-    bfs_code += "while queue NOT EMPTY<br>";
-    bfs_code += "&emsp;current_node = queue.dequeue();<br>";
-    bfs_code += "&emsp;for i in all adyacent_edges(current_node)<br>";
-    bfs_code += "&emsp;&emsp;if i NOT VISITED<br>";
-    bfs_code += "&emsp;&emsp;&emsp;i = VISITED;<br>";
-    bfs_code += "&emsp;&emsp;&emsp;queue.enqueue(i);<br>";
-    */
+    floyd_code += "var distancias[][]; <br>"
+    floyd_code += "BEGIN <br>";
+    floyd_code += "FOR i= 0....,n Do <br>";
+    floyd_code += "&emsp;FOR j= 0....,n Do <br>";
+    floyd_code += "&emsp;&emsp;IF i=j <br>";
+    floyd_code += "&emsp;&emsp;&emsp;distancias[i][j] <- 0 <br>";
+    floyd_code += "&emsp;&emsp;ELSE IF Aristas(i,j) EXISTS <br>";
+    floyd_code += "&emsp;&emsp;&emsp;distancias[i][j] <- Aristas(i,j).Peso <br>";
+    floyd_code += "&emsp;&emsp;ELSE <br>";
+    floyd_code += "&emsp;&emsp;&emsp;distancias[i][j] <- Infinity <br>";
+
+    floyd_code += "FOR k= 0....,n Do <br>";
+    floyd_code += "&emsp;FOR i= 0....,n Do <br>";
+    floyd_code += "&emsp;&emsp;FOR j= 0....,n Do <br>";
+    floyd_code += "&emsp;&emsp;&emsp;IF if (distancias[i][j] > distancias[i][k] + distancias[k][j]) <br>";
+    floyd_code += "&emsp;&emsp;&emsp;&emsp;distancias[i][j] <- distancias[i][k] + distancias[k][j] <br>";
+    floyd_code += "END <br>";
     document.getElementById("floyd-code").innerHTML = floyd_code;
 
-    // Se obtiene el nodo de origen usansdo el id del input
-    // (todos son 'origin-algoritmo' -> checar html para obtener ids)
-    // var start_node = parseInt(document.getElementById("origin-belford").value);
-    // var target_node = parseInt(document.getElementById("target-belford").value);
     // Se tiene que volver a hacer un dibujo del grafo
     // para tener animaciones individuales
     var floyd_nodes = new vis.DataSet(nodes.get()); // Se hace una copia de los nodos y aristas
@@ -1675,94 +1803,121 @@ function Floyd(delay)
         nodes: floyd_nodes,
         edges: floyd_edges
     };
-    var options = {};
+    var options = { };
     var floyd_network = new vis.Network(container, data, options);
-    //Hasta aqui es el proceso para tener grafos independientes
+    // Hasta aquí es el proceso para tener grafos independientes
 
-    /*Proceso de creacion de matriz de adyacencia inicial*/
+    /* Proceso de creacion de matriz de adyacencia inicial */
 
+    // Se crea la matriz de adyacencia con valores infinitos y diagonal principal con valores de cero
     var dist = [];
-    for (var i = 0; i < node_number; i += 1) {
-      dist[i] = [];
-      for(var j=0;j<node_number;j++){
-          if(i==j){
-              dist[i][j]=0;
-          }
-          else{
-            dist[i][j]=Infinity;
-          }
+    for (var i = 0; i < node_number; i += 1)
+    {
+        dist[i] = [];
+        for (var j = 0; j < node_number; ++j)
+        {
+            if (i==j)
+                dist[i][j]=0;
+            else
+                dist[i][j]=Infinity;
         }
     }
-    dist.forEach(element => {
-        console.log(element);
-        
-    });
-    console.log("-----------------------")
+    // Se llena la matriz de acuerdo a los pesos de sus aristas
     for (var i = 0; i < node_number; i += 1) {
-        for(var j=0;j<node_number;j++){
-            for(var k=0;k<Aristas.length;k++){
-                if(Aristas[k].origen==i+1&&Aristas[k].destino==j+1){
-                    //console.log("si");
+        for (var j=0;j<node_number;++j) {
+            for (var k=0;k<Aristas.length;++k) {
+                if (Aristas[k].origen==i+1&&Aristas[k].destino==j+1) {
                     dist[i][j]=Aristas[k].peso;
                 }
             }
-          }
-      }
-      dist.forEach(element => {
-        console.log(element);
-    });
-    console.log("END")
-    //Fin inicializacion de matriz
+        }
+    }
+    // Fin inicializaciÓn de matriz
 
-
-
-    var time = FloydUtil(floyd_network,floyd_nodes,floyd_edges,dist,delay);
+    var time = FloydUtil(floyd_nodes, floyd_edges, dist, delay);
 
   return time;
 }
 
 
-async function FloydUtil(floydnetwork, floyd_nodes, floyd_edges,dist,delay)
+/* Función principal que ejecuta algoritmo de Floyd-Warshall
+ * @param floyd_nodes: grupo de nodos sobre el cual se ejecutan comandos
+ * @param floyd_edges: grupo de aristas sobre el cual se ejecutan comandos
+ * @param dist: Matriz de adyacencia
+ * @param delay: cantidad de milisegundos que se hará el atraso;
+          recibido de html y funciona para correr algoritmo rapido o lento
+ */
+async function FloydUtil(floyd_nodes, floyd_edges, dist, delay)
 {
     // Obtención tiempos ejecucion; NO TOCAR
     var ti = performance.now();
-    for(var k=0;k<node_number;++k){
-        for(var i=0;i<node_number;++i){
-            if(k!=i){
+    var progress=100/node_number;
+    var result = " ";
+    document.getElementById("floyd-result").innerHTML = result;
+    document.getElementById("floyd-instruction").innerHTML ="FOR k= 0....,"+(node_number-1) +" Do";
+    document.getElementById("floyd-instruction").innerHTML ="FOR i= 0....,"+(node_number-1) +" Do";
+    document.getElementById("floyd-instruction").innerHTML ="FOR j= 0....,"+(node_number-1) +" Do";
+
+    /* Ciclos anidados para analizar la distancia pasando por un nodo intermedio */
+    for (var k = 0; k < node_number; ++k) {
+        load_progressBar("floyd",progress*k);
+        for (var i = 0; i < node_number; ++i) {
+            if (k != i) { // No se analiza esta posición k=i porque los pesos serían iguales
+
                 await sleep(delay*1.5);
                 markVisited_Node(i+1,floyd_nodes);
-                await sleep(delay*1.5);
-                for(var j=0;j<node_number;++j){
-                    if(j!=i&&j!=k){
-                        for(var n=0;n<Aristas.length;n++){
-                            if(Aristas[n].origen==i+1&&Aristas[n].destino==k+1){
-                                highlightEdge(Aristas[n].ID,floyd_edges,floyd_nodes,floydnetwork,-1);
-                            }
-                            if(Aristas[n].origen==k+1&&Aristas[n].destino==j+1){
-                                highlightEdge(Aristas[n].ID,floyd_edges,floyd_nodes,floydnetwork,-1);
-                            } 
+                await sleep(delay);
+                highlightNode(k+1,floyd_nodes);
 
+                for (var j = 0; j < node_number; ++j) {
+                    var flag = true;
+                    if ((j != i) && (j != k)) { // No se analiza esta posición j=i y j=k porque los pesos serían iguales
+                        for (var n = 0; n < Aristas.length; ++n) {
+
+                            if ((Aristas[n].origen == i + 1) && (Aristas[n].destino == j + 1)) {
+                                highlightEdge(Aristas[n].ID, floyd_edges);
+                                var flag = false;
+                            }
+                            if ((Aristas[n].origen == k + 1) && (Aristas[n].destino == j + 1)) {
+                                highlightEdge(Aristas[n].ID, floyd_edges);
+                                var flag = false;
+                            }
                         }
-                        await sleep(delay*1.5);
-                        markVisited_Node(j+1,floyd_nodes);
-                        await sleep(delay*1.5);
-                        if(dist[i][j]>dist[i][k]+dist[k][j]){
-                            dist[i][j]=dist[i][k]+dist[k][j]
+                        if (flag) {
+                            // await sleep(delay*1.5);
+                            dashNode(j + 1, floyd_nodes);
+                            await sleep(delay);
+                        } else {
+                           // await sleep(delay*1.5);
+                            markVisited_Node(j + 1, floyd_nodes);
+                            await sleep(delay);
+                        }
+                        // Se comparan el peso del nodo actual al destino y el peso pasando por el nodo intermedio
+                        document.getElementById("floyd-instruction").innerHTML ="IF (distancias["+i+"]["+j+"] > distancias["+i+"]["+k+"] + distancias["+k+"]["+j+"])";
+                        if (dist[i][j] > dist[i][k] + dist[k][j]) {
+                            document.getElementById("floyd-instruction").innerHTML ="distancias["+i+"]["+j+"] <- distancias["+i+"]["+k+"] + distancias["+k+"]["+j+"]";
+                            dist[i][j] = dist[i][k] + dist[k][j];
                         }
                     }
                 }
             }
             cleanGraph(floyd_nodes,floyd_edges);
         }
-        console.log("Iter: "+(k+1))
-        dist.forEach(element => {
-            console.log(element);
-        });
-        console.log("---------")
     }
+    /* Impresión de los caminos mínimos  */
+    for (var i = 0; i < dist.length; ++i) {
+        for (var j = 0; j < dist.length; ++j) {
+            result += "Camino mínimo del nodo "+(i+1)+" al nodo "+(j+1)+" es: "+dist[i][j]+"<br>";
+        }
+        result+="<br>";
+    }
+    document.getElementById("floyd-instruction").innerHTML ="END";
+    document.getElementById("floyd-result").innerHTML=result;
+
     // Obtención tiempos ejecucion; NO TOCAR
     var tf = performance.now();
     var execution_time = tf - ti;
+    load_progressBar("floyd",100);
     document.getElementById("tiempo-floyd").innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
 
     return execution_time;
@@ -1841,51 +1996,6 @@ function resultados_históricos(){
 }
 
 
-/*
-$(function () {
-    $("#hist").click(testPOST);
-    
-    var exportUrl = 'http://export.highcharts.com/';
-
-    function testPOST() {
-        
-        var optionsStr = JSON.stringify({
-            "xAxis": {
-                "categories": ["Jan", "Feb", "Mar"]
-            },
-                "series": [{
-                "data": [29.9, 71.5, 106.4]
-            }]
-        }),
-        dataString = encodeURI('async=true&type=jpeg&width=400&options=' + optionsStr);
-
-        if (window.XDomainRequest) {
-            var xdr = new XDomainRequest();
-            xdr.open("post", exportUrl+ '?' + dataString);
-            xdr.onload = function () {
-                console.log(xdr.responseText);
-                $('#container').html('<img src="' + exporturl + xdr.responseText + '"/>');
-            };
-            xdr.send();
-        } else {
-            $.ajax({
-                type: 'POST',
-                data: dataString,
-                url: exportUrl,
-                success: function (data) {
-                    console.log('get the file from relative url: ', data);
-                    $('#container').html('<img src="' + exportUrl + data + '"/>');
-                },
-                error: function (err) {
-                    debugger;
-                    console.log('error', err.statusText)
-                }
-            });
-        }
-
-    }
-});
-*/
 
 
 async function balance_data(){
@@ -1921,9 +2031,9 @@ async function balance_data(){
 /* -------------------------------------------------------------------------- */
 /* --------------------- COMPARACIONES (PARALELISMO) ------------------------ */
 
-/* Todos las funciones que se ejecutan cuando
- se corre un algoritmo desde la sección de comparación
-*/
+/* Todos las funciones que se ejecutan cuando se corre
+ * un algoritmo desde la sección de comparación
+ */
 async function runAlgorithm(algorithm)
 {
     var algorithm_checkbox = "compare-" + algorithm;
@@ -1942,7 +2052,6 @@ async function runAlgorithm(algorithm)
     if (document.getElementById(algorithm_checkbox).checked)
     {
         var ti = performance.now();
-        //load_progressBar(algorithm, 100); //Esta llamada debera ejecutarse dentro de sus códigos
 
         switch(algorithm)
         {
@@ -1951,14 +2060,14 @@ async function runAlgorithm(algorithm)
                 await DFS(50);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("DFS");
-                check_check_box=true;
+                check_check_box = true;
                 break;
             case "bfs":
                 load_progressBar(algorithm, 60);
                 await BFS(50);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("BFS");
-                check_check_box=true;
+                check_check_box = true;
                 break;
             case "a":
                 document.getElementById("end-a").value = parseInt(document.getElementById("target-all").value);
@@ -1966,43 +2075,43 @@ async function runAlgorithm(algorithm)
                 await A_star(50);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("A*");
-                check_check_box=true;
+                check_check_box = true;
                 break;
             case "prim":
                 load_progressBar(algorithm, 60);
                 await Prim(50);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("Prim");
-                check_check_box=true;
+                check_check_box = true;
                 break;
             case "kruskal":
-                //load_progressBar(algorithm, 60);
-                //await Kruskal(50);
-                //load_progressBar(algorithm, 100);
+                load_progressBar(algorithm, 60);
+                await Kruskal(50);
+                load_progressBar(algorithm, 100);
                 categories_graph.push("Kruskal");
-                check_check_box=true;
+                check_check_box = true;
                 break;
             case "dijkstra":
                 document.getElementById("target-dijkstra").value = parseInt(document.getElementById("target-all").value);
-                load_progressBar(algorithm, 60);
+                //load_progressBar(algorithm, 60);
                 await Dijkstra(50);
-                load_progressBar(algorithm, 100);
+                //load_progressBar(algorithm, 100);
                 categories_graph.push("Dijkstra");
-                check_check_box=true;
+                check_check_box = true;
                 break;
             case "belford":
                 document.getElementById("target-belford").value = parseInt(document.getElementById("target-all").value);
-                load_progressBar(algorithm, 60);
+                //load_progressBar(algorithm, 60);
                 await Belford(50);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("Bellman");
                 check_check_box=true;
                 break;
             case "floyd":
-                //Ingresar codigo del algoritmo con velocidad normal
-
+                // Ingresar código del algoritmo con velocidad normal
+                await Floyd(50);
                 categories_graph.push("Floyd");
-                check_check_box=true;
+                check_check_box = true;
                 break;
         }
 
@@ -2012,7 +2121,7 @@ async function runAlgorithm(algorithm)
         document.getElementById(time_id).innerHTML = Number((execution_time).toFixed(2)) + " milisegundos";
         if (check_check_box)
         {
-        dataGraph.push(execution_time);
+            dataGraph.push(execution_time);
         }
 
     }
@@ -2027,7 +2136,7 @@ async function compareAlgorithms()
     //var p = new Parallel(["dfs", "bfs", "a", "prim", "kruskal", "dijkstra", "belford", "floyd"], {evalPath: './eval.js'});
     //p.map(runAlgorithm);
 
-    //Estas llamadas son las que deberemos paralelizar
+    // Estas llamadas son las que debemos paralelizar
     runAlgorithm("dfs");
     runAlgorithm("bfs");
     runAlgorithm("a");

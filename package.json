@@ -1,0 +1,31 @@
+{
+  "name": "algoritmos-de-grafos",
+  "version": "1.0.0",
+  "description": "Proyecto final: Análisis y Diseño de Algoritmos | Equipo 2",
+  "main": "./frontend/main.html",
+  "dependencies": {
+    "par": "^0.3.0",
+    "paralleljs": "^0.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ./frontend/main.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tec-csf/tc2017-pf-primavera-2020-equipo-2-1.git"
+  },
+  "keywords": [
+    "Algoritmos",
+    "Grafos",
+    "vis.js",
+    "Complejidad"
+  ],
+  "author": "Andrés Barragán Salas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tec-csf/tc2017-pf-primavera-2020-equipo-2-1/issues"
+  },
+  "homepage": "https://github.com/tec-csf/tc2017-pf-primavera-2020-equipo-2-1#readme"
+}

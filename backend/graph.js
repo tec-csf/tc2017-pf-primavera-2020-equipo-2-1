@@ -1134,7 +1134,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
         var pos_min = 0, pos_edge = 0;
         for (var i = 0; i < queue.length; ++i)
         {
-  
+
             var temp = prim_network.getConnectedEdges(queue[i]);
 
             for (var j = 0; j < temp.length; ++j)
@@ -1144,7 +1144,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
                 {
                     if (parseInt(prim_edges.get(temp[j]).label) < min)
                     {
-                       
+
                         min = parseInt(prim_edges.get(temp[j]).label);
                         pos_min = i;
                         pos_edge = j;
@@ -1228,7 +1228,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     for (var i = 0; i < edges_array.length; ++i)
     {
         ids_edges.push(edges_array[i].id);
- 
+
     }
 
     for (var i = 0; i < ids_edges.length; ++i)
@@ -1608,7 +1608,7 @@ function Belford(delay)
     bellman_code += "&emsp;&emsp;&emsp;ciclo_negativo <- true, BREAK <br>";
     bellman_code += "END <br>";
     document.getElementById("belford-code").innerHTML = bellman_code;
-    
+
 
     // Se obtiene el nodo de origen usansdo el id del input
     // (todos son 'origin-algoritmo' -> checar html para obtener ids)
@@ -1698,7 +1698,7 @@ async function BelfordUtil(start_node, target_node, belfordnetwork, bel_nodes, b
                     }
                 }
             }
-        
+
         }
 
     }
@@ -2015,7 +2015,7 @@ async function balance_data(){
         //console.log(dataGraph[0])
 
         if(categories_graph.indexOf(all_categories[i]) > -1){
-            temp.push(dataGraph[categories_graph.indexOf(all_categories[i])]);   
+            temp.push(dataGraph[categories_graph.indexOf(all_categories[i])]);
         }else{
             temp.push(0);
         }
@@ -2047,7 +2047,7 @@ async function runAlgorithm(algorithm)
 
     document.getElementById(time_id).innerHTML = "0.00 milisegundos"
 
-    document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
+
 
     if (document.getElementById(algorithm_checkbox).checked)
     {
@@ -2056,6 +2056,7 @@ async function runAlgorithm(algorithm)
         switch(algorithm)
         {
             case "dfs":
+                document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 load_progressBar(algorithm, 60);
                 await DFS(50);
                 load_progressBar(algorithm, 100);
@@ -2063,6 +2064,7 @@ async function runAlgorithm(algorithm)
                 check_check_box = true;
                 break;
             case "bfs":
+                document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 load_progressBar(algorithm, 60);
                 await BFS(50);
                 load_progressBar(algorithm, 100);
@@ -2070,6 +2072,7 @@ async function runAlgorithm(algorithm)
                 check_check_box = true;
                 break;
             case "a":
+                document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 document.getElementById("end-a").value = parseInt(document.getElementById("target-all").value);
                 load_progressBar(algorithm, 60);
                 await A_star(50);
@@ -2078,6 +2081,7 @@ async function runAlgorithm(algorithm)
                 check_check_box = true;
                 break;
             case "prim":
+                document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 load_progressBar(algorithm, 60);
                 await Prim(50);
                 load_progressBar(algorithm, 100);
@@ -2092,6 +2096,7 @@ async function runAlgorithm(algorithm)
                 check_check_box = true;
                 break;
             case "dijkstra":
+                document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 document.getElementById("target-dijkstra").value = parseInt(document.getElementById("target-all").value);
                 //load_progressBar(algorithm, 60);
                 await Dijkstra(50);
@@ -2100,6 +2105,7 @@ async function runAlgorithm(algorithm)
                 check_check_box = true;
                 break;
             case "belford":
+                document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 document.getElementById("target-belford").value = parseInt(document.getElementById("target-all").value);
                 //load_progressBar(algorithm, 60);
                 await Belford(50);

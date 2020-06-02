@@ -2,7 +2,7 @@
   "name": "algoritmos-de-grafos",
   "version": "1.0.0",
   "description": "Proyecto final: Análisis y Diseño de Algoritmos | Equipo 2",
-  "main": "./frontend/main.html",
+  "main": "./backend/graph.js",
   "dependencies": {
     "par": "^0.3.0",
     "paralleljs": "^0.2.1"

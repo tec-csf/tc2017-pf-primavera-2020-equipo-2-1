@@ -146,5 +146,5 @@ Para el desarrollo de las funciones solicitadas por la aplicación se utilizaron
 
 \[1\] w3schools (1998) *HTML*. w3schools.com. Obtenido de: https://www.w3schools.com/  
 \[2\] vis.js *Network*. vis.js. Obtenido de: https://visjs.github.io/vis-network/docs/network/  
-\[3\] Highcharts *JS API Reference* Highcharts Obtenido de: https://api.highcharts.com/highcharts/
+\[3\] Highcharts *JS API Reference* Highcharts Obtenido de: https://api.highcharts.com/highcharts/     
 \[4\] jQuery *JavaScript Library v3.5.0* jQuery Obtenido de: https://code.jquery.com/jquery-3.5.0.js

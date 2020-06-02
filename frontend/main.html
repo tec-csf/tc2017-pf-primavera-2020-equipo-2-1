@@ -10,11 +10,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 <script src="parallel.js"></script>
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
-<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>  
+<script src="https://code.highcharts.com/modules/offline-exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>  
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
 
 <!-- Estilos personalizados dados a las clases -->
 <style>
@@ -97,7 +98,7 @@ body {font-size:16px;}
           <div id="dfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="dfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="dfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -145,7 +146,7 @@ body {font-size:16px;}
           <div id="bfs-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="bfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="bfs-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -193,7 +194,7 @@ body {font-size:16px;}
             <div id="a-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
             <div ><p> Código </p></div>
             <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-              <p id="a-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+              <p id="a-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
             </div>
           </div>
           <div style="float:left; width: 2%;"><p></p></div>
@@ -243,7 +244,7 @@ body {font-size:16px;}
           <div id="prim-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="prim-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="prim-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -291,7 +292,7 @@ body {font-size:16px;}
           <div id="kruskal-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="kruskal-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="kruskal-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -306,15 +307,15 @@ body {font-size:16px;}
               <p id="tiempo-kruskal" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 95px; overflow: auto;">
                 <p id="kruskal-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 145px; overflow: auto;">
                 <p id="kruskal-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
             </div>
             <div style="margin-top:20px;">
-                <div style="float: left; width: 50%;"><input id="origin-kruskal" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
+                <!-- <div style="float: left; width: 50%;"><input id="origin-kruskal" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div> -->
                 <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Kruskal(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
@@ -339,7 +340,7 @@ body {font-size:16px;}
           <div id="dijkstra-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="dijkstra-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="dijkstra-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -388,7 +389,7 @@ body {font-size:16px;}
           <div id="belford-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="belford-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="belford-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -437,7 +438,7 @@ body {font-size:16px;}
           <div id="floyd-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
-            <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del agoritmo: </p>
+            <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
@@ -452,21 +453,20 @@ body {font-size:16px;}
               <p id="tiempo-floyd" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto; width: 500px;">
                 <p id="floyd-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
-            <div><p> Camino </p></div>
-            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
-                <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Camino recorrido...</p>
+            <div><p> Resultado </p></div>
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto; width: 500px;">
+                <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Caminos mínimos...</p>
             </div>
             <div style="margin-top:20px;">
-                <div style="float: left; width: 50%;"><input id="origin-floyd" type="text" class="w3-input" style="width:70%" value="1"><label>Nodo de Origen</label></div>
                 <div style="float: left;"><button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="Floyd(2000);"> Ejecutar </button></div>
                 <div class="w3-dropdown">
                   <button class="w3-button w3-blue-grey w3-ripple" style="border-left:1px solid #aaaaaa; margin-top: 16px;"><i class="fa fa-caret-down"></i></button>
                   <div class="w3-dropdown-content" style="float: left;">
                     <a onclick="Floyd(2000);"> Lento </a>
-                    <a onclick="Floyd(2000);"> Normal </a>
+                    <a onclick="Floyd(50);"> Normal </a>
                   </div>
                 </div>
             </div>
@@ -583,12 +583,12 @@ body {font-size:16px;}
         <div id="grafico-algoritmos" class="w3-card-4 w3-container" style="width: 600px; height: 340px;"></div>
       </div>
       <div class="w3-container" style="float: left">
-        <p><button type="button" class="w3-button w3-light-grey w3-ripple" onclick=""> Resultados Históricos </button></p>
+        <p><button id = "hist"type="button" class="w3-button w3-light-grey w3-ripple" onclick="resultados_históricos()"> Resultados Históricos </button></p>
         <p style="margin-top: 30px;">Opciones de Gráfica</p>
         <div><button id ="exportar_pdf" type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a PDF </button></div>
         <div><button type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick="downlaodCsv()"> Exportar a CSV </button></div>
         <p style="margin-top: 30px;">Opciones de Grafo</p>
-        <div><button type="button" class="w3-button w3-light-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a CSV </button></div>
+        <div><button type="button" class="w3-button w3-light-grey w3-ripple" style="width: 180px;" onclick="balance_data()"> Exportar a CSV </button></div>
         <div><button type="button" class="w3-button w3-light-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick=""> Exportar a JSON </button></div>
       </div>
     </div>

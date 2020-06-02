@@ -140,7 +140,15 @@ Para el desarrollo de las funciones solicitadas por la aplicación se utilizaron
 
 ## 3.6 Pasos a seguir para utilizar el proyecto
 
-*[Incluya aquí una guía paso a paso para poder utilizar el proyecto, desde la clonación de este repositorio hasta el despliegue de la solución en una plataforma en la nube.]*
+Para poder utilizar la aplicación, los usuarios simplemente se deben de conectar a la siguiente dirección haciendo uso de su navegador web:
+
+    http://34.106.89.207/
+
+Una vez dentro, se podrá hacer uso de todas las funciones que pertenecen a la aplicación. De otro modo, si es que se desea ejecutar localmente el proyecto, los usuarios simplemente deberan clonar este repositorio, ubicandose en la carpeta deseada y ejecutando el siguiente comando: 
+
+    $ git clone https://github.com/tec-csf/tc2017-pf-primavera-2020-equipo-2-1
+
+Una vez clonado el repositorio, deberán abrir el archivo *main.html*, ubicando en *./frontend/main.html* de este repositorio, desde un servidor local de su computadora (localhost o 127.0.0.1). No es necesario instalar ninguna dependencia extra a las incluidas en este repositorio. 
 
 ## 4. Referencias
 

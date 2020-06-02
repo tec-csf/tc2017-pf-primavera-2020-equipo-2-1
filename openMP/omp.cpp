@@ -70,19 +70,19 @@ public:
   }
 };
 
-bool asc_peso(const pair<int, parN> &a,
-              const pair<int, parN> &b)
+bool asc_peso(const pair<parN, int> &a,
+              const pair<parN, int> &b)
 {
     int num_grande = 1000;
-    return ((a.first < b.first));
+    return ((a.second < b.second));
 }
 
 
 
 
-void KruskalUtil(set<int> nodes, vector< pair<int, parN> > edges)
+void KruskalUtil(set<int> nodes, vector< pair<parN, int> > edges)
 {
-    vector< pair<int, parN> > mst;
+    vector< pair<parN, int> > mst;
 
     sort(edges.begin(), edges.end(), asc_peso);
 
@@ -105,13 +105,13 @@ void KruskalUtil(set<int> nodes, vector< pair<int, parN> > edges)
 
     while ((num_aristas > 0) && (disj_set.size() > 1))
     {
-        if (!disj_set.connected(edges[cont].second.first, edges[cont].second.second))
+        if (!disj_set.connected(edges[cont].first.first, edges[cont].first.second))
         {
             mst.push_back(edges[cont]);
-            disj_set.Union(edges[cont].second.first, edges[cont].second.second);
+            disj_set.Union(edges[cont].first.first, edges[cont].first.second);
             num_aristas--;
 
-            printf("De: %d, a: %d, con peso: %d\n", edges[cont].second.first, edges[cont].second.second, edges[cont].first);
+            printf("De: %d, a: %d, con peso: %d\n", edges[cont].first.first, edges[cont].first.second, edges[cont].second);
         }
         cont++;
     }
@@ -125,7 +125,7 @@ void KruskalUtil(set<int> nodes, vector< pair<int, parN> > edges)
 
 int main(int argc, char const *argv[])
 {
-    vector< pair<int, parN> > edges;
+    vector< pair<parN, int> > edges;
     set<int> nodes;
 
     node_number = 14;
@@ -136,28 +136,28 @@ int main(int argc, char const *argv[])
         nodes.insert(i+1);
     }
 
-    /* El orden es {peso, {origen, destino}} */
-    /* Para obtener peso sería "edges[i].first" */
-    /* Para obtener origen sería "edges[i].second.first" */
-    /* Para obtener destino sería "edges[i].second.second" */
-    edges.push_back({1, {3, 2}});
-    edges.push_back({2, {3, 7}});
-    edges.push_back({8, {2, 8}});
-    edges.push_back({6, {2, 1}});
-    edges.push_back({4, {7, 6}});
-    edges.push_back({3, {7, 8}});
-    edges.push_back({2, {7, 14}});
-    edges.push_back({6, {8, 10}});
-    edges.push_back({2, {8, 6}});
-    edges.push_back({7, {1, 4}});
-    edges.push_back({9, {1, 5}});
-    edges.push_back({9, {6, 9}});
-    edges.push_back({4, {14, 10}});
-    edges.push_back({7, {10, 12}});
-    edges.push_back({8, {10, 11}});
-    edges.push_back({9, {5, 11}});
-    edges.push_back({9, {9, 8}});
-    edges.push_back({2, {11, 13}});
+    /* El orden es {{origen, destino}, peso} */
+    /* Para obtener origen sería "edges[i].first.first" */
+		/* Para obtener destino sería "edges[i].first.second" */
+		/* Para obtener peso sería "edges[i].second" */
+    edges.push_back({{3, 2}, 1});
+    edges.push_back({{3, 7}, 2});
+    edges.push_back({{2, 8}, 8});
+    edges.push_back({{2, 1}, 6});
+    edges.push_back({{7, 6}, 4});
+    edges.push_back({{7, 8}, 3});
+    edges.push_back({{7, 14}, 2});
+    edges.push_back({{8, 10}, 6});
+    edges.push_back({{8, 6}, 2});
+    edges.push_back({{1, 4}, 7});
+    edges.push_back({{1, 5}, 9});
+    edges.push_back({{6, 9}, 9});
+    edges.push_back({{14, 10}, 4});
+    edges.push_back({{10, 12}, 7});
+    edges.push_back({{10, 11}, 8});
+    edges.push_back({{5, 11}, 9});
+    edges.push_back({{9, 8}, 9});
+    edges.push_back({{11, 13}, 2});
 
 
     KruskalUtil(nodes, edges);

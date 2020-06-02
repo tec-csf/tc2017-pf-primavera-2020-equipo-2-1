@@ -70,14 +70,17 @@ public:
   }
 };
 
+
 bool asc_peso(const pair<parN, int> &a,
               const pair<parN, int> &b)
 {
     int num_grande = 1000;
+		if (a.second == b.second)
+		{
+				return (a.first.first * num_grande + a.first.second < b.first.first * num_grande + b.first.second);
+		}
     return ((a.second < b.second));
 }
-
-
 
 
 void KruskalUtil(set<int> nodes, vector< pair<parN, int> > edges)
@@ -88,7 +91,7 @@ void KruskalUtil(set<int> nodes, vector< pair<parN, int> > edges)
 
     // for (int i = 0; i < edges.size(); ++i)
     // {
-    //     printf("De: %d, a: %d, con peso: %d\n", edges[i].second.first, edges[i].second.second, edges[i].first);
+    //     printf("De: %d, a: %d, con peso: %d\n", edges[i].first.first, edges[i].first.second, edges[i].second);
     // }
 
     int nodos[node_number];

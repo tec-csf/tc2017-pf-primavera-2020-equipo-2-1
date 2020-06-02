@@ -81,7 +81,7 @@ body {font-size:16px;}
 
         <button type="button" class="w3-button w3-blue-grey w3-ripple" style="margin-bottom: 0px;" onclick="drawSetGraph();"> Generar </button>
         <button type="button" class="w3-button w3-section w3-blue-grey w3-ripple" style="margin-bottom: 5px;" onclick="drawRandomGraph();"> Generar Aleatorio </button>
-        <p><button type="button" class="w3-button w3-light-grey w3-ripple" onclick="drawTestGraph();"> Importar Grafo </button></p>
+        <p><button type="button" title="Genera el mismo grafo siempre para comprobar resultados" class="w3-button w3-blue-grey w3-ripple" onclick="drawTestGraph();"> Grafo Conocido </button></p>
     </form>
     <div style="float:left; width: 5%;"><p></p></div>
     <div id="mynetwork" class="w3-card-4" style="float:left; width: 600px; height: 430px;"></div>
@@ -434,15 +434,15 @@ body {font-size:16px;}
     <hr style="width:50px;border:5px solid #3f51b5" class="w3-round">
     <div style="margin-top:10px;">
         <div style="float:left; width: 5%;"><p></p></div>
-        <div style="float:left; width: 600px; height: 600px;">
-          <div id="floyd-network" class="w3-card-4" style="width: 600px; height: 340px;"></div>
+        <div style="float:left; width: 500px; height: 600px;">
+          <div id="floyd-network" class="w3-card-4" style="width: 500px; height: 340px;"></div>
           <div ><p> Código </p></div>
           <div class="w3-container w3-card-4" style="height: 200px; overflow: auto;">
             <p id="floyd-code" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Pseudocódigo del algoritmo: </p>
           </div>
         </div>
         <div style="float:left; width: 2%;"><p></p></div>
-        <div style="float:left; width: 33%;">
+        <div style="float:left; width: 42%;">
             <div >
               <p style="color: #3f51b5; font-weight: bold; font-size: larger; margin-bottom: 0;">Complejidad </p>
               <p style="font-size: smaller; margin-left: 30px; margin-bottom: 0; margin-top: 0;">Temporal: O(|V|^3)</p>
@@ -453,11 +453,11 @@ body {font-size:16px;}
               <p id="tiempo-floyd" style="font-size: larger; font-weight: bold; margin-left: 30px; margin-top: 0;">0.00 milisegundos</p>
             </div>
             <div style="margin-top: 10px;"><p> Ejecución (Comando Actual)</p></div>
-            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto; width: 500px;">
+            <div class="w3-container w3-card-4" style="height: 60px; overflow: auto;">
                 <p id="floyd-instruction" style="font-style: italic; font-family:'Courier New', Courier, monospace; font-size: small;">Instrucción ejecutada...</p>
             </div>
             <div><p> Resultado </p></div>
-            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto; width: 500px;">
+            <div class="w3-container w3-card-4" style="height: 157px; overflow: auto;">
                 <p id="floyd-result" style="font-style: italic; font-family:'Courier New', Courier, monospace;">Caminos mínimos...</p>
             </div>
             <div style="margin-top:20px;">
@@ -583,13 +583,11 @@ body {font-size:16px;}
         <div id="grafico-algoritmos" class="w3-card-4 w3-container" style="width: 600px; height: 340px;"></div>
       </div>
       <div class="w3-container" style="float: left">
-        <p><button id = "hist"type="button" class="w3-button w3-light-grey w3-ripple" onclick="resultados_históricos()"> Resultados Históricos </button></p>
+        <p><button id = "hist" type="button" title="Mostrar comparación de los resultados guardados en esta sesión" class="w3-button w3-section w3-blue-grey w3-ripple" onclick="resultados_históricos()"> Resultados Históricos </button></p>
         <p style="margin-top: 30px;">Opciones de Gráfica</p>
-        <div><button id ="exportar_pdf" type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px;" onclick=""> Exportar a PDF </button></div>
+        <div><button type="button" title="Guarda los resultados de las gráficas durante la sesión actual para obtener resultados históricos" class="w3-button w3-blue-grey w3-ripple" style="width: 180px;" onclick="balance_data()"> Guardar resultados </button></div>
+        <div><button id ="exportar_pdf" type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 30px;" onclick=""> Exportar a PDF </button></div>
         <div><button type="button" class="w3-button w3-blue-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick="downlaodCsv()"> Exportar a CSV </button></div>
-        <p style="margin-top: 30px;">Opciones de Grafo</p>
-        <div><button type="button" class="w3-button w3-light-grey w3-ripple" style="width: 180px;" onclick="balance_data()"> Exportar a CSV </button></div>
-        <div><button type="button" class="w3-button w3-light-grey w3-ripple" style="width: 180px; margin-top: 10px;" onclick=""> Exportar a JSON </button></div>
       </div>
     </div>
   </div>

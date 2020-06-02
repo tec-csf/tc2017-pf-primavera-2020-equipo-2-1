@@ -2058,7 +2058,7 @@ async function runAlgorithm(algorithm)
             case "dfs":
                 document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 load_progressBar(algorithm, 60);
-                await DFS(50);
+                await DFS(10);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("DFS");
                 check_check_box = true;
@@ -2066,7 +2066,7 @@ async function runAlgorithm(algorithm)
             case "bfs":
                 document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 load_progressBar(algorithm, 60);
-                await BFS(50);
+                await BFS(10);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("BFS");
                 check_check_box = true;
@@ -2075,7 +2075,7 @@ async function runAlgorithm(algorithm)
                 document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 document.getElementById("end-a").value = parseInt(document.getElementById("target-all").value);
                 load_progressBar(algorithm, 60);
-                await A_star(50);
+                await A_star(10);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("A*");
                 check_check_box = true;
@@ -2083,14 +2083,14 @@ async function runAlgorithm(algorithm)
             case "prim":
                 document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 load_progressBar(algorithm, 60);
-                await Prim(50);
+                await Prim(10);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("Prim");
                 check_check_box = true;
                 break;
             case "kruskal":
                 load_progressBar(algorithm, 60);
-                await Kruskal(50);
+                await Kruskal(10);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("Kruskal");
                 check_check_box = true;
@@ -2099,7 +2099,7 @@ async function runAlgorithm(algorithm)
                 document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 document.getElementById("target-dijkstra").value = parseInt(document.getElementById("target-all").value);
                 //load_progressBar(algorithm, 60);
-                await Dijkstra(50);
+                await Dijkstra(10);
                 //load_progressBar(algorithm, 100);
                 categories_graph.push("Dijkstra");
                 check_check_box = true;
@@ -2108,14 +2108,14 @@ async function runAlgorithm(algorithm)
                 document.getElementById("origin-"+algorithm).value = parseInt(document.getElementById("origin-all").value);
                 document.getElementById("target-belford").value = parseInt(document.getElementById("target-all").value);
                 //load_progressBar(algorithm, 60);
-                await Belford(50);
+                await Belford(10);
                 load_progressBar(algorithm, 100);
                 categories_graph.push("Bellman");
                 check_check_box=true;
                 break;
             case "floyd":
                 // Ingresar código del algoritmo con velocidad normal
-                await Floyd(50);
+                await Floyd(10);
                 categories_graph.push("Floyd");
                 check_check_box = true;
                 break;

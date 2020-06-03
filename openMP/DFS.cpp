@@ -2,7 +2,7 @@
 ------------------------- ALGORITMO DFS -------------------------
     Paralelización en C++
 -----------------------------------------------------------------
-Para el algoritmo DFS, a pesar de ser implementado iterativamente.
+Para el algoritmo DFS, a pesar de ser implementado iterativamente,
 resulta complicado paralelizar algo más aparte de el análisis de
 nodos adyacentes debido a que, por la naturaleza del algoritmo, 
 el análisis de sus pasos depende de las llamadas anteriores, lo

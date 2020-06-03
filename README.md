@@ -77,7 +77,7 @@ Al observar la arquitectura anterior el flujo de la información fluye de la sig
 
 ### 3.3 Frontend
 
-El *Frontend* de la aplicación generada involucró una interfaz web, dentro de la cual, mediante un menú lateral el usuario podría navegar a través de las secciones de la aplicación con facilidad. Cada sección de la pagina funciona primordialmente con contenedores *<div>*, ingresos de información *<input>* y botones *<button>*, cada uno con respectivos identificadores *id* para la comunicación continua con el código de *JavaScript*.  
+El *Frontend* de la aplicación generada involucró una interfaz web, dentro de la cual, mediante un menú lateral el usuario podría navegar a través de las secciones de la aplicación con facilidad. Cada sección de la pagina funciona primordialmente con contenedores *<\div>*, ingresos de información *<input>* y botones *<button>*, cada uno con respectivos identificadores *id* para la comunicación continua con el código de *JavaScript*.  
 
 #### 3.3.1 Lenguaje de programación
 
@@ -99,6 +99,7 @@ Como fue mencionado anteriormente, *templates* para el desarrollo de la interfaz
 ### 3.4 Backend
 
 El *Backend* fue programada haciendo uso de *JavaScript* en él, se genera la estructura del grafo y sus respectivas visualización u animaciones, además, a partir de su estructura se ejecutan cada uno de los algoritmos de grafos (DFS, BFS, A*, Prim, Kruskal, Dijkstra, Bellman-Ford y Floyd-Warshall). Para cada uno de los algoritmos, además de ejecutar el algoritmo como es usualmente conocido, se realizan distintas funciones como ejecutar las animaciones del grafo, contabilizar el tiempo de ejecución, mostrar el código del algoritmo y su línea actual de ejecución y por último cada uno de estos toma una variable para ser ejecutados con distintas velocidades a elegir por el usuario. Es importante notar que para cada uno de los algoritmos se realiza una copia del grafo a fin de que las animaciones que se están mostrando en una sección de la interfaz no interfiera con alguna otra. Para la función de comparar los algoritmos, el código manda a llamar a todas las funciones que el usuario seleccione simultáneamente, y gracias a que *JavaScript* es un lenguaje de programación que se ejecuta de manera asíncrona, todas estas llamadas se ejecutarán al mismo tiempo. Finalmente, el código de *JavaScript* también se hace cargo de generar gráficas a partir de los resultados generados, almacenar la información obtenida y también cargar información a partir de distintos archivos. Para la conexión y comunicación continua el código hace uso de los *id*s establecidos en el código de *HTML* para obtener y mandar información hacia la interfaz para su correcta visualización.  
+La paralelización efectiva de los algoritmos de grafos se realizo en archivos separados dentro de la carpeta *openMP* haciendo uso de *C++* ya que *JavaScript* debido a su naturaleza de lenguaje de un solo hilo, no permitía la paralelización de código haciendo una conexión con *HTML*. De esta manera, para la paralelización de los algoritmos de grafos estos fueron programados por aparte (algunos en mayor medida que otros por sus características propias) haciendo uso de la libería *openmp* y *C++*.  
 
 #### 3.4.1 Lenguaje de programación
 
@@ -110,35 +111,15 @@ El *framework* de desarrollo utilizado fue en parte *Node.js*, ya que en él est
 
 #### 3.4.3 Librerías de funciones o dependencias
 
-Para el desarrollo de las funciones solicitadas por la aplicación se utilizaron 4 librerías: *vis.js*, utilizada para la estructura de los grafos, su visualización y animación; *JQuery*, utilizado para la lectura de y organización de la información obtenida de modo que esta pudiera ser graficada; *highcharts.js* para poder graficar los resultados obtenidos; y *parallel.js* para poder paralelizar ciertas secciones del código (a pesar de que en muchas ocasiones esto no era posible debido a la naturaleza propia de *JavaScript*).  
+Para el desarrollo de las funciones solicitadas por la aplicación se utilizaron 4 librerías: *vis.js*, utilizada para la estructura de los grafos, su visualización y animación; *JQuery*, utilizado para la lectura de y organización de la información obtenida de modo que esta pudiera ser graficada; *highcharts.js* para poder graficar los resultados obtenidos; y *parallel.js* para poder paralelizar ciertas secciones del código (a pesar de que en muchas ocasiones esto no era posible debido a la naturaleza propia de *JavaScript*). Por último, la paralelización efectiva de los algoritmos en *C++* se realizó con la libería *OpenMP*.   
 
         https://visjs.org/  
 	    https://qunitjs.com/  
 	    https://www.highcharts.com/  
 	    https://parallel.js.org/  
+        https://www.openmp.org/wp-content/uploads/OpenMP-4.5-1115-CPP-web.pdf  
 
-
-### 3.5 API
-
-*[Incluya aquí una explicación de la solución utilizada para implementar la API del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
-
-#### 3.5.1 Lenguaje de programación
-#### 3.5.2 Framework
-#### 3.5.3 Librerías de funciones o dependencias
-
-*[Incluya aquí una explicación de cada uno de los endpoints que forman parte de la API. Cada endpoint debe estar correctamente documentado.]*
-
-*[Por cada endpoint debe incluir lo siguiente:]*
-
-* **Descripción**:
-* **URL**:
-* **Verbos HTTP**:
-* **Headers**:
-* **Formato JSON del cuerpo de la solicitud**: 
-* **Formato JSON de la respuesta**:
-
-
-## 3.6 Pasos a seguir para utilizar el proyecto
+## 3.5 Pasos a seguir para utilizar el proyecto
 
 Para poder utilizar la aplicación, los usuarios simplemente se deben de conectar a la siguiente dirección haciendo uso de su navegador web:
 

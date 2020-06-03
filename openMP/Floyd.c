@@ -1,6 +1,14 @@
-/* A continuacion se plantea una posible solución utilizando programacion paralela para ejecutar el algoritmo de floydWarshall
-Debido a que una iteración es dependiente de la anterior en el mayor de los casos, la opción parallel for no mejora en todos los casos el algoritmo
-Teniendo en cuenta que cada hilo debe esperar al anterior para poder iniciar 
+/* 
+-----------------ALGORITMO FloydWarshall -------------------------
+                Paralelización en C
+-----------------------------------------------------------------
+A continuacion se plantea una posible solución utilizando 
+programacion paralela para ejecutar el algoritmo de floydWarshall
+Debido a que una iteración es dependiente de la anterior en el 
+mayor de los casos, la opción parallel for no mejora en todos los 
+casos el algoritmo. Teniendo en cuenta que cada hilo debe esperar
+ al anterior para poder iniciar.
+ -----------------------------------------------------------------
 */
 
 #include <omp.h>
@@ -19,7 +27,7 @@ Teniendo en cuenta que cada hilo debe esperar al anterior para poder iniciar
 void printSolution(int dist[][V]); 
 
 /**
- * graph: Matriz de adyacencia del grafo a analizar
+ *@ graph: Matriz de adyacencia del grafo a analizar
 */
 void floydWarshall (int graph[][V]) 
 { 
@@ -27,6 +35,7 @@ void floydWarshall (int graph[][V])
 	int dist[V][V], i, j, k; 
 
 	/* Copia la matriz de adyacencia a la de nuevas soluciones */
+	#pragma omp parallel for
 	for (i = 0; i < V; i++) 
 		for (j = 0; j < V; j++) 
 			dist[i][j] = graph[i][j]; 
@@ -72,7 +81,6 @@ void printSolution(int dist[][V])
 	} 
 } 
 
-// driver program to test above function 
 int main() 
 { 
 	srand(time(NULL));

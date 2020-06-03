@@ -2,11 +2,14 @@
 #include <vector>
 #include <set>
 #include <chrono>
+#include <queue>
 // #include <omp.h>
 
 using namespace std;
 
 typedef pair<int, int> parN;
+
+#define INF 1000
 
 int node_number, edge_number = 0;
 
@@ -80,6 +83,140 @@ bool asc_peso(const pair<parN, int> &a,
 				return (a.first.first * num_grande + a.first.second < b.first.first * num_grande + b.first.second);
 		}
     return ((a.second < b.second));
+}
+
+void DFSUtil(int start_node, set<int> nodes, vector< pair<parN, int> > edges)
+{
+		auto start = chrono::high_resolution_clock::now();
+
+		auto stop = chrono::high_resolution_clock::now(); // Aqui se guarda el tiempo en ese momento
+    auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+
+    printf("DFS tardó %lld microsegundos\n", duration.count());
+}
+
+
+void BFSUtil(int start_node, set<int> nodes, vector< pair<parN, int> > edges)
+{
+		auto start = chrono::high_resolution_clock::now();
+
+
+
+    bool visited[node_number];
+    for (var i = 0; i < node_number; ++i) {
+        visited[i] = false;
+		}
+
+		vector<int> bfs_result;
+		queue<int> queue;
+    visited[start_node - 1] = true;
+
+    queue.push(start_node);
+    while (!queue.empty())
+    {
+				int node_analized = queue.pop();
+
+        bfs_result.push_back(node_analized);
+				printf("%d", bfs_result);
+
+        visited[node_analized - 1] = true;
+
+
+
+				for (i = adj[s].begin(); i != adj[s].end(); ++i)
+        {
+            if (!visited[*i]) 
+            {
+                visited[*i] = true;
+                queue.push_back(*i);
+            }
+        }
+
+
+
+        var temp_queue = [];
+        for (var i = 0; i < neighbors.length; ++i)
+        {
+            if (bfs_edges.get(neighbors[i]).from == node_analized)
+            {
+                var destination = bfs_edges.get(neighbors[i]).to;
+                if (!visited[destination - 1])
+                {
+
+                    // Organizo edges para que siga un orden ascendente de nodos
+                    temp_queue.push(destination);
+                    visited[destination - 1] = true;
+                }
+            }
+        }
+        // Con esto, el recorrido se hace en orden de nodos ascendente
+        temp_queue.sort(function(a, b) {return a - b});
+        for (var i = 0; i < temp_queue.length; ++i)
+        {
+            queue.push(temp_queue[i]);
+        }
+    }
+
+
+
+		auto stop = chrono::high_resolution_clock::now(); // Aqui se guarda el tiempo en ese momento
+		auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+
+		printf("BFS tardó %lld microsegundos\n", duration.count());
+}
+
+
+void PrimUtil(int start_node, set<int> nodes, vector< pair<parN, int> > edges)
+{
+		int parent[node_number];
+		int key[node_number];
+		bool mstSet[node_number];
+
+		// // Initialize all keys as INFINITE
+		// for (int i = 0; i < node_number; i++)
+		// 		key[i] = INT_MAX, mstSet[i] = false;
+		//
+		// // Always include first 1st vertex in MST.
+		// // Make key 0 so that this vertex is picked as first vertex.
+		// key[0] = 0;
+		// parent[0] = -1; // First node is always root of MST
+		// auto start = chrono::high_resolution_clock::now();
+		// // The MST will have node_number vertices
+		// for (int count = 0; count < node_number - 1; ++count)
+		// {
+		// 		// Pick the minimum key vertex from the
+		// 		// set of vertices not yet included in MST
+		// 		int u = minKey(key, mstSet);
+		//
+		// 		// Initialize min value
+		//     int u = INT_MAX, min_index;
+		//
+		//     for (int v = 0; v < node_number; ++v)
+		//         if (mstSet[v] == false && key[v] < min)
+		//             u = key[v], min_index = v;
+		//
+		// 		// Add the picked vertex to the MST Set
+		// 		mstSet[u] = true;
+		//
+		// 		// Update key value and parent index of
+		// 		// the adjacent vertices of the picked vertex.
+		// 		// Consider only those vertices which are not
+		// 		// yet included in MST
+		// printf("Me está faltando la ultima condición\n");
+		// 		// for (int v = 0; v < node_number; ++v)
+		// 		//
+		// 		// 		// graph[u][v] is non zero only for adjacent vertices of m
+		// 		// 		// mstSet[v] is false for vertices not yet included in MST
+		// 		// 		// Update the key only if graph[u][v] is smaller than key[v]
+		// 		// 		if (graph[u][v] && mstSet[v] == false && graph[u][v] < key[v])
+		// 		// 				parent[v] = u, key[v] = graph[u][v];
+		// }
+		//
+		// auto stop = chrono::high_resolution_clock::now(); // Aqui se guarda el tiempo en ese momento
+		// auto duration = chrono::duration_cast<chrono::microseconds>(stop - start);
+		//
+		// printf("Prim tardó %lld microsegundos\n", duration.count());
+
 }
 
 
@@ -164,6 +301,7 @@ int main(int argc, char const *argv[])
 
 
     KruskalUtil(nodes, edges);
+		PrimUtil(3, nodes, edges);
 
     return 0;
 }

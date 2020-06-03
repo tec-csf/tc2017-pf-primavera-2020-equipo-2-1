@@ -1115,7 +1115,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
     distance[start_node - 1] = 0;
     parent[start_node - 1] = start_node;
 
-    mst.push[start_node];
+    mst.push(start_node);
     prim_result += start_node;
     document.getElementById("prim-result").innerHTML = prim_result;
     prim_result += " -> ";
@@ -1163,7 +1163,7 @@ async function PrimUtil(start_node, prim_network, prim_nodes, prim_edges, delay)
 
         if (parent[node_analized - 1] != node_analized)
         {
-            mst.push[node_analized];
+            mst.push(node_analized);
             prim_result += node_analized;
             document.getElementById("prim-result").innerHTML = prim_result;
             prim_result += " -> ";

@@ -1,12 +1,12 @@
 /*
---------------------- ALGORITMO de Dijkstra ---------------------
+----------------------- ALGORITMO de Prim -----------------------
     Paralelización en C++
 -----------------------------------------------------------------
-Para el algoritmo Dijkstra la paralelización resultó posible, sin
-embargo es importante elegir las zonas del código que pueden ser 
-paralelizadas debido a que, para que una sección sea paralelizada,
-el resto de las llamadas del algoritmo en esa misma sección deben
-ser independientes, es decir, no deben de depender una de la otra.
+Para el algoritmo Prim la paralelización resulta posible en aquellos
+ciclos en donde los procesos no dependen de un resultado anterior. 
+De esta manera, los ciclos "for" en donde sus operaciones se 
+pudieron realizar de manera independiente fueron paralelizados, 
+tomando en cuenta sus respectivas regiones críticas. 
 -----------------------------------------------------------------
 */
 #include <omp.h>
@@ -37,15 +37,15 @@ int minDistance(int dist[], bool sptSet[]) {
 
 // Imprimir la solución por fuera de la función principal (evitar inhibision del paralelismo)
 int printSolution(int dist[], int n) { 
-	printf("Dijkstra: distancia a los nodos desde el origen: \n"); 
+	printf("Prim: distancia a los nodos desde el nodo padre: \n"); 
 	for (int i = 0; i < V; i++) 
 		printf("%d: %d\n", i+1, dist[i]); 
 } 
 
-/* Función de algoritmo Dijkstra implementada en C++
+/* Función de algoritmo Prim implementada en C++
     * @param src: nodo de origen tomado por el algoritmo
     */
-void dijkstra(int src) 
+void prim(int src) 
 { 
     src--; 
 	int dist[V]; // Distancias mínimas actuales
@@ -69,8 +69,8 @@ void dijkstra(int src)
             for (int v = 0; v < V; v++) {
                 #pragma omp critical //Región critica, la lectura de los pesos acutales y su respectiva actualización
                 {
-                    if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && dist[u] + graph[u][v] < dist[v]) {
-                        dist[v] = dist[u] + graph[u][v]; 
+                    if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && graph[u][v] < dist[v]) {
+                        dist[v] = graph[u][v]; 
                     }
                 }
             }
@@ -101,7 +101,7 @@ int main() {
     addEdge(9, 8, 9);
     addEdge(11, 13, 2);
 
-	dijkstra(3); 
+	prim(3); 
 
 	return 0; 
 } 
